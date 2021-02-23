@@ -33,3 +33,24 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ### dev-dependencies
 - [`create-react-component-folder`](https://www.npmjs.com/package/create-react-component-folder): makes it easier to create react component folders.
   - Usage: `npx crcf <path_to_component>`
+
+## Project Structure
+- `team05/`
+  - `public/`: Contains public resources such as images required byt he components.
+    - `...`
+  - `src/`
+    - `components/`
+      - `App/`
+        - `App.css`: Styling for the app. Mostly styling for nav bar.
+        - `App.js`: Main application logic. Responsible for changing views and contains router/nav bar.
+        - `index.js`: Exports the component
+      - `<Component>/`
+        - `<Component>.css`: Styling for the component. Make sure to import this file in `<Component>.js`.
+        - `<Component>.js`: Logic and jsx for the soecific component.
+        - `index.js`: Exports the component
+      - `...`
+    - `index.js`: This renders the `App` component and is called by `publilc/index.html`.
+    - `index.css`
+  - `.gitignore`: A list of files that git should ignore.
+  - `package*.json`: Tells `npm install` which packages are required by the app.
+  - `README.md`: This file.
