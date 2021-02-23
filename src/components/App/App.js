@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import {Component} from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,21 +7,16 @@ import {
   Link
 } from "react-router-dom";
 
-import {
-  CreateAccount,
-  Home,
-  Leaderboard,
-  Login,
-  Progress,
-  Schedule,
-} from './views.js';
+import CreateAccount from '../CreateAccount';
+import Home from '../Home';
+import Leaderboard from '../Leaderboard';
+import Login from '../Login';
+import Progress from '../Progress';
+import Schedule from '../Schedule';
 
-class App extends React.Component {
 
-  // state = {
-  //   views: views
-  // }
-
+class App extends Component {
+  
   render() {
     return (
       <Router>
@@ -75,5 +70,7 @@ class App extends React.Component {
     );
   }
 }
+
+App.title = 'Team 05';
 
 export default App;
