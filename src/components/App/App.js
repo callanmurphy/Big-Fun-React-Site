@@ -16,8 +16,23 @@ import Schedule from '../Schedule';
 
 
 class App extends Component {
-  
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      navDropdown: false
+    }
+  }
+
+  toggleDropdown() {
+    this.setState({
+      navDropdown: !this.state.navDropdown
+    })
+  }
+
   render() {
+    const caretClasses = 'dropcaret' + (this.state.navDropdown? ' active' : ' notactive');
+    console.log(caretClasses)
     return (
       <Router>
         <div>
@@ -41,25 +56,38 @@ class App extends Component {
               <li>
                 <Link to="/schedule">Schedule</Link>
               </li>
+              <li className="dropli">
+                <button className="dropbtn" onClick={(_) => this.toggleDropdown()}>
+                  Games <span className={caretClasses}>&#9660;</span>
+                </button>
+                {
+                  this.state.navDropdown ?
+                    <ul className='dropdown'>
+                      <li><Link to="/game1">Game 1</Link></li>
+                      <li><Link to="/game2">Game 2</Link></li>
+                    </ul>
+                  : null
+                }
+              </li>
             </ul>
           </nav>
 
           
           <Switch>
             <Route path="/createaccount">
-                  <CreateAccount />
+              <CreateAccount />
             </Route>
             <Route path="/home">
-                  <Home />
+              <Home />
             </Route>
             <Route path="/leaderboard">
-                  <Leaderboard />
+              <Leaderboard />
             </Route>
             <Route path="/progress">
-                  <Progress />
+              <Progress />
             </Route>
             <Route path="/schedule">
-                  <Schedule />
+              <Schedule />
             </Route>
             <Route path="/">
               <Login />

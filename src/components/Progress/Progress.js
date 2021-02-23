@@ -1,8 +1,15 @@
 import React, { Component } from "react";
+import LineChart from "../LineChart/lineChart";
 
 class Progress extends Component {
   render() {
-    return <div>Progress</div>;
+    return (
+      <div>
+        <LineChart />
+        <LineChart />
+        <LineChart />
+      </div>
+    );
   }
 }
 
