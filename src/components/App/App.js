@@ -30,6 +30,7 @@ class App extends Component {
     }
     this.state = {
       navDropdown: false,
+      defaultUserName: "User"
     }
   }
 
