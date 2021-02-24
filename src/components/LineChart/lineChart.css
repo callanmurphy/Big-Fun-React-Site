@@ -5,3 +5,7 @@ svg.linechart {
 .bar {
     fill: teal;
 }
+
+.chartTitle {
+    text-align: center;
+}

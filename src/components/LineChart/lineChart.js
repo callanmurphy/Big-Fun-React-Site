@@ -1,70 +1,82 @@
-import React, { Component } from "react";
-import * as d3 from "d3";
+import React, { Component } from 'react';
+import * as d3 from 'd3';
 import './lineChart.css';
 
 class LineChart extends Component {
   constructor(props) {
     super(props);
 
-    this.chart = React.createRef();
+    this.chartref = React.createRef();
     this.width = 500;
     this.height = 300;
-    this.axisLeft = 30;
-    this.axisBottom = 30;
-    this.axisTop = 5;
-    this.axisRight = 10;
-    this.state = {
-      data: [1, 2, 3, 2]
+    this.margin = {
+      top: 10,
+      right: 30,
+      bottom: 30,
+      left: 60,
     }
+    this.chart = {}
+
+  }
+
+  get ydata() {
+    return this.props.data.map((d, i) => this.props.gety(d, i))
+  }
+
+  get xdata() {
+    return this.props.data.map((d, i) => this.props.getx(d, i))
+  }
+
+  get xypath() {
+    return Array.from(Array(this.props.data.length).keys()).map(i => {
+      return [this.chart.xscale(this.xdata[i]), this.chart.yscale(this.ydata[i])]
+    })
   }
 
   componentDidMount() {
-    const svg = d3.select(this.chart.current)
-    svg.attr('width', this.width)
-       .attr('height', this.height)
+    const svg = d3.select(this.chartref.current)
+      .attr('width', this.width + this.margin.left + this.margin.right)
+      .attr('height', this.height + this.margin.top + this.margin.bottom)
+      .append('g')
+      .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
 
-    const xscale = d3
+    this.chart.xscale = d3
       .scaleLinear()
-      .domain([0, this.state.data.length + 1.5])
-      .range([this.axisLeft, this.width - this.axisRight])
-    const yscale = d3
+      .domain([d3.min(this.xdata), d3.max(this.xdata)])
+      .range([0, this.width])
+    this.chart.xaxis = svg.append('g')
+      .attr('transform', `translate(0, ${this.height})`)
+      .call(d3.axisBottom(this.chart.xscale))
+
+    this.chart.yscale = d3
       .scaleLinear()
-      .domain([0, d3.max(this.state.data)])
-      .range([this.height - this.axisTop, this.axisBottom])
+      .domain([d3.min(this.ydata), d3.max(this.ydata)])
+      .range([this.height, 0])
+    this.chart.yaxis = svg.append('g')
+      // .attr('transform', `translate(0, ${this.height})`)
+      .call(d3.axisLeft(this.chart.yscale))
 
-    const xaxis = d3
-      .axisBottom()
-      .scale(xscale)
-    const yaxis = d3
-      .axisLeft()
-      .scale(yscale)
+    this.chart.line = svg.append('path')
+      .attr('fill', 'none')
+      .attr('stroke', 'steelblue')
+      .attr('stroke-width', 1.5)
+      .attr('d', d3.line()(this.xypath))
+  }
 
-    svg
-      .append('g')
-      .attr('transform', `translate(0, ${this.height - this.axisBottom})`)
-      .call(xaxis)
-    svg
-      .append('g')
-      .attr('transform', `translate(${this.axisLeft}, ${this.axisTop-this.axisBottom})`)
-      .call(yaxis)
-
-    svg
-      .append('g')
-      .selectAll('.bar')
-      .data(this.state.data)
-      .enter().append('rect')
-      .attr('class', 'bar')
-      .attr('x', (_, i) => xscale(i+1) - (this.width / this.state.data.length - 50)/2)
-      .attr('y', (d, i) => yscale(d))
-      .attr('width', this.width / this.state.data.length - 50)
-      .attr('height', (d, i) => yscale(0) - yscale(d))
-      .attr('transform', `translate(0, ${this.axisTop-this.axisBottom})`)
+  componentDidUpdate() {
+    this.chart.line.attr('d', d3.line()(this.xypath))
+    this.chart.xscale.domain([d3.min(this.xdata), d3.max(this.xdata)])
+    this.chart.yscale.domain([d3.min(this.ydata), d3.max(this.ydata)])
+    this.chart.xaxis.call(d3.axisBottom(this.chart.xscale))
+    this.chart.yaxis.call(d3.axisLeft(this.chart.yscale))
   }
 
   render() {
     return (
-      <svg className="linechart" ref={this.chart}>
-      </svg>
+      <div>
+        <h2 className='chartTitle'>{ this.props.title }</h2><br/>
+        <svg className='linechart' ref={this.chartref}></svg>
+      </div>
     );
   }
 }

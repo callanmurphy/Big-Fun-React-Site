@@ -1,28 +1,3 @@
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-ul > li {
-    display: inline-block;
-    min-width: 50px;
-    padding: 10px 20px;
-}
-
-ul > li:not(:last-child) {
-    border-right: 1px solid black;
-}
-
-ul > li:hover {
-    background-color: grey;
-}
-
-ul > li > a {
-    text-decoration: none;
-    color: black;
-}
-
 nav {
     display: block;
     margin: 0;
@@ -31,25 +6,31 @@ nav {
     background-color: lightgrey;
 }
 
-
-.dropli {
+nav > ul {
+    list-style-type: none;
+    margin: 0;
     padding: 0;
 }
 
-.dropcaret {
+nav > ul > li {
     display: inline-block;
-    color: grey;
-    transition: 0.5s;
+    min-width: 50px;
+    padding: 10px 20px;
 }
 
-.dropcaret.notactive {
-    transform: scale(1);
+nav > ul > li:not(:last-child) {
+    border-right: 1px solid black;
 }
 
-.dropcaret.active {
-    transform: scale(-1);
-    color: red;
+nav > ul > li:hover {
+    background-color: grey;
 }
+
+nav > ul > li > a {
+    text-decoration: none;
+    color: black;
+}
+
 
 .dropdown {
     list-style: none;
@@ -68,10 +49,29 @@ nav {
     border-right: 0;
 }
 
+.dropli {
+    padding: 0;
+}
+
 .dropbtn {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
     padding: 10px 20px;
+}
+
+.dropcaret {
+    display: inline-block;
+    color: grey;
+    transition: 0.5s;
+}
+
+.dropcaret.notactive {
+    transform: scale(1);
+}
+
+.dropcaret.active {
+    transform: scale(-1);
+    color: red;
 }

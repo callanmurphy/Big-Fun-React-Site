@@ -29,6 +29,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 - [`react`](https://reactjs.org/docs/getting-started.html): This is the framework that we are using for the webapp.
 - [`react-router-dom`](https://reactrouter.com/web/guides/quick-start): This is used for routing between different views/components.
 - [`d3`](https://d3js.org/): This library is used for creating plots.
+- [`react-uid`](https://www.npmjs.com/package/react-uid): Used for generating unique keys (mostly in lists).
 
 ### dev-dependencies
 - [`create-react-component-folder`](https://www.npmjs.com/package/create-react-component-folder): makes it easier to create react component folders.
