@@ -3,6 +3,7 @@ import './Home.css';
 import Avatar from '@material-ui/core/Avatar';
 import GreedyFish from './ProfilePictures/GreedyFish.png'
 import CoolPenguin from './ProfilePictures/CoolPenguin.png'
+import HandsomeSquid from './ProfilePictures/HandsomeSquid.png'
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 
@@ -15,7 +16,8 @@ class ProfilePicture extends Component {
     showProfilePics: false,
       profilePictures: [
         {'name': 'GreedyFish', 'src': GreedyFish},
-        {'name': 'CoolPenguin', 'src': CoolPenguin}
+        {'name': 'CoolPenguin', 'src': CoolPenguin},
+        {'name': 'HandsomeSquid', 'src':HandsomeSquid}
       ],
       currentProfilePicture: {'name': 'GreedyFish', 'src': GreedyFish},
       buttonText: "Change Picture"
