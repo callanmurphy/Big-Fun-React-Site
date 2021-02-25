@@ -1,0 +1,11 @@
+svg.linechart {
+    padding: 10px;
+}
+
+.bar {
+    fill: teal;
+}
+
+.chartTitle {
+    text-align: center;
+}
