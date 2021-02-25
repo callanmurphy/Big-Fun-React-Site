@@ -30,6 +30,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 - [`react-router-dom`](https://reactrouter.com/web/guides/quick-start): This is used for routing between different views/components.
 - [`d3`](https://d3js.org/): This library is used for creating plots.
 - [`react-uid`](https://www.npmjs.com/package/react-uid): Used for generating unique keys (mostly in lists).
+- [`material-ui`](https://material-ui.com/) Used for fancy ui components.
 
 ### dev-dependencies
 - [`create-react-component-folder`](https://www.npmjs.com/package/create-react-component-folder): makes it easier to create react component folders.
