@@ -63,12 +63,12 @@ class LineChart extends Component {
       .attr('d', d3.line()(this.xypath))
   }
 
-  componentDidUpdate() {
-    this.chart.line.attr('d', d3.line()(this.xypath))
+  componentDidUpdate(psprops, pstate) {
     this.chart.xscale.domain([d3.min(this.xdata), d3.max(this.xdata)])
     this.chart.yscale.domain([d3.min(this.ydata), d3.max(this.ydata)])
     this.chart.xaxis.call(d3.axisBottom(this.chart.xscale))
     this.chart.yaxis.call(d3.axisLeft(this.chart.yscale))
+    this.chart.line.attr('d', d3.line()(this.xypath))
   }
 
   render() {
