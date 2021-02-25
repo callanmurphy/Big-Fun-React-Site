@@ -93,7 +93,9 @@ class App extends Component {
               <CreateAccount />
             </Route>
             <Route path="/home">
-              <Home />
+              <Home 
+                username={this.state.defaultUserName}
+              />
             </Route>
             <Route path="/leaderboard">
               <Leaderboard />

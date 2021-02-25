@@ -1,0 +1,52 @@
+
+ul {
+  list-style: none;
+}
+
+
+
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: green;
+}
+
+.status {
+  float: left;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-color: black;
+  margin: 10px;
+}
+
+.rival {
+  border: 1px solid black;
+
+}
+
+.rivalInfo {
+  display: inline-block;
+  margin: 10px;
+}
+
+.rivalsHeader {
+  border: 1px solid black;
+}
+
+.rivals {
+  width: 400px;
+  display: block;
+}
+
+#rivalSearch {
+  margin-left: 30px;
+  display: inline-block;
+}
+
+#rivalsTitle {
+  margin-left: 20px;
+  display: inline-block;
+}
