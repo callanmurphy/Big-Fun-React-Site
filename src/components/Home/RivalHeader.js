@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import './Home.css';
 
+
 class RivalHeader extends Component {
 
   render() {

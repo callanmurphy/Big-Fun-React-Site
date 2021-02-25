@@ -5,6 +5,7 @@ import Rival from './Rival'
 import RivalHeader from './RivalHeader'
 import ProfilePicture from './ProfilePicture'
 
+
 class Home extends Component {
   constructor(props) {
     super(props)
