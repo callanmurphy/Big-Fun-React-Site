@@ -1,9 +1,8 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Link, Route, Switch
 } from "react-router-dom";
-import { uid } from 'react-uid';
 import CreateAccount from '../CreateAccount';
 import Home from '../Home';
 import Leaderboard from '../Leaderboard';
@@ -11,115 +10,118 @@ import Login from '../Login';
 import Progress from '../Progress';
 import Schedule from '../Schedule';
 import './App.css';
+import { AppBar, IconButton, Toolbar, List, ListItem, ListItemText, Container } from '@material-ui/core';
+import { Home as HomeIcn } from '@material-ui/icons';
 
 
+class GameHome extends Component {
+
+  render() {
+    return (
+      <Container>
+        {
+          this.props.gamelinks.map(g => (
+            <Link key={g.title} to={g.path}>
+              <h1>
+                {g.title}
+              </h1>
+            </Link>
+          ))
+        }
+      </Container>
+    )
+  }
+}
 
 class App extends Component {
   constructor(props) {
     super(props)
+    this.gamelinks = [
+      { path: '/games/game1', title: 'Game 1', element: (<h1>Game 1</h1>) },
+      { path: '/games/game2', title: 'Game 2', element: (<h1>Game 2</h1>) },
+      { path: '/games/game3', title: 'Game 3', element: (<h1>Game 3</h1>) },
+    ]
 
-    this.gameComponents = {
-      'game1': (<h1>Game 1</h1>),
-      'game2': (<h1>Game 2</h1>),
-      'game3': (<h1>Game 3</h1>),
-    }
-    this.games = {
-      'game1': 'Game 1',
-      'game2': 'Game 2',
-      'game3': 'Game 3',
-    }
+    this.navlinks = [
+      {
+        title: 'Create Account',
+        path: '/createaccount',
+        element: (<CreateAccount />)
+      }, {
+        title: 'Leaderboard',
+        path: '/leaderboard',
+        element: (<Leaderboard />)
+      }, {
+        title: 'Login',
+        path: '/',
+        element: (<Login />)
+      }, {
+        title: 'Progress',
+        path: '/progress',
+        element: (<Progress games={this.gamelinks.map(g => g.title)} />)
+      }, {
+        title: 'Games',
+        path: '/games',
+        element: (<GameHome gamelinks={this.gamelinks} />)
+      }, {
+        title: 'Schedule',
+        path: '/schedule',
+        element: (<Schedule />)
+      },
+    ]
+
     this.state = {
-      navDropdown: false,
       defaultUserName: "User"
     }
-  }
 
-  toggleDropdown() {
-    this.setState({
-      navDropdown: !this.state.navDropdown
-    })
+
   }
 
   render() {
-    const caretClasses = 'dropcaret' + (this.state.navDropdown ? ' active' : ' notactive');
-    console.log(caretClasses)
     return (
       <Router>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/createaccount">Create Account</Link>
-              </li>
-              <li>
-                <Link to="/home">Home</Link>
-              </li>
-              <li>
-                <Link to="/leaderboard">Leaderboard</Link>
-              </li>
-              <li>
-                <Link to="/">Login</Link>
-              </li>
-              <li>
-                <Link to="/progress">Progress</Link>
-              </li>
-              <li>
-                <Link to="/schedule">Schedule</Link>
-              </li>
-              <li className="dropli">
-                <button className="dropbtn" onClick={(_) => this.toggleDropdown()}>
-                  Games <span className={caretClasses}>&#9660;</span>
-                </button>
-                {
-                  this.state.navDropdown ?
-                    <ul className='dropdown'>
-                      {
-                        Object.entries(this.games).map(([url, name]) => {
-                          return (
-                            <li key={uid(url + name)}><Link to={url}>{name}</Link></li>
-                          );
-                        })
-                      }
-                    </ul>
-                    : null
-                }
-              </li>
-            </ul>
-          </nav>
+        <AppBar position='static'>
+          <Toolbar className='homenav'>
+            <Link to='/home'>
+              <IconButton>
+                <HomeIcn className='homebtn' />
+              </IconButton>
+            </Link>
+            <List className='homenav'>
+              {
+                this.navlinks.map(({ title, path }) => (
+                  <Link to={path} key={title} className='navtext'>
+                    <ListItem button>
+                      <ListItemText primary={title} />
+                    </ListItem>
+                  </Link>
+                ))
+              }
+            </List>
+          </Toolbar>
+        </AppBar>
 
 
-          <Switch>
-            <Route path="/createaccount">
-              <CreateAccount />
-            </Route>
-            <Route path="/home">
-              <Home 
-                username={this.state.defaultUserName}
-              />
-            </Route>
-            <Route path="/leaderboard">
-              <Leaderboard />
-            </Route>
-            <Route path="/progress">
-              <Progress games={Object.values((this.games))} />
-            </Route>
-            <Route path="/schedule">
-              <Schedule />
-            </Route>
-            {
-              Object.entries(this.gameComponents).map(([url, comp]) => {
-                return (
-                  <Route path={url} key={uid(comp)}>
-                    { comp}
-                  </Route>
-                );
-              })
-            }
-            <Route exact path="/">
-              <Login />
-            </Route>
-          </Switch>
-        </div>
+        <Switch>
+          {/* home route */}
+          <Route exact path='/home'>
+            <Home username={this.state.defaultUserName} />
+          </Route>
+          {  // page routes
+            this.navlinks.map(({ title, path, element }) => (
+              <Route key={path} exact path={path}>
+                {element}
+              </Route>
+            ))
+          }
+          {  // game routes
+            this.gamelinks.map(({ title, path, element }) => (
+              <Route key={path} exact path={path}>
+                {element}
+              </Route>
+            ))
+          }
+        </Switch>
       </Router >
     );
   }
