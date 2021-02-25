@@ -105,7 +105,7 @@ class App extends Component {
         <Switch>
           {/* home route */}
           <Route exact path='/home'>
-            <Home />
+            <Home username={this.state.defaultUserName} />
           </Route>
           {  // page routes
             this.navlinks.map(({ title, path, element }) => (

@@ -1,0 +1,90 @@
+
+ul {
+  list-style: none;
+}
+
+
+
+.red {
+  background-color: red;
+}
+
+.green {
+  background-color: green;
+}
+
+.status {
+  float: left;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-color: black;
+  margin: 10px;
+}
+
+.rival {
+  border: 1px solid black;
+
+}
+
+.rivalInfo {
+  display: inline-block;
+  margin: 10px;
+}
+
+.rivalsHeader {
+  border: 1px solid black;
+}
+
+.rivals {
+  width: 400px;
+}
+
+#rivalSearch {
+  margin-left: 30px;
+  display: inline-block;
+}
+
+#rivalsTitle {
+  margin-left: 20px;
+  display: inline-block;
+}
+
+#profilePicture {
+  border-radius: 10%;
+  width: 200px;
+  margin-left: 50px;
+  margin-right: 30px;
+  margin-top: 30px;
+  float: none;
+}
+
+#ChangePicture {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  float: none;
+}
+
+#Username {
+  margin-left: 50px;
+}
+
+#profilePictureContainer {
+  display: inline-block;
+  float: left;
+}
+
+#UserInfo {
+  display: inline-block;
+}
+
+#profilePictures {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.miniProfilePictures {
+  width: 100px;
+  border-radius: 10%;
+}
