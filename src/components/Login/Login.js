@@ -19,6 +19,7 @@ class Login extends Component {
   handleSubmit(e){
       e.preventDefault();
       alert(this.state.username + " logged in successfully");
+      this.props.login()
       window.location.href = "/home";
   }
 
