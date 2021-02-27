@@ -1,0 +1,15 @@
+.homenav {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navtext {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: white;
+}
+
+.homebtn {
+    color: white;
+    font-size: large;
+}
