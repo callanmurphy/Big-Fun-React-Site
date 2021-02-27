@@ -1,7 +1,7 @@
 :root {
-  --primary: #64E4B6
-  --secondary: #B664E4
-  --tertiary: #E4B664
+  --primary: #64E4B6;
+  --secondary: #B664E4;
+  --tertiary: #E4B664;
 }
 
 body {
