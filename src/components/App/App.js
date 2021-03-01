@@ -7,7 +7,7 @@ import CreateAccount from '../CreateAccount';
 import Home from '../Home';
 import Leaderboard from '../Leaderboard';
 import Login from '../Login';
-// import TestComp from '../TestComp';
+import TestComp from '../TestComp';
 import Progress from '../Progress';
 import Schedule from '../Schedule';
 import './App.css';
@@ -61,11 +61,11 @@ class App extends Component {
         path: '/schedule',
         element: (<Schedule />)
       },
-      // {
-      //   title: 'Test',
-      //   path: '/test',
-      //   element: (<TestComp />)
-      // },
+      {
+        title: 'Test',
+        path: '/test',
+        element: (<TestComp />)
+      },
     ]
 
     this.nonNavlinks = [
