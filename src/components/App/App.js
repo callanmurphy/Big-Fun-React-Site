@@ -10,39 +10,18 @@ import Login from '../Login';
 import TestComp from '../TestComp';
 import Progress from '../Progress';
 import Schedule from '../Schedule';
+import Games, { gamelinks } from '../Games';
 import './App.css';
-import { AppBar, IconButton, Toolbar, List, ListItem, ListItemText, Container } from '@material-ui/core';
+import { AppBar, IconButton, Toolbar, List, ListItem, ListItemText } from '@material-ui/core';
 import { Home as HomeIcn, ExitToApp } from '@material-ui/icons';
 
+
 import {login, getUser} from '../../backend/userAPI'
-
-class GameHome extends Component {
-
-  render() {
-    return (
-      <Container>
-        {
-          this.props.gamelinks.map(g => (
-            <Link key={g.title} to={g.path}>
-              <h1>
-                {g.title}
-              </h1>
-            </Link>
-          ))
-        }
-      </Container>
-    )
-  }
-}
 
 class App extends Component {
   constructor(props) {
     super(props)
-    this.gamelinks = [
-      { path: '/games/game1', title: 'Game 1', element: (<h1>Game 1</h1>) },
-      { path: '/games/game2', title: 'Game 2', element: (<h1>Game 2</h1>) },
-      { path: '/games/game3', title: 'Game 3', element: (<h1>Game 3</h1>) },
-    ]
+    this.gamelinks = gamelinks
 
     this.navref = React.createRef();
 
@@ -58,7 +37,7 @@ class App extends Component {
       }, {
         title: 'Games',
         path: '/games',
-        element: (<GameHome gamelinks={this.gamelinks} />)
+        element: (<Games gamelinks={this.gamelinks} />)
       }, {
         title: 'Schedule',
         path: '/schedule',
@@ -74,7 +53,7 @@ class App extends Component {
     this.nonNavlinks = [
       {
         path: '/',
-        element: (<Login login={() => this.login()} />)
+        element: (<Login login={(user, pass) => this.login(user, pass)} />)
       }, {
         path: '/createaccount',
         element: (<CreateAccount />)
@@ -89,10 +68,12 @@ class App extends Component {
 
   }
 
-  login() {
-    this.setState({
-      loggedIn: true
-    })
+  login(user, pass) {
+    if (login(user, pass)) {
+      this.setState({
+        loggedIn: true
+      })
+    }
   }
 
   logout() {
