@@ -4,7 +4,10 @@ import Avatar from '@material-ui/core/Avatar';
 import { profilePictures } from './';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import { Button, Menu, MenuItem } from '@material-ui/core';
+import { 
+  Button,
+  // Menu, MenuItem
+} from '@material-ui/core';
 
 
 
@@ -16,7 +19,7 @@ class ProfilePicture extends Component {
 
     // console.log(profilePictures)
     this.state = {
-    showProfilePics: false,
+      showProfilePics: false,
       profilePictures: profilePictures,
       currentProfilePicture: profilePictures[0],
       buttonText: "Change Picture"
@@ -48,9 +51,9 @@ class ProfilePicture extends Component {
               //   <Avatar class="miniProfilePictures" src={this.state.profilePictures[1].src} alt={this.state.profilePictures[1].name} onClick={ () => this.state.currentProfilePicture = this.state.profilePictures[1]} />
               // </div>
               <GridList cellHeight={160} className="gridlist" cols={3}>
-                {(this.state.profilePictures.map((pic) => (
-                  <GridListTile key={pic.name} cols={1}>
-                    <img src={pic.src} alt={pic.name} onClick={ () => this.state.currentProfilePicture = pic} />
+                {(this.state.profilePictures.map((pic, i) => (
+                  <GridListTile key={i} cols={1}>
+                    <img src={pic.src} alt={pic.name} onClick={ () => this.setState({currentProfilePicture: pic}) } />
                   </GridListTile>
                 )))}
 

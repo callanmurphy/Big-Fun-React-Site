@@ -22,9 +22,9 @@ class Games extends Component {
 
 
 const gamelinks = [
-  { path: '/games/game1', title: 'Game 1', element: (<h1>Game 1</h1>) },
-  { path: '/games/game2', title: 'Game 2', element: (<h1>Game 2</h1>) },
-  { path: '/games/game3', title: 'Game 3', element: (<h1>Game 3</h1>) },
+  { path: '/games/game1', title: 'Follow the dot', element: (<h1>Game 1</h1>) },
+  { path: '/games/game2', title: 'Type the keys', element: (<h1>Game 2</h1>) },
+  { path: '/games/game3', title: 'Pong', element: (<h1>Game 3</h1>) },
 ];
 
 export default Games;

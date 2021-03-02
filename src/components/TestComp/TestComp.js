@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Menu, MenuItem } from '@material-ui/core';
+// import { Button, Menu, MenuItem } from '@material-ui/core';
 import UserAvatar from '../UserAvatar';
 import { profilePictures } from '../Home';
 
@@ -20,47 +20,47 @@ class TestComp extends Component {
 export default TestComp;
 
 
-class TestDropDown extends Component {
-  constructor(props) {
-    super(props)
+// class TestDropDown extends Component {
+//   constructor(props) {
+//     super(props)
 
-    this.ref = React.createRef();
-    this.state = {
-      open: false
-    }
-  }
+//     this.ref = React.createRef();
+//     this.state = {
+//       open: false
+//     }
+//   }
 
-  handleClose() {
-    this.setState({
-      open: false
-    })
-  }
+//   handleClose() {
+//     this.setState({
+//       open: false
+//     })
+//   }
 
-  handleClick() {
-    this.setState({
-      open: true
-    })
-  }
+//   handleClick() {
+//     this.setState({
+//       open: true
+//     })
+//   }
 
-  render() {
-    let handleClose = () => this.handleClose();
-    return (
-      <div>
-        <Button ref={this.ref} onClick={() => this.handleClick()}>
-          Open Menu
-        </Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={this.ref.current}
-          keepMounted
-          open={this.state.open}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
-        </Menu>
-      </div>
-    );
-  }
-}
+//   render() {
+//     let handleClose = () => this.handleClose();
+//     return (
+//       <div>
+//         <Button ref={this.ref} onClick={() => this.handleClick()}>
+//           Open Menu
+//         </Button>
+//         <Menu
+//           id="simple-menu"
+//           anchorEl={this.ref.current}
+//           keepMounted
+//           open={this.state.open}
+//           onClose={handleClose}
+//         >
+//           <MenuItem onClick={handleClose}>Profile</MenuItem>
+//           <MenuItem onClick={handleClose}>My account</MenuItem>
+//           <MenuItem onClick={handleClose}>Logout</MenuItem>
+//         </Menu>
+//       </div>
+//     );
+//   }
+// }

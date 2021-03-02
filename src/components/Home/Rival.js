@@ -10,22 +10,22 @@ class Rival extends Component {
 
     if (user.online) {
       return (
-        <li class="rival">
-            <div class="rivalPic">
+        <li className="rival">
+            <div className="rivalPic">
                <UserAvatar uid={user.id} onlineIndicator pic={profilePictures[user.profilePic]} size='small' />
             </div>
-            <div class="rivalInfo">
+            <div className="rivalInfo">
              {user.name} - {user.status}
             </div>
         </li>
       )
     } else {
       return (
-        <li class="rival">
-            <div class="rivalPic">
+        <li className="rival">
+            <div className="rivalPic">
                <UserAvatar uid={user.id} offlineIndicator pic={profilePictures[user.profilePic]} size='small' />
             </div>
-            <div class="rivalInfo">
+            <div className="rivalInfo">
              {user.name} - {user.status}
             </div>
         </li>

@@ -34,7 +34,7 @@ class Leaderboard extends Component {
                 </TableCell>
               </TableRow>
             {this.state.users.map((user,i) => (
-              <TableRow>
+              <TableRow key={i}>
                 <TableCell>
                   {i+1}
                 </TableCell>

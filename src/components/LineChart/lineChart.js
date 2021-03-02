@@ -61,7 +61,7 @@ class LineChart extends Component {
     const xdata = this.xdata.map(this.chart.xscale);
     const ydata = this.ydata.map(this.chart.yscale);
     let ret = [];
-    this.props.data.map((d, i) => {
+    for(let i = 0; i < this.props.data.length; i++) {
       if (this.props.blocky) {
         if (i < this.props.data.length - 1) {
           ret.push([xdata[i], ydata[i]])
@@ -73,7 +73,7 @@ class LineChart extends Component {
       } else {
         ret.push([xdata[i], ydata[i]])
       }
-    })
+    }
     return ret
   }
 

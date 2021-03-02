@@ -2,19 +2,19 @@ import React, { Component } from "react";
 import './Home.css';
 
 import Rival from './Rival' 
-import RivalHeader from './RivalHeader'
+// import RivalHeader from './RivalHeader'
 import ProfilePicture from './ProfilePicture'
 import { profilePictures } from './';
 
 import Input from '@material-ui/core/Input';
-import { Button, Menu, MenuItem } from '@material-ui/core';
+// import { Button, Menu, MenuItem } from '@material-ui/core';
 import UserAvatar from '../UserAvatar';
 import {getUser} from '../../backend/userAPI'
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
+// import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
@@ -62,8 +62,9 @@ class Home extends Component {
 
   render() {
   	const {user} = this.props
-    const rivals = this.state.rivals.map((rivalId) =>
+    const rivals = this.state.rivals.map((rivalId, i) =>
       <Rival
+        key={i}
         user={getUser(rivalId)}
       />
     )
@@ -72,8 +73,8 @@ class Home extends Component {
         <ProfilePicture />
       <div id="UserInfo">
         <h1 id="Username">{user.name}</h1>
-        <ul class="rivals">
-          <li class="rivalsHeader">
+        <ul className="rivals">
+          <li className="rivalsHeader">
                 <h2 id="rivalsTitle">RIVALS</h2>
                 <form id="rivalSearch">
                 <Input type="text" placeholder="Search Rivals..." title="Type in a Rival's Name" onChange={this.searchRivals.bind(this)} />
@@ -87,15 +88,15 @@ class Home extends Component {
           </TableRow>
         </TableHead>
         <TableBody>
-          {this.state.rivals.map((rival) => (
-            <TableRow key={getUser(rival).id}>
+          {this.state.rivals.map((rival, i) => (
+            <TableRow key={i}>
               <TableCell align="right">
-                <div class="rivalPic">
+                <div className="rivalPic">
                   <UserAvatar uid={getUser(rival).id} onlineIndicator pic={profilePictures[getUser(rival).profilePic]} size='small' />
                 </div>
               </TableCell>
               <TableCell align="right">
-                <div class="rivalInfo">
+                <div className="rivalInfo">
                   {getUser(rival).name} - {getUser(rival).status}
                 </div>
               </TableCell>
