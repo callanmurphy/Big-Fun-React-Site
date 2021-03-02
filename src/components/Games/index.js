@@ -1,2 +1,2 @@
+export { gamelinks } from './gameData';
 export { default } from "./Games";
-export { gamelinks } from './Games';
