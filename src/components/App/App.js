@@ -14,6 +14,7 @@ import './App.css';
 import { AppBar, IconButton, Toolbar, List, ListItem, ListItemText, Container } from '@material-ui/core';
 import { Home as HomeIcn, ExitToApp } from '@material-ui/icons';
 
+import {login, getUser} from '../../backend/userAPI'
 
 class GameHome extends Component {
 
@@ -79,7 +80,7 @@ class App extends Component {
     ]
 
     this.state = {
-      defaultUserName: "User",
+      defaultUser: getUser(1),
       loggedIn: true
     }
 
@@ -138,7 +139,7 @@ class App extends Component {
         <Switch>
           {/* home route */}
           <Route exact path='/home'>
-            <Home username={this.state.defaultUserName} />
+            <Home user={this.state.defaultUser} />
           </Route>
           {  // page routes
             this.navlinks.map(({ title, path, element }) => (
