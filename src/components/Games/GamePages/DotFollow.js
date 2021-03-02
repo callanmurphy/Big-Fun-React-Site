@@ -1,4 +1,4 @@
-import { Container, Divider, Paper, Typography } from "@material-ui/core";
+import { Divider, Paper, Typography } from "@material-ui/core";
 import React, { Component } from "react";
 import './GamePages.css';
 

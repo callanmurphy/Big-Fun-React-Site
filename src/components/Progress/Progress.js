@@ -8,7 +8,7 @@ import {
   Toolbar, Typography, Select, FormControl, MenuItem,
   Input, TablePagination, TableFooter, IconButton,
   Slide,
-  Divider
+  Divider, Container
 } from '@material-ui/core';
 import { FilterList, ArrowBackIos as BackArrow, ArrowForwardIos as ForwardArrow } from '@material-ui/icons';
 
@@ -137,188 +137,190 @@ class Progress extends Component {
 
 
     return (
-      <Grid container spacing={3} alignItems='stretch' className='progessGrid'>
-        <Grid item xs={4}>
-          <Paper className='progressFullHeight'>
-            <Toolbar>
-              <Typography variant='h5' className='progressToolbarHeader'>
-                My Games
-              </Typography>
-              <FilterList />
-              <FormControl>
-                <Select
-                  value={this.state.gameFilter}
-                  input={<Input />}
-                  onChange={setFilter}
-                >
-                  <MenuItem value='All'><em>All</em></MenuItem>
-                  {
-                    this.props.games.map(g => (
-                      <MenuItem key={g} value={g}>{g}</MenuItem>
-                    ))
-                  }
-                </Select>
-              </FormControl>
-            </Toolbar>
-            <Table size='medium'>
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <TableSortLabel
-                      align='left'
-                      active={this.state.by === 'date'}
-                      direction={this.state.direction === 1 ? 'asc' : 'desc'}
-                      onClick={(e) => this.setSort('date')}
-                    >
-                      Date
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      align='right'
-                      active={this.state.by === 'score'}
-                      direction={this.state.direction === 1 ? 'asc' : 'desc'}
-                      onClick={(e) => this.setSort('score')}
-                    >
-                      Score
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      align='right'
-                      active={this.state.by === 'name'}
-                      direction={this.state.direction === 1 ? 'asc' : 'desc'}
-                      onClick={(e) => this.setSort('name')}
-                    >
-                      Game
-                    </TableSortLabel>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {
-                  filteredGames
-                    .slice(
-                      this.state.tablePage * this.perPage,
-                      (this.state.tablePage + 1) * this.perPage)
-                    .map((g, i) => (
-                      <TableRow
-                        hover
-                        key={uid(g.date)}
+      <Container maxWidth={false}>
+        <Grid container spacing={3} alignItems='stretch' className='progessGrid'>
+          <Grid item xs={4}>
+            <Paper className='progressFullHeight'>
+              <Toolbar>
+                <Typography variant='h5' className='progressToolbarHeader'>
+                  My Games
+                </Typography>
+                <FilterList />
+                <FormControl>
+                  <Select
+                    value={this.state.gameFilter}
+                    input={<Input />}
+                    onChange={setFilter}
+                  >
+                    <MenuItem value='All'><em>All</em></MenuItem>
+                    {
+                      this.props.games.map(g => (
+                        <MenuItem key={g} value={g}>{g}</MenuItem>
+                      ))
+                    }
+                  </Select>
+                </FormControl>
+              </Toolbar>
+              <Table size='medium'>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      <TableSortLabel
+                        align='left'
+                        active={this.state.by === 'date'}
+                        direction={this.state.direction === 1 ? 'asc' : 'desc'}
+                        onClick={(e) => this.setSort('date')}
                       >
-                        <TableCell className={(i%2 === 1) ? 'progressFaintPrimary' : ''}>
-                          {g.date.toLocaleDateString('en-US')}
-                        </TableCell>
-                        <TableCell className={(i%2 === 1) ? 'progressFaintPrimary' : ''}>
-                          {Math.round(g.score)}
-                        </TableCell>
-                        <TableCell className={(i%2 === 1) ? 'progressFaintPrimary' : ''}>
-                          {g.name}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                }
-                { // blank rows
-                  filteredGames.length % this.perPage !== 0
-                    && this.state.tablePage === Math.floor(filteredGames.length / this.perPage)
-                    ? [...Array(this.perPage - (filteredGames.length % this.perPage)).keys()]
-                      .map(i => (
-                        <TableRow key={i}>
-                          <TableCell>{"\u00a0"}</TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
+                        Date
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell>
+                      <TableSortLabel
+                        align='right'
+                        active={this.state.by === 'score'}
+                        direction={this.state.direction === 1 ? 'asc' : 'desc'}
+                        onClick={(e) => this.setSort('score')}
+                      >
+                        Score
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell>
+                      <TableSortLabel
+                        align='right'
+                        active={this.state.by === 'name'}
+                        direction={this.state.direction === 1 ? 'asc' : 'desc'}
+                        onClick={(e) => this.setSort('name')}
+                      >
+                        Game
+                      </TableSortLabel>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {
+                    filteredGames
+                      .slice(
+                        this.state.tablePage * this.perPage,
+                        (this.state.tablePage + 1) * this.perPage)
+                      .map((g, i) => (
+                        <TableRow
+                          hover
+                          key={uid(g.date)}
+                        >
+                          <TableCell className={(i%2 === 1) ? 'progressFaintPrimary' : ''}>
+                            {g.date.toLocaleDateString('en-US')}
+                          </TableCell>
+                          <TableCell className={(i%2 === 1) ? 'progressFaintPrimary' : ''}>
+                            {Math.round(g.score)}
+                          </TableCell>
+                          <TableCell className={(i%2 === 1) ? 'progressFaintPrimary' : ''}>
+                            {g.name}
+                          </TableCell>
                         </TableRow>
                       ))
-                    : null
-                }
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    count={filteredGames.length}
-                    rowsPerPage={this.perPage}
-                    page={this.state.tablePage}
-                    onChangePage={(e, p) => this.setState({ tablePage: p })}
-                    rowsPerPageOptions={[]}
-                  />
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </Paper>
-        </Grid>
-        <Grid item xs={8}>
-          <Paper className='progressFullHeight progressCharts'>
-            <Typography variant='h5' display='block' align='center'>
-              {this.props.games[this.state.showGame]}
-            </Typography>
-            <div className='progressChartCarosoul'>
-              <div>
-                <IconButton
-                  className='progressCarosoulButton'
-                  onClick={(e) => this.moveChart(-1)}
-                >
-                  <BackArrow ></BackArrow>
-                </IconButton>
+                  }
+                  { // blank rows
+                    filteredGames.length % this.perPage !== 0
+                      && this.state.tablePage === Math.floor(filteredGames.length / this.perPage)
+                      ? [...Array(this.perPage - (filteredGames.length % this.perPage)).keys()]
+                        .map(i => (
+                          <TableRow key={i}>
+                            <TableCell>{"\u00a0"}</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                          </TableRow>
+                        ))
+                      : null
+                  }
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      count={filteredGames.length}
+                      rowsPerPage={this.perPage}
+                      page={this.state.tablePage}
+                      onChangePage={(e, p) => this.setState({ tablePage: p })}
+                      rowsPerPageOptions={[]}
+                    />
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            </Paper>
+          </Grid>
+          <Grid item xs={8}>
+            <Paper className='progressFullHeight progressCharts'>
+              <Typography variant='h5' display='block' align='center'>
+                {this.props.games[this.state.showGame]}
+              </Typography>
+              <div className='progressChartCarosoul'>
+                <div>
+                  <IconButton
+                    className='progressCarosoulButton'
+                    onClick={(e) => this.moveChart(-1)}
+                  >
+                    <BackArrow ></BackArrow>
+                  </IconButton>
+                </div>
+                <div className='progressChartContainer'>
+                  {charts}
+                </div>
+                <div>
+                  <IconButton
+                    className='progressCarosoulButton'
+                    onClick={(e) => this.moveChart(1)}
+                  >
+                    <ForwardArrow ></ForwardArrow>
+                  </IconButton>
+                </div>
               </div>
-              <div className='progressChartContainer'>
-                {charts}
-              </div>
-              <div>
-                <IconButton
-                  className='progressCarosoulButton'
-                  onClick={(e) => this.moveChart(1)}
-                >
-                  <ForwardArrow ></ForwardArrow>
-                </IconButton>
-              </div>
-            </div>
-          </Paper>
+            </Paper>
+          </Grid>
+          <Grid item xs={3}>
+            <Paper className='progressFullHeight progressStatPaper'>
+              <Typography className='progressStatTitle' variant='h4' align='center' display='block'>
+                Games Played
+              </Typography>
+              <Divider />
+              <Typography className='progressStatVal' variant='h2' align='center'>
+                {this.state.recentGames.length}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={3}>
+            <Paper className='progressFullHeight progressStatPaper'>
+              <Typography className='progressStatTitle' variant='h4' align='center' display='block'>
+                High Score
+              </Typography>
+              <Divider />
+              <Typography className='progressStatVal' variant='h2' align='center'>
+                {Math.round(Math.max(...this.state.recentGames.map(g => g.score)))}
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={3}>
+            <Paper className='progressFullHeight progressStatPaper'>
+              <Typography className='progressStatTitle' variant='h4' align='center' display='block'>
+                Best Rival
+              </Typography>
+              <Divider />
+              <Typography className='progressStatVal' variant='h2' align='center'>
+                TODO
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={3}>
+            <Paper className='progressFullHeight progressStatPaper'>
+              <Typography className='progressStatTitle' variant='h4' align='center' display='block'>
+                Favorite Game
+              </Typography>
+              <Divider />
+              <Typography className='progressStatVal' variant='h2' align='center'>
+                {favoriteGame}
+              </Typography>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Paper className='progressFullHeight progressStatPaper'>
-            <Typography className='progressStatTitle' variant='h4' align='center' display='block'>
-              Games Played
-            </Typography>
-            <Divider />
-            <Typography className='progressStatVal' variant='h2' align='center'>
-              {this.state.recentGames.length}
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper className='progressFullHeight progressStatPaper'>
-            <Typography className='progressStatTitle' variant='h4' align='center' display='block'>
-              High Score
-            </Typography>
-            <Divider />
-            <Typography className='progressStatVal' variant='h2' align='center'>
-              {Math.round(Math.max(...this.state.recentGames.map(g => g.score)))}
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper className='progressFullHeight progressStatPaper'>
-            <Typography className='progressStatTitle' variant='h4' align='center' display='block'>
-              Best Rival
-            </Typography>
-            <Divider />
-            <Typography className='progressStatVal' variant='h2' align='center'>
-              TODO
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper className='progressFullHeight progressStatPaper'>
-            <Typography className='progressStatTitle' variant='h4' align='center' display='block'>
-              Favorite Game
-            </Typography>
-            <Divider />
-            <Typography className='progressStatVal' variant='h2' align='center'>
-              {favoriteGame}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+      </Container>
     );
   }
 }
