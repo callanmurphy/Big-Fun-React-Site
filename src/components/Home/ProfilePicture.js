@@ -1,25 +1,24 @@
 import React, { Component } from "react";
 import './Home.css';
 import Avatar from '@material-ui/core/Avatar';
-import GreedyFish from './ProfilePictures/GreedyFish.png'
-import CoolPenguin from './ProfilePictures/CoolPenguin.png'
-import HandsomeSquid from './ProfilePictures/HandsomeSquid.png'
+import { profilePictures } from './';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import { Button, Menu, MenuItem } from '@material-ui/core';
+
 
 
 class ProfilePicture extends Component {
   constructor(props) {
     super(props)
 
+    
+
+    // console.log(profilePictures)
     this.state = {
     showProfilePics: false,
-      profilePictures: [
-        {'name': 'GreedyFish', 'src': GreedyFish},
-        {'name': 'CoolPenguin', 'src': CoolPenguin},
-        {'name': 'HandsomeSquid', 'src':HandsomeSquid}
-      ],
-      currentProfilePicture: {'name': 'GreedyFish', 'src': GreedyFish},
+      profilePictures: profilePictures,
+      currentProfilePicture: profilePictures[0],
       buttonText: "Change Picture"
     }
   }
@@ -40,7 +39,7 @@ class ProfilePicture extends Component {
 
       <div>
         <Avatar id="profilePicture" src={this.state.currentProfilePicture.src} alt="ProfilePicture" />
-        <button id="ChangePicture" onClick={this.UpdatePic.bind(this)}>{this.state.buttonText}</button>
+        <Button id="ChangePicture" onClick={this.UpdatePic.bind(this)}>{this.state.buttonText}</Button>
       </div>
       {
         this.state.showProfilePics ?
