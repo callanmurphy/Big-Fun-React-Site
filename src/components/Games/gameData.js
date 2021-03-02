@@ -1,4 +1,5 @@
 import PongImg from './gamePics/pong.png';
+import DotImg from './gamePics/followDot.png';
 import { Pong, DotFollow, TypeType } from './GamePages';
 
 
@@ -6,7 +7,7 @@ const gamelinks = [
     {
         path: '/games/game1',
         title: 'Follow the dot',
-        img: PongImg,
+        img: DotImg,
         description: (<span>Can you keep track of the dot?</span>),
         element: (<DotFollow />),
     
