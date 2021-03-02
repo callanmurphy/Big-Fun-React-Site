@@ -43,6 +43,8 @@ class App extends Component {
       { path: '/games/game3', title: 'Game 3', element: (<h1>Game 3</h1>) },
     ]
 
+    this.navref = React.createRef();
+
     this.navlinks = [
       {
         title: 'Leaderboard',
@@ -98,12 +100,35 @@ class App extends Component {
     })
   }
 
+  moveGradient(e) {
+    // const light = [e.screenX / 2, 0];
+    // const mouse = [e.clientX, e.clientY];
+
+    // let angle = Math.atan2(light[1]-mouse[1], light[0]-mouse[0]);
+    // angle = Math.round((360 + (180 * angle / Math.PI))) % 360;
+    // let angle = 180;
+    // this.navref.current.style.background =
+    //   `linear-gradient(${angle}, red 0%, var(--primary) 100%)`;
+    // console.log(angle)
+  }
+
+  componentDidMount() {
+    // this.gradientmover = (e) => this.moveGradient(e);
+    // document.addEventListener('mousemove', this.gradientmover);
+  }
+
+  componentWillUnmount() {
+    // if (this.gradientmover) {
+    //   document.removeEventListener('mousemove', this.gradientmover);
+    // }
+  }
+
   render() {
     return (
       <Router>
         {this.state.loggedIn ?
           <AppBar position='static'>
-            <Toolbar className='homenav'>
+            <Toolbar className='homenav' ref={this.navref}>
               <List>
 
                 <Link to='/' onClick={() => this.logout()} key='logout'>
@@ -123,7 +148,10 @@ class App extends Component {
                   this.navlinks.map(({ title, path }) => (
                     <Link to={path} key={title} className='navtext'>
                       <ListItem button>
-                        <ListItemText primary={title} />
+                        <ListItemText
+                          primary={title}
+                          primaryTypographyProps={{variant:'h5'}}
+                        />
                       </ListItem>
                     </Link>
                   ))

@@ -1,12 +1,16 @@
 .homenav {
     display: flex;
     justify-content: space-between;
+    background-color: var(--secondary);
+    /* background-color: red; */
+    /* background: linear-gradsient(180, red 0%, var(--primary) 100%); */
 }
 
 .navtext {
     text-decoration: none;
     text-transform: uppercase;
     color: white;
+    font-weight: bolder;
 }
 
 .homebtn {
