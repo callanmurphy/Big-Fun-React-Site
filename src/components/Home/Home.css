@@ -13,13 +13,13 @@ ul {
   background-color: green;
 }
 
-.status {
+.rivalPic {
   float: left;
-  border-radius: 50%;
   width: 20px;
   height: 20px;
   border-color: black;
-  margin: 10px;
+  margin-right: 20px;
+  margin-bottom: 20px;
 }
 
 .rival {
