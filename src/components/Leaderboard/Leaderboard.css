@@ -1,0 +1,15 @@
+.MuiAvatar-root{
+    display: inline-block
+}
+
+h4 {
+    font-family: fantasy;
+}
+
+h3 {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+text {
+    font-family: monospace;
+}

@@ -1,23 +1,26 @@
 import React, { Component } from "react";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+import { Table, TableBody, TableCell, TableRow, Avatar } from '@material-ui/core';
+import { profilePictures } from "../Home"
+
+import "./Leaderboard.css"
 
 class Leaderboard extends Component {
   
   constructor(props) {
     super(props);
+    
     this.state = {
       users: [
-        { uName: "MArio", points: 309 },
-        { uName: "LUigi", points: 108 }
+        { uName: "Squidward", points: 369 , profilePic: 2},
+        { uName: "MArio", points: 309, profilePic: 0 },
+        { uName: "LUigi", points: 108 , profilePic: 1},
       ]
     }
-}
+  }
 
 
   render() {
+    console.log(profilePictures)
     return (
       <div>
         <Table className="leaderboard">
@@ -39,7 +42,8 @@ class Leaderboard extends Component {
                   {i+1}
                 </TableCell>
                 <TableCell>
-                  {user.uName}
+                  <Avatar alt="" src={profilePictures[user.profilePic].src}/>
+                  <h4>{user.uName}</h4>
                 </TableCell>
                 <TableCell>
                   {user.points}
