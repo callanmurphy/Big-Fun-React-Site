@@ -1,20 +1,19 @@
 import React, { Component } from "react";
 import { Table, TableBody, TableCell, TableRow, Avatar } from '@material-ui/core';
 import { profilePictures } from "../Home"
-
+import { getUser } from "../../backend"
 import "./Leaderboard.css"
 
 class Leaderboard extends Component {
   
   constructor(props) {
     super(props);
-    
+    const users = []
+    for (let id = 0; id < 4; id++) {
+      users.push(getUser(id))
+    }
     this.state = {
-      users: [
-        { uName: "Squidward", points: 369 , profilePic: 2},
-        { uName: "MArio", points: 309, profilePic: 0 },
-        { uName: "LUigi", points: 108 , profilePic: 1},
-      ]
+      users: users
     }
   }
 
@@ -43,7 +42,7 @@ class Leaderboard extends Component {
                 </TableCell>
                 <TableCell>
                   <Avatar alt="" src={profilePictures[user.profilePic].src}/>
-                  <h4>{user.uName}</h4>
+                  <h4>{user.name}</h4>
                 </TableCell>
                 <TableCell>
                   {user.points}
