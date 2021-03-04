@@ -14,6 +14,7 @@ import Games, { gamelinks } from '../Games';
 import './App.css';
 import { AppBar, IconButton, Toolbar, List, ListItem, ListItemText } from '@material-ui/core';
 import { Home as HomeIcn, ExitToApp } from '@material-ui/icons';
+import 'fontsource-roboto';
 
 
 import {login, getUser} from '../../backend/userAPI'
@@ -42,11 +43,6 @@ class App extends Component {
         title: 'Schedule',
         path: '/schedule',
         element: (<Schedule />)
-      },
-      {
-        title: 'Test',
-        path: '/test',
-        element: (<TestComp />)
       },
     ]
 
