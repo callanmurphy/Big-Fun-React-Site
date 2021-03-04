@@ -4,11 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { profilePictures } from './';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import { 
-  Button,
-  // Menu, MenuItem
-} from '@material-ui/core';
-
+import Button from '@material-ui/core/Button';
 
 
 class ProfilePicture extends Component {
@@ -16,12 +12,11 @@ class ProfilePicture extends Component {
     super(props)
 
     
-
-    // console.log(profilePictures)
+    const {user} = this.props
     this.state = {
       showProfilePics: false,
       profilePictures: profilePictures,
-      currentProfilePicture: profilePictures[0],
+      currentProfilePicture: profilePictures[user.profilePic],
       buttonText: "Change Picture"
     }
   }
@@ -32,36 +27,30 @@ class ProfilePicture extends Component {
     })
 
     !this.state.showProfilePics ? this.setState({buttonText: "Confirm"}) : this.setState({buttonText: "Change Picture"})
-    // console.log(this.state.showProfilePics)
   }
   
 
   render() {
+    const {user} = this.props
     return (
-      <div id="profilePictureContainer">
+      <div id="ProfileInfo">
+        <h1 id="Username">
+          {user.name}
+        </h1>
+            <Avatar id="ProfilePicture" src={this.state.currentProfilePicture.src} alt="ProfilePicture" />
+            <Button id="ChangeButton" onClick={this.UpdatePic.bind(this)}>{this.state.buttonText}</Button>
+          {
+            this.state.showProfilePics ?
+                  <GridList className="PictureChoices" cols={3}>
+                    {(this.state.profilePictures.map((pic, i) => (
+                      <GridListTile key={i} cols={1}>
+                        <img src={pic.src} alt={pic.name} onClick={ () => this.setState({currentProfilePicture: pic}) } />
+                      </GridListTile>
+                    )))}
 
-      <div>
-        <Avatar id="profilePicture" src={this.state.currentProfilePicture.src} alt="ProfilePicture" />
-        <Button id="ChangePicture" onClick={this.UpdatePic.bind(this)}>{this.state.buttonText}</Button>
-      </div>
-      {
-        this.state.showProfilePics ?
-              // <div id="profilePictures">
-              //   <Avatar class="miniProfilePictures" src={this.state.profilePictures[0].src} alt={this.state.profilePictures[0].name} onClick={ () => this.state.currentProfilePicture = this.state.profilePictures[0]} />
-              //   <Avatar class="miniProfilePictures" src={this.state.profilePictures[1].src} alt={this.state.profilePictures[1].name} onClick={ () => this.state.currentProfilePicture = this.state.profilePictures[1]} />
-              // </div>
-              <GridList cellHeight={160} className="gridlist" cols={3}>
-                {(this.state.profilePictures.map((pic, i) => (
-                  <GridListTile key={i} cols={1}>
-                    <img src={pic.src} alt={pic.name} onClick={ () => this.setState({currentProfilePicture: pic}) } />
-                  </GridListTile>
-                )))}
-
-              </GridList>
-        : null
-      }
-
-
+                  </GridList>
+            : null
+          }
       </div>
     )
   }
