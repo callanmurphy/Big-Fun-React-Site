@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, TextField, Button } from '@material-ui/core';
+import { Grid, TextField, Button, Paper } from '@material-ui/core';
 
 class RivalForm extends Component {
     render() {
@@ -12,18 +12,16 @@ class RivalForm extends Component {
   
       return (
         <Grid className="student-form" container spacing={4}>
-          {/* Inputs to add student */}
-          <TextField
-            name="rivalName"
-            defaultValue={"" || rivalName}
-            onChange={handleChange}
-            label="Rival"
-          />
-  
-          <form noValidate>
             <TextField
+                id="rivalName"
+                name="rivalName"
+                defaultValue={"" || rivalName}
+                onChange={handleChange}
+                label="Rival"
+            />   
+            <TextField
+                id="scheduleDate"
                 name = "scheduleDate"
-                id="datetime-local"
                 label="Time"
                 type="datetime-local"
                 defaultValue={"" || scheduleDate}
@@ -32,7 +30,8 @@ class RivalForm extends Component {
                 shrink: true,
                 }}
             />
-            </form>
+            
+            
   
           <Grid
             className="student-form__button-grid"
