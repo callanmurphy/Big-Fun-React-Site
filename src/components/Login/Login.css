@@ -11,6 +11,10 @@
   text-align: center;
 }
 
+.loginLogo {
+  width: 30%;
+}
+
 .submitButton {
   background-color: white;
   color: black;
@@ -31,4 +35,8 @@ input[type=text], input[type=password] {
   padding: 12px 20px;
   margin: 5px;
   box-sizing: border-box;
+}
+
+.buttonTest {
+  color:aqua;
 }

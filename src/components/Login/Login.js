@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import './Login.css';
+import { Button, TextField, Box, Paper } from '@material-ui/core';
 
 
 class Login extends Component {
@@ -31,15 +32,18 @@ class Login extends Component {
   render() {
       
     return (
-    <div className='centerText centerBox'>
+    <div className="centerBox centerText">
+    {/* <Paper variant="prop" className='centerText' elevation={3}> */}
+      <img className='loginLogo' src={'/img/icon-circle.png'} alt="Big Fun Logo"/>
       <h1>Login</h1>
       <form name='registerForm' onSubmit={this.handleSubmit}>
-        <input type="text" id='username' placeholder='Username' value={this.state.username} onChange={this.handleChange.bind(this)} />
+        <TextField label='Username' id='username' value={this.state.username} onChange={this.handleChange.bind(this)} />
         <br/>
-        <input type="password" id='password' placeholder='Password' value={this.state.password} onChange={this.handleChange.bind(this)} />
-        <br/><br/>
-        <input type="submit" className='submitButton' value="Login"/>
+        <TextField label='Password' id='password' type='password' value={this.state.password} onChange={this.handleChange.bind(this)} />
+        <br/><br/><br/><br/>
+        <Button variant="contained" type="submit" color='secondary'>Login</Button>
       </form>
+    {/* </Paper> */}
     </div>
     );
   }
