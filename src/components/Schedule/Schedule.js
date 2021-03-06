@@ -3,10 +3,37 @@ import { uid } from "react-uid";
 import React, { Component } from "react";
 import RivalForm  from "./rivalForm";
 
-import "./Schedule.css"
+import { getUser } from "../../backend";
+
+import "./Schedule.css";
 
 class Schedule extends Component {
 
+  constructor(props) {
+    super(props);
+    const date = new Date()
+    const y = date.getFullYear()
+    const m = date.getMonth()
+    const d = date.getDate()
+    const h = date.getHours()
+    const min = date.getMinutes()
+    const dateString = `${y}-${m < 10 ? 0 : ""}${m}-${d < 10 ? 0 : ""}${d}T${h < 10 ? 0 : ""}${date.getHours()}:${min < 10 ? 0 : ""}${date.getMinutes()}`
+    
+    this.state = {
+      currUser: getUser(0),
+      rivalName: getUser(getUser(0).rivals[0]).name,
+      scheduleDate: dateString,
+      scheduled: [
+        { rname: "James", date: "2017-05-24T15:30" },
+        { rname: "Kate", date: "2017-05-24T16:30" }
+      ]
+    };
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.scheduleGame = this.scheduleGame.bind(this);
+    this.cancelGame = this.cancelGame.bind(this);
+
+  }
+  
   componentDidMount() {
     document.title = 'Schedule - Big Fun';
   }
@@ -63,28 +90,14 @@ class Schedule extends Component {
     });
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      rivalName: "",
-      scheduleDate: "",
-      scheduled: [
-        { rname: "James", date: "2017-05-24T15:30" },
-        { rname: "Kate", date: "2017-05-24T16:30" }
-      ]
-    };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.scheduleGame = this.scheduleGame.bind(this);
-    this.cancelGame = this.cancelGame.bind(this);
-  }
+  
   
   render() {
     return (
     <div>
       <div className="rivalForm">
         <RivalForm 
-          
+          currUser={this.state.currUser}
           rivalName={this.state.rivalName} 
           scheduleDate={this.state.scheduleDate}
           handleChange={this.handleInputChange}
