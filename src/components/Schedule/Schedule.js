@@ -7,6 +7,10 @@ import "./Schedule.css"
 
 class Schedule extends Component {
 
+  componentDidMount() {
+    document.title = 'Schedule - Big Fun';
+  }
+
   scheduleGame() {
     const scheduled = this.state.scheduled;
     const game = {

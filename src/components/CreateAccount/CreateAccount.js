@@ -12,6 +12,10 @@ class CreateAccount extends Component {
       this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    document.title = 'Create Account - Big Fun';
+  }
+
   handleChange(e){
       this.setState({[e.target.id]: e.target.value});
   }
