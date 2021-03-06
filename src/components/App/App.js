@@ -176,6 +176,6 @@ class App extends Component {
   }
 }
 
-App.title = 'Team 05';
+App.title = 'Big Fun';
 
 export default App;
