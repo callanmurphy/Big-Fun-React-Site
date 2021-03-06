@@ -1,30 +1,47 @@
 import React, { Component } from "react";
-import { Grid, TextField, Button, Paper } from '@material-ui/core';
+import { Grid, TextField, Button, Paper, MenuItem } from '@material-ui/core';
+import { getUser } from "../../backend";
 
 class RivalForm extends Component {
+
+    
+
     render() {
-      const {
-        rivalName,
-        scheduleDate,
-        handleChange,
-        scheduleGame
-      } = this.props;
+        const {
+            currUser,
+            rivalName,
+            scheduleDate,
+            handleChange,
+            scheduleGame
+        } = this.props;
   
+        
+      const rivalNames = currUser.rivals.map((id) => getUser(id).name);
       return (
         <Grid className="student-form" container spacing={4}>
+
             <TextField
                 id="rivalName"
                 name="rivalName"
+                select
                 defaultValue={"" || rivalName}
                 onChange={handleChange}
                 label="Rival"
-            />   
+            >
+              {rivalNames.map(name => (
+                <MenuItem key={name} value={name}>
+                  {name}
+                </MenuItem>
+              ))}
+            </TextField> 
+
+      
             <TextField
                 id="scheduleDate"
                 name = "scheduleDate"
                 label="Time"
                 type="datetime-local"
-                defaultValue={"" || scheduleDate}
+                defaultValue={scheduleDate}
                 onChange={handleChange}
                 InputLabelProps={{
                 shrink: true,
