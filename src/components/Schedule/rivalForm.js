@@ -23,7 +23,7 @@ class RivalForm extends Component {
             <TextField
                 id="rivalName"
                 name="rivalName"
-                select
+                controlled select
                 defaultValue={"" || rivalName}
                 onChange={handleChange}
                 label="Rival"

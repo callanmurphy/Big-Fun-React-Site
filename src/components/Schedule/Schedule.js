@@ -19,21 +19,21 @@ class Schedule extends Component {
     const min = date.getMinutes()
     const dateString = `${y}-${m < 10 ? 0 : ""}${m}-${d < 10 ? 0 : ""}${d}T${h < 10 ? 0 : ""}${date.getHours()}:${min < 10 ? 0 : ""}${date.getMinutes()}`
     
+    const currUser = getUser(2);
     this.state = {
-      currUser: getUser(0),
-      rivalName: getUser(getUser(0).rivals[0]).name,
+      currUser: currUser,
+      rivalName: getUser(currUser.rivals[0]).name,
       scheduleDate: dateString,
-      scheduled: [
-        { rname: "James", date: "2017-05-24T15:30" },
-        { rname: "Kate", date: "2017-05-24T16:30" }
-      ]
+      scheduled: currUser.rivalGames.map((item) => {
+        return {rname: getUser(item.rid).name, date: item.date}
+      })
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.scheduleGame = this.scheduleGame.bind(this);
     this.cancelGame = this.cancelGame.bind(this);
 
   }
-  
+
   componentDidMount() {
     document.title = 'Schedule - Big Fun';
   }
@@ -71,6 +71,7 @@ class Schedule extends Component {
       
 
     }
+    /*********** Needs to make backend request ***********/
     this.setState({scheduled: scheduled});
   }
 
