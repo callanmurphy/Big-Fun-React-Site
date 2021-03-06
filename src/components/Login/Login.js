@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import './Login.css';
 
+
 class Login extends Component {
   constructor(props){
       super(props);
@@ -10,6 +11,10 @@ class Login extends Component {
       };
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    document.title = 'Login - Big Fun';
   }
 
   handleChange(e){

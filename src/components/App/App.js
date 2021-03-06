@@ -22,6 +22,12 @@ import {login, getUser} from '../../backend/userAPI'
 class App extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      defaultUser: getUser(1),
+      loggedIn: true
+    }
+
     this.gamelinks = gamelinks
 
     this.navref = React.createRef();
@@ -30,19 +36,19 @@ class App extends Component {
       {
         title: 'Leaderboard',
         path: '/leaderboard',
-        element: (<Leaderboard />)
+        element: (<Leaderboard user={this.state.defaultUser}/>)
       }, {
         title: 'Progress',
         path: '/progress',
-        element: (<Progress games={this.gamelinks.map(g => g.title)} />)
+        element: (<Progress user={this.state.defaultUser} games={this.gamelinks.map(g => g.title)} />)
       }, {
         title: 'Games',
         path: '/games',
-        element: (<Games gamelinks={this.gamelinks} />)
+        element: (<Games user={this.state.defaultUser} gamelinks={this.gamelinks} />)
       }, {
         title: 'Schedule',
         path: '/schedule',
-        element: (<Schedule />)
+        element: (<Schedule user={this.state.defaultUser}/>)
       },
     ]
 
@@ -56,10 +62,7 @@ class App extends Component {
       }
     ]
 
-    this.state = {
-      defaultUser: getUser(1),
-      loggedIn: true
-    }
+    
 
 
   }
@@ -173,6 +176,6 @@ class App extends Component {
   }
 }
 
-App.title = 'Team 05';
+App.title = 'Big Fun';
 
 export default App;

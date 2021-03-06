@@ -31,6 +31,11 @@ class Schedule extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.scheduleGame = this.scheduleGame.bind(this);
     this.cancelGame = this.cancelGame.bind(this);
+
+  }
+  
+  componentDidMount() {
+    document.title = 'Schedule - Big Fun';
   }
 
   scheduleGame() {

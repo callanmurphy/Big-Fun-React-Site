@@ -20,6 +20,10 @@ class Home extends Component {
     this.state = {rivals: user.rivals}
   }
 
+  componentDidMount() {
+    document.title = 'Home - Big Fun';
+  }
+
   searchRivals(e) {
     const {user} = this.props
     if (e.target.value === "") {

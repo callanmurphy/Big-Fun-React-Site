@@ -48,6 +48,10 @@ class Progress extends Component {
     }
   }
 
+  componentDidMount() {
+    document.title = 'Progress - Big Fun';
+  }
+
   moveChart(n) {
     const oldgame = this.state.showGame;
     const ngames = this.props.games.length;

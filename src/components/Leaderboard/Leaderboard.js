@@ -17,6 +17,10 @@ class Leaderboard extends Component {
     }
   }
 
+  componentDidMount() {
+    document.title = 'Leaderboard - Big Fun';
+  }
+
 
   render() {
     console.log(profilePictures)

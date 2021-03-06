@@ -13,6 +13,10 @@ class Games extends Component {
     }
   }
 
+  componentDidMount() {
+    document.title = 'Games - Big Fun';
+  }
+
   render() {
     return (
       <Grid container spacing={3} alignItems='stretch' className='gameContainer'>
