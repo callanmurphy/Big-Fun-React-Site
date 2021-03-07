@@ -107,7 +107,7 @@ class App extends Component {
   render() {
     return (
       <Router>
-        {this.state.loggedIn ?
+        {/* {this.state.loggedIn ? */}
           <AppBar position='static'>
             <Toolbar className='homenav' ref={this.navref}>
               <List>
@@ -116,36 +116,42 @@ class App extends Component {
                 <img className='sitelogo' src={'/img/icon-circle.png'} alt="Big Fun Logo"/>
                 </IconButton>
               </Link>
-
-              <Link to='/' onClick={() => this.logout()} key='logout'>
-                <IconButton>
-                  <ExitToApp className='homebtn' />
-                </IconButton>
-              </Link>
+              {this.state.loggedIn ?
+                <Link to='/' onClick={() => this.logout()} key='logout'>
+                  <IconButton>
+                    <ExitToApp className='homebtn' />
+                  </IconButton>
+                </Link>
+                : null
+              }
               </List>
               {/* <Link to='/home' key='home'>
                 <IconButton>
                   <HomeIcn className='homebtn' />
                 </IconButton>
               </Link> */}
-              <List className='homenav'>
-                {
-                  this.navlinks.map(({ title, path }) => (
-                    <Link to={path} key={title} className='navtext'>
-                      <ListItem button>
-                        <ListItemText
-                          primary={title}
-                          primaryTypographyProps={{variant:'h5'}}
-                        />
-                      </ListItem>
-                    </Link>
-                  ))
-                }
-              </List>
+              {this.state.loggedIn ?
+                <List className='homenav'>
+                  {
+                    this.navlinks.map(({ title, path }) => (
+                      <Link to={path} key={title} className='navtext'>
+                        <ListItem button>
+                          <ListItemText
+                            primary={title}
+                            primaryTypographyProps={{variant:'h5'}}
+                          />
+                        </ListItem>
+                      </Link>
+                    ))
+                  }
+                </List>
+                : null
+              }
             </Toolbar>
           </AppBar>
-          : null
-        }
+          {/* : null
+        } */}
+
 
 
         <Switch>
