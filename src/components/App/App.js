@@ -110,22 +110,24 @@ class App extends Component {
         {this.state.loggedIn ?
           <AppBar position='static'>
             <Toolbar className='homenav' ref={this.navref}>
+              <List>
               <Link to='/home' key='home'>
-                <img className='sitelogo' src={'/img/logo-3.png'} alt="Big Fun Logo"/>
+                <IconButton>
+                <img className='sitelogo' src={'/img/icon-circle.png'} alt="Big Fun Logo"/>
+                </IconButton>
               </Link>
 
-                <Link to='/' onClick={() => this.logout()} key='logout'>
-                  <IconButton>
-                    <ExitToApp className='homebtn' />
-                  </IconButton>
-                </Link>
-              {/* <List>
-                <Link to='/home' key='home'>
-                  <IconButton>
-                    <HomeIcn className='homebtn' />
-                  </IconButton>
-                </Link>
-              </List> */}
+              <Link to='/' onClick={() => this.logout()} key='logout'>
+                <IconButton>
+                  <ExitToApp className='homebtn' />
+                </IconButton>
+              </Link>
+              </List>
+              {/* <Link to='/home' key='home'>
+                <IconButton>
+                  <HomeIcn className='homebtn' />
+                </IconButton>
+              </Link> */}
               <List className='homenav'>
                 {
                   this.navlinks.map(({ title, path }) => (
