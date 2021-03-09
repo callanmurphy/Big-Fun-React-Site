@@ -1,17 +1,5 @@
-import { users } from './userAPI';
-
-const games = [
-    {
-        id: 0,
-        title: 'Follow the dot',
-    }, {
-        id: 0,
-        title: 'Type the keys',
-    }, {
-        id: 0,
-        title: 'Pong',
-    },
-]
+import { users } from './tempdata';
+import { games } from './tempdata';
 
 function makeGame(name, score, daysago) {
     let date = new Date();
@@ -38,11 +26,19 @@ function makeGamesData(i, start) {
 const matches = makeGamesData(400, 0);
 
 export function gameHistory(uid) {
-    return matches.filter(g => (g.user1 === uid) || (g.user2 === uid));
+    if (uid || uid === 0) {
+        return matches.map(m => m).filter(g => (g.user1 === uid) || (g.user2 === uid));
+    } else {
+        return matches.map(m => m);
+    }
 }
 
 export function gameInfo(gid) {
-    return games.filter(({id}) => id === gid)[0];
+    if (gid) {
+        return games.map(g => g).filter(({id}) => id === gid)[0];
+    } else {
+        return games.map(g => g);
+    }
 }
 
 export function soloGames(uid) {
@@ -74,4 +70,12 @@ export function getBestRival(uid) {
         }
     })
     return max;
+}
+
+export function getFavoriteGame(uid) {
+    let gamecounts = games.map(g => 0)
+    gameHistory(uid).forEach(g => {
+      gamecounts[games.indexOf(g.name)] += 1;
+    });
+    return games[gamecounts.indexOf(Math.max(...gamecounts))].title;
 }
