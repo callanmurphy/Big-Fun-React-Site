@@ -1,5 +1,3 @@
-import { useLayoutEffect } from "react";
-import { getFavoriteGame } from './gameAPI';
 import { users } from './tempdata';
 
 export function getUser(id) {
