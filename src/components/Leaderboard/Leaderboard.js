@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, TableBody, TableCell, TableRow, Avatar } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableRow, Avatar, Paper } from '@material-ui/core';
 import { profilePictures } from "../Home"
 import { getUser } from "../../backend"
 import "./Leaderboard.css"
@@ -9,9 +9,10 @@ class Leaderboard extends Component {
   constructor(props) {
     super(props);
     const users = []
-    for (let id = 0; id < 4; id++) {
+    for (let id = 0; id < 5; id++) {
       users.push(getUser(id))
     }
+    users.sort((a, b) => (a.points < b.points) ? 1 : -1)
     this.state = {
       users: users
     }
@@ -26,8 +27,10 @@ class Leaderboard extends Component {
     console.log(profilePictures)
     return (
       <div>
+      <Paper>
         <Table className="leaderboard">
           <TableBody>
+              
               <TableRow>
                 <TableCell>
                   <h3>Rank</h3>
@@ -46,7 +49,7 @@ class Leaderboard extends Component {
                 </TableCell>
                 <TableCell>
                   <Avatar alt="" src={profilePictures[user.profilePic].src}/>
-                  <h4>{user.name}</h4>
+                  {user.name}
                 </TableCell>
                 <TableCell>
                   {user.points}
@@ -55,6 +58,7 @@ class Leaderboard extends Component {
             ))}
           </TableBody>
         </Table>
+        </Paper>
       </div>
     );
   }
