@@ -30,6 +30,12 @@
   height: 100%;
 }
 
+.PictureChoicesImage:hover {
+  transition: 0.5s;
+  box-shadow: 1px 1px 4px var(--primary);
+  cursor: pointer;
+}
+
 #RivalTable {
   display: inline-block;
   width: 65%;
