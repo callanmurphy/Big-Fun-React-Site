@@ -1,18 +1,4 @@
-const matches = [
-    {
-        user1: 2, user2: 1, game: 1, score: 25, date: new Date('3/4/2021')
-    }, {
-        user1: 3, user2: 2, game: 1, score: 15, date: new Date('3/4/2021')
-    }, {
-        user1: 0, user2: 1, game: 0, score: 13, date: new Date('3/1/2021')
-    }, {
-        user1: 0, user2: -1, game: 0, score: 83, date: new Date('3/2/2021')
-    }, {
-        user1: 0, user2: -1, game: 1, score: 52, date: new Date('3/3/2021')
-    }, {
-        user1: 0, user2: -1, game: 2, score: 37, date: new Date('3/4/2021')
-    }
-]
+import { users } from './userAPI';
 
 const games = [
     {
@@ -27,8 +13,32 @@ const games = [
     },
 ]
 
+function makeGame(name, score, daysago) {
+    let date = new Date();
+    date.setDate(date.getDate() - daysago);
+    return {
+      name: name,
+      score: score,
+      date: date,
+      user1: users[Math.floor(Math.random() * users.length)].id,
+      user2: users[Math.floor(Math.random() * users.length)].id,
+    }
+}
+function makeGamesData(i, start) {
+    let range = Array.from(Array(i).keys());
+    return range.map((i) => {
+        let r = Math.random();
+        let score = 100 * r;
+        let k = Math.floor(r * games.length);
+        return makeGame(games[k].title, score, start + i);
+    })
+}
+
+
+const matches = makeGamesData(400, 0);
+
 export function gameHistory(uid) {
-    return matches.filter(({user1, user2, game}) => (user1 === uid) || (user2 === uid));
+    return matches.filter(g => (g.user1 === uid) || (g.user2 === uid));
 }
 
 export function gameInfo(gid) {
@@ -41,4 +51,27 @@ export function soloGames(uid) {
 
 export function vsGames(uid) {
     return gameHistory(uid).filter(({user2}) => user2 !== -1)
+}
+
+export function getBestRival(uid) {
+    let counts = {};
+    vsGames(uid).forEach(g => {
+        let u = g.user1;
+        if (u === uid) {
+            u = g.user2;
+        }
+        if (counts[u]) {
+            counts[u] ++;
+        } else {
+            counts[u] = 1;
+        }
+    });
+    let rivals = Object.keys(counts);
+    let max = rivals[0];
+    rivals.forEach(r => {
+        if (counts[r] > counts[max]) {
+            max = r;
+        }
+    })
+    return max;
 }

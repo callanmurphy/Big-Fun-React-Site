@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, TextField, Button, Paper, MenuItem } from '@material-ui/core';
+import { Grid, TextField, Button, MenuItem } from '@material-ui/core';
 import { getUser } from "../../backend";
 
 class RivalForm extends Component {

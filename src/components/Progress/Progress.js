@@ -11,25 +11,9 @@ import {
   Divider, Container
 } from '@material-ui/core';
 import { FilterList, ArrowBackIos as BackArrow, ArrowForwardIos as ForwardArrow } from '@material-ui/icons';
+import { getUser, gameHistory, getBestRival } from "../../backend";
 
-function makeGame(name, score, daysago) {
-  let date = new Date();
-  date.setDate(date.getDate() - daysago);
-  return {
-    name: name,
-    score: score,
-    date: date,
-  }
-}
-function makeGamesData(i, start, gameSelection) {
-  let range = Array.from(Array(i).keys());
-  return range.map((i) => {
-    let r = Math.random();
-    let score = 100 * r;
-    let k = Math.floor(r * gameSelection.length);
-    return makeGame(gameSelection[k], score, start + i);
-  })
-}
+
 class Progress extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +21,7 @@ class Progress extends Component {
     this.perPage = 8;
 
     this.state = {
-      recentGames: makeGamesData(40, 0, this.props.games),
+      recentGames: gameHistory(this.props.user.id),
       direction: 1,
       by: 'date',
       tablePage: 0,
@@ -47,6 +31,7 @@ class Progress extends Component {
       chartTransitionsIn: this.props.games.map((g, i) => (i === 0)),
     }
   }
+
 
   componentDidMount() {
     document.title = 'Progress - Big Fun';
@@ -82,10 +67,10 @@ class Progress extends Component {
   }
 
   getMoreData() {
-    let newGames = makeGamesData(10, this.state.recentGames.length, this.props.games);
-    this.setState({
-      recentGames: this.state.recentGames.concat(newGames)
-    });
+    // let newGames = makeGamesData(10, this.state.recentGames.length, this.props.games);
+    // this.setState({
+    //   recentGames: this.state.recentGames.concat(newGames)
+    // });
   }
 
   setSort(by) {
@@ -138,6 +123,18 @@ class Progress extends Component {
       gamecounts[this.props.games.indexOf(g.name)] += 1;
     });
     let favoriteGame = this.props.games[gamecounts.indexOf(Math.max(...gamecounts))]
+
+    let rivalName = getBestRival(this.props.user.id);
+    if (rivalName) {
+      rivalName = getUser(parseInt(rivalName))
+    } else {
+      rivalName = 'Err';
+    }
+    if (rivalName) {
+      rivalName = rivalName.name;
+    } else {
+      rivalName = 'Err';
+    }
 
 
     return (
@@ -206,18 +203,18 @@ class Progress extends Component {
                       .slice(
                         this.state.tablePage * this.perPage,
                         (this.state.tablePage + 1) * this.perPage)
-                      .map((g, i) => (
+                      .map(g => (
                         <TableRow
                           hover
-                          key={uid(g.date)}
+                          key={uid(g.date.toLocaleDateString('en-US'))}
                         >
-                          <TableCell className={(i%2 === 1) ? 'progressFaintPrimary' : ''}>
+                          <TableCell>
                             {g.date.toLocaleDateString('en-US')}
                           </TableCell>
-                          <TableCell className={(i%2 === 1) ? 'progressFaintPrimary' : ''}>
+                          <TableCell>
                             {Math.round(g.score)}
                           </TableCell>
-                          <TableCell className={(i%2 === 1) ? 'progressFaintPrimary' : ''}>
+                          <TableCell>
                             {g.name}
                           </TableCell>
                         </TableRow>
@@ -253,7 +250,7 @@ class Progress extends Component {
           </Grid>
           <Grid item xs={8}>
             <Paper className='progressFullHeight progressCharts'>
-              <Typography variant='h5' display='block' align='center'>
+              <Typography variant='h5' display='block' align='center' className='progressChartTitle'>
                 {this.props.games[this.state.showGame]}
               </Typography>
               <div className='progressChartCarosoul'>
@@ -307,8 +304,8 @@ class Progress extends Component {
                 Best Rival
               </Typography>
               <Divider />
-              <Typography className='progressStatVal' variant='h2' align='center'>
-                TODO
+              <Typography className='progressStatVal' variant='h3' align='center'>
+                { rivalName }
               </Typography>
             </Paper>
           </Grid>
@@ -318,7 +315,7 @@ class Progress extends Component {
                 Favorite Game
               </Typography>
               <Divider />
-              <Typography className='progressStatVal' variant='h2' align='center'>
+              <Typography className='progressStatVal' variant='h3' align='center'>
                 {favoriteGame}
               </Typography>
             </Paper>

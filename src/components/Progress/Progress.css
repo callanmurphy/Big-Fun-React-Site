@@ -60,7 +60,6 @@
     font-family: monospace;
 }
 
-.progressFaintPrimary {
-    /* background-color: var(--primary);
-    opacity: 15%; */
+.progressChartTitle {
+    padding-top: 16px;
 }

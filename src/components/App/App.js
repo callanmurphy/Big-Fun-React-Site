@@ -17,14 +17,14 @@ import { ExitToApp } from '@material-ui/icons';
 import 'fontsource-roboto';
 
 
-import { login, getUser } from '../../backend/userAPI'
+import { login, getUser, getUserByName } from '../../backend/userAPI'
 
 class App extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      defaultUser: getUser(1),
+      curUser: getUser(0),
       loggedIn: false
     }
 
@@ -36,19 +36,19 @@ class App extends Component {
       {
         title: 'Leaderboard',
         path: '/leaderboard',
-        element: (<Leaderboard user={this.state.defaultUser} />)
+        element: (<Leaderboard user={this.state.curUser} />)
       }, {
         title: 'Progress',
         path: '/progress',
-        element: (<Progress user={this.state.defaultUser} games={this.gamelinks.map(g => g.title)} />)
+        element: (<Progress user={this.state.curUser} games={this.gamelinks.map(g => g.title)} />)
       }, {
         title: 'Games',
         path: '/games',
-        element: (<Games user={this.state.defaultUser} gamelinks={this.gamelinks} />)
+        element: (<Games user={this.state.curUser} gamelinks={this.gamelinks} />)
       }, {
         title: 'Schedule',
         path: '/schedule',
-        element: (<Schedule user={this.state.defaultUser} />)
+        element: (<Schedule user={this.state.curUser} />)
       },
     ]
     this.state.navlinks = this.navlinks;
@@ -79,7 +79,8 @@ class App extends Component {
       }
       this.setState({
         loggedIn: true,
-        navlinks: newlinks
+        navlinks: newlinks,
+        curUser: getUserByName(user)
       })
       return true;
     }
@@ -136,7 +137,7 @@ class App extends Component {
           {/* home route */}
           <Route exact path='/home'
             render={this.state.loggedIn
-              ? () => <Home user={this.state.defaultUser} />
+              ? () => <Home user={this.state.curUser} />
               : () => <Redirect to='/login' />}
           />
           {  // page routes

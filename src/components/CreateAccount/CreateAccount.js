@@ -23,7 +23,7 @@ class CreateAccount extends Component {
     
   handleSubmit(e){
       e.preventDefault();
-      if(this.state.password == this.state.confirmPassword){
+      if(this.state.password === this.state.confirmPassword){
         // alert("Account successfully created for: " + this.state.username);
         window.location.href = "/";
       }
