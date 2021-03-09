@@ -1,4 +1,4 @@
-import { Table, TableBody, TableRow, TableCell, Button } from "@material-ui/core";
+import { Table, TableBody, TableRow, TableCell, Button, Paper } from "@material-ui/core";
 import { uid } from "react-uid";
 import React, { Component } from "react";
 import RivalForm  from "./rivalForm";
@@ -96,6 +96,7 @@ class Schedule extends Component {
   render() {
     return (
     <div>
+    <Paper>
       <div className="rivalForm">
         <RivalForm 
           currUser={this.state.currUser}
@@ -138,6 +139,7 @@ class Schedule extends Component {
 
         </TableBody>
       </Table>
+      </Paper>
     </div>
     );
   }
