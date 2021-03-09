@@ -8,10 +8,13 @@ import Input from '@material-ui/core/Input';
 import {getUser} from '../../backend/userAPI'
 
 import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 
 import Paper from '@material-ui/core/Paper'
+
+
+// Anything involving Material UI in this file and related components 
+// takes influence from their documentation and accompanying examples
 
 class Home extends Component {
   constructor(props) {
@@ -24,6 +27,8 @@ class Home extends Component {
     document.title = 'Home - Big Fun';
   }
 
+
+  // Modified from an Emma Goto tutorial - https://www.emgoto.com/react-search-bar/
   searchRivals(e) {
     const {user} = this.props
     if (e.target.value === "") {
@@ -37,6 +42,13 @@ class Home extends Component {
     }
   }
 
+  // Modified from a Masatoshi Nishiguchi Blog Post - https://blog.mnishiguchi.com/react-disable-submit-event-triggered-by-pressing-enter-key?  
+  disableEnterKey(e) {
+    if (e.which === 13) {
+      e.preventDefault();
+    }
+  }
+
   render() {
   	const {user} = this.props
     return (
@@ -47,7 +59,13 @@ class Home extends Component {
             <div>
               <h1 id="RivalTableTitle">RIVALS</h1>
               <form id="RivalTableSearch">
-                <Input type="text" placeholder="Search Rivals..." title="Type in a Rival's Name" onChange={this.searchRivals.bind(this)} />
+                <Input 
+                    type="text" 
+                    placeholder="Search Rivals..." 
+                    title="Type in a Rival's Name" 
+                    onChange={this.searchRivals.bind(this)}
+                    onKeyPress={this.disableEnterKey.bind(this)}
+                  />
               </form>
             </div>
           </Paper>

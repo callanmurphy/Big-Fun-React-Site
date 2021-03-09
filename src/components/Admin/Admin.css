@@ -63,3 +63,23 @@
 .progressChartTitle {
     padding-top: 16px;
 }
+
+.adminTertText {
+    color: var(--tertiary);
+}
+
+.adminBlankButton {
+    opacity: 0;
+}
+
+.adminPassword {
+    -webkit-text-security: disc;
+    -moz-text-security: disc;
+    text-security: disc;
+}
+
+.adminNotPassword {
+    -webkit-text-security: none;
+    -moz-text-security: none;
+    text-security: none;
+}
