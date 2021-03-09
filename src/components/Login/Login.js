@@ -24,11 +24,10 @@ class Login extends Component {
     
   handleSubmit(e){
       e.preventDefault();
-      if(this.state.username.match("^[a-zA-Z0-9]{1,20}$") != null){
+      if(this.state.username.match("^[a-zA-Z0-9]{1,20}$") != null && this.props.login(this.state.username, this.state.password)){
         // <Alert severity="success">{ this.state.username } + " logged in successfully"</Alert>
         // alert(this.state.username + " logged in successfully");
-        this.props.login(this.state.username, this.state.password)
-        window.location.href = "/home";
+        // window.location.href = "/home";
       }
       else {
         alert("Login error");

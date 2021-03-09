@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
-  Link, Route, Switch
+  Link, Redirect, Route, Switch
 } from "react-router-dom";
 import CreateAccount from '../CreateAccount';
 import Home from '../Home';
 import Leaderboard from '../Leaderboard';
 import Login from '../Login';
-import TestComp from '../TestComp';
 import Progress from '../Progress';
 import Schedule from '../Schedule';
+import Admin from '../Admin';
 import Games, { gamelinks } from '../Games';
 import './App.css';
 import { AppBar, IconButton, Toolbar, List, ListItem, ListItemText } from '@material-ui/core';
-import { Home as HomeIcn, ExitToApp } from '@material-ui/icons';
+import { ExitToApp } from '@material-ui/icons';
 import 'fontsource-roboto';
 
 
-import {login, getUser} from '../../backend/userAPI'
+import { login, getUser } from '../../backend/userAPI'
 
 class App extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class App extends Component {
 
     this.state = {
       defaultUser: getUser(1),
-      loggedIn: true
+      loggedIn: false
     }
 
     this.gamelinks = gamelinks
@@ -36,7 +36,7 @@ class App extends Component {
       {
         title: 'Leaderboard',
         path: '/leaderboard',
-        element: (<Leaderboard user={this.state.defaultUser}/>)
+        element: (<Leaderboard user={this.state.defaultUser} />)
       }, {
         title: 'Progress',
         path: '/progress',
@@ -48,122 +48,104 @@ class App extends Component {
       }, {
         title: 'Schedule',
         path: '/schedule',
-        element: (<Schedule user={this.state.defaultUser}/>)
+        element: (<Schedule user={this.state.defaultUser} />)
       },
     ]
+    this.state.navlinks = this.navlinks;
 
     this.nonNavlinks = [
       {
-        path: '/',
-        element: (<Login login={(user, pass) => this.login(user, pass)} />)
+        path: '/login',
+        element: () => this.state.loggedIn ? <Redirect to='/home' /> : <Login login={(user, pass) => this.login(user, pass)} />
       }, {
         path: '/createaccount',
-        element: (<CreateAccount />)
+        element: () => (<CreateAccount />)
       }
     ]
 
-    
 
 
   }
 
   login(user, pass) {
     if (login(user, pass)) {
+      let newlinks = this.navlinks.map(e => e);
+      if (user === 'admin') {
+        newlinks.push({
+          title: 'Admin',
+          path: '/admin',
+          element: (<Admin />)
+        });
+      }
       this.setState({
-        loggedIn: true
+        loggedIn: true,
+        navlinks: newlinks
       })
+      return true;
     }
+    return false;
   }
 
   logout() {
     this.setState({
-      loggedIn: false
+      loggedIn: false,
+      navlinks: this.navlinks
     })
-  }
-
-  moveGradient(e) {
-    // const light = [e.screenX / 2, 0];
-    // const mouse = [e.clientX, e.clientY];
-
-    // let angle = Math.atan2(light[1]-mouse[1], light[0]-mouse[0]);
-    // angle = Math.round((360 + (180 * angle / Math.PI))) % 360;
-    // let angle = 180;
-    // this.navref.current.style.background =
-    //   `linear-gradient(${angle}, red 0%, var(--primary) 100%)`;
-    // console.log(angle)
-  }
-
-  componentDidMount() {
-    // this.gradientmover = (e) => this.moveGradient(e);
-    // document.addEventListener('mousemove', this.gradientmover);
-  }
-
-  componentWillUnmount() {
-    // if (this.gradientmover) {
-    //   document.removeEventListener('mousemove', this.gradientmover);
-    // }
   }
 
   render() {
     return (
       <Router>
-        {/* {this.state.loggedIn ? */}
+        {this.state.loggedIn ?
           <AppBar position='static'>
             <Toolbar className='homenav' ref={this.navref}>
               <List>
-              <Link to='/home' key='home'>
-                <IconButton>
-                <img className='sitelogo' src={'/img/icon-circle.png'} alt="Big Fun Logo"/>
-                </IconButton>
-              </Link>
-              {this.state.loggedIn ?
+                <Link to='/home' key='home'>
+                  <IconButton>
+                    <img className='sitelogo' src={'/img/icon-circle.png'} alt="Big Fun Logo" />
+                  </IconButton>
+                </Link>
                 <Link to='/' onClick={() => this.logout()} key='logout'>
                   <IconButton>
                     <ExitToApp className='homebtn' />
                   </IconButton>
                 </Link>
-                : null
-              }
               </List>
-              {/* <Link to='/home' key='home'>
-                <IconButton>
-                  <HomeIcn className='homebtn' />
-                </IconButton>
-              </Link> */}
-              {this.state.loggedIn ?
-                <List className='homenav'>
-                  {
-                    this.navlinks.map(({ title, path }) => (
-                      <Link to={path} key={title} className='navtext'>
-                        <ListItem button>
-                          <ListItemText
-                            primary={title}
-                            primaryTypographyProps={{variant:'h5'}}
-                          />
-                        </ListItem>
-                      </Link>
-                    ))
-                  }
-                </List>
-                : null
-              }
+              <List className='homenav'>
+                {
+                  this.state.navlinks.map(({ title, path }) => (
+                    <Link to={path} key={title} className='navtext'>
+                      <ListItem button>
+                        <ListItemText
+                          primary={title}
+                          primaryTypographyProps={{ variant: 'h5' }}
+                        />
+                      </ListItem>
+                    </Link>
+                  ))
+                }
+              </List>
             </Toolbar>
           </AppBar>
-          {/* : null
-        } */}
+          : null
+        }
 
 
 
         <Switch>
           {/* home route */}
-          <Route exact path='/home'>
-            <Home user={this.state.defaultUser} />
-          </Route>
+          <Route exact path='/home'
+            render={this.state.loggedIn
+              ? () => <Home user={this.state.defaultUser} />
+              : () => <Redirect to='/login' />}
+          />
           {  // page routes
-            this.navlinks.map(({ title, path, element }) => (
-              <Route key={path} exact path={path}>
-                {element}
-              </Route>
+            this.state.navlinks.map(({ title, path, element }) => (
+              <Route key={path} exact path={path}
+                render={this.state.loggedIn
+                  ? () => element
+                  : () => <Redirect to='/login' />}
+              />
             ))
           }
           {  // game routes
@@ -176,10 +158,13 @@ class App extends Component {
           {  // game routes
             this.nonNavlinks.map(({ path, element }) => (
               <Route key={path} exact path={path}>
-                {element}
+                {element()}
               </Route>
             ))
           }
+          <Route path='/'>  {/* catch all */}
+            <Redirect to={this.state.loggedIn ? '/home' : '/login' } />
+          </Route>
         </Switch>
       </Router >
     );
