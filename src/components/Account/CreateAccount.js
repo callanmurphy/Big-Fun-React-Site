@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import './CreateAccount.css';
+import './Account.css';
 
 class CreateAccount extends Component {
   constructor(props){
@@ -39,11 +39,11 @@ class CreateAccount extends Component {
         <img className='loginLogo' src={'/img/icon-circle.png'} alt="Big Fun Logo"/>
         <h1 className='headingText'>Create Account</h1>
         <form name='registerForm' onSubmit={this.handleSubmit}>
-          <input required id='username' placeholder='Username' type='text' value={this.state.username} onChange={this.handleChange.bind(this)} />
+          <input required id='username' class='loginBox' placeholder='Username' type='text' value={this.state.username} onChange={this.handleChange.bind(this)} />
           <br/>
-          <input required id='password' placeholder='Password' type='password' value={this.state.password} onChange={this.handleChange.bind(this)} />
+          <input required id='password' class='loginBox' placeholder='Password' type='password' value={this.state.password} onChange={this.handleChange.bind(this)} />
           <br/>
-          <input required id='confirmPassword' placeholder='Confirm password' type='password' value={this.state.confirmPassword} onChange={this.handleChange.bind(this)} />
+          <input required id='confirmPassword' class='loginBox' placeholder='Confirm password' type='password' value={this.state.confirmPassword} onChange={this.handleChange.bind(this)} />
           <br/>
           <button id='submit' type="submit" className='submitButton'>Sign up</button>
           <div>

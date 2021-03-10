@@ -40,7 +40,7 @@ class Admin extends Component {
       showGame: 0,
       chartTransitions: this.games.map((g, i) => (i === 0 ? 'left' : 'right')),
       chartTransitionsIn: this.games.map((g, i) => (i === 0)),
-      userPasswordHidden: usrs.map(u => true),
+      userPasswordHidden: usrs.map(u => false),
       userSearchString: '',
     }
   }

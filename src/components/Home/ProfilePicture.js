@@ -43,8 +43,9 @@ class ProfilePicture extends Component {
             this.state.showProfilePics ?
                   <GridList className="PictureChoices" cols={3}>
                     {(this.state.profilePictures.map((pic, i) => (
+                     
                       <GridListTile key={i} cols={1}>
-                        <img src={pic.src} alt={pic.name} onClick={ () => this.setState({currentProfilePicture: pic}) } />
+                        <img className="PictureChoicesImage" src={pic.src} alt={pic.name} onClick={ () => this.setState({currentProfilePicture: pic}) } />
                       </GridListTile>
                     )))}
 

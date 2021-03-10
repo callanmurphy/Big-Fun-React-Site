@@ -73,13 +73,11 @@
 }
 
 .adminPassword {
-    -webkit-text-security: disc;
-    -moz-text-security: disc;
-    text-security: disc;
+    filter: none;
+    user-select: auto;
 }
 
 .adminNotPassword {
-    -webkit-text-security: none;
-    -moz-text-security: none;
-    text-security: none;
+    filter: blur(0.2rem);
+    user-select: none;
 }

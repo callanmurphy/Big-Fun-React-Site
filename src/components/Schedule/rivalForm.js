@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Grid, TextField, Button, MenuItem } from '@material-ui/core';
 import { getUser } from "../../backend";
+import './Schedule.css';
 
 class RivalForm extends Component {
 
@@ -59,14 +60,21 @@ class RivalForm extends Component {
             s={12}
             xs={12}
           >
-            <Button
+            <button 
+            type="submit" 
+            className='purpleButton'
+            onClick={scheduleGame}
+            >
+              Confirm
+            </button>
+            {/* <Button
               variant="contained"
               color="primary"
               onClick={scheduleGame}
               className="student-form__submit-button"
             >
               Confirm
-            </Button>
+            </Button> */}
           </Grid>
         </Grid>
       );
