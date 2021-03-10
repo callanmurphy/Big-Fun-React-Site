@@ -76,6 +76,7 @@ class Schedule extends Component {
   }
 
   cancelGame(i) {
+    console.log(i);
     const scheduled = this.state.scheduled;
     scheduled.splice(i, 1);
     this.setState({scheduled: scheduled})
@@ -120,7 +121,7 @@ class Schedule extends Component {
             </TableCell>
           </TableRow>
 
-          {this.state.scheduled.map((item, i) => {
+          {this.state.scheduled.map((item, index) => {
             const date = new Date(item.date)
               return (
                 <TableRow key={uid(item)} >
@@ -131,7 +132,7 @@ class Schedule extends Component {
                     {date.toString()} 
                   </TableCell>
                   <TableCell>
-                    <Button onClick={(i) => this.cancelGame(i)}>Cancel Game</Button>
+                    <Button onClick={() => this.cancelGame(index)}>Cancel Game</Button>
                   </TableCell>
                 </TableRow>
               )
