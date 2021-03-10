@@ -118,6 +118,9 @@ class Schedule extends Component {
             <TableCell>
               Time 
             </TableCell>
+            <TableCell>
+              {/* Cancel */}
+            </TableCell>
           </TableRow>
 
           {this.state.scheduled.map((item, i) => {
@@ -131,7 +134,7 @@ class Schedule extends Component {
                     {date.toString()} 
                   </TableCell>
                   <TableCell>
-                    <Button onClick={(i) => this.cancelGame(i)}>Cancel Game</Button>
+                    <Button onClick={(i) => this.cancelGame(i)} color='secondary'>Cancel Game</Button>
                   </TableCell>
                 </TableRow>
               )
