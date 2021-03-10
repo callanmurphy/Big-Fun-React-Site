@@ -43,11 +43,11 @@ class Login extends Component {
       <h1 className='headingText'>Login to Big Fun</h1>
       <form name='registerForm' onSubmit={this.handleSubmit}>
         {/* <TextField required label='Username' id='username' value={this.state.username} onChange={this.handleChange.bind(this)} /> */}
-        <input required id='username' placeholder='Username' type='text' value={this.state.username} onChange={this.handleChange.bind(this)} />
+        <input required id='username' class='loginBox' placeholder='Username' type='text' value={this.state.username} onChange={this.handleChange.bind(this)} />
         {/* <TextField required label='Password' id='password' type='password' value={this.state.password} onChange={this.handleChange.bind(this)} /> */}
         <br/>
         {/* <Button variant="contained" className='submitButton' type="submit" color='primary'>Login</Button> */}
-        <input required id='password' placeholder='Password' type='password' value={this.state.password} onChange={this.handleChange.bind(this)} />
+        <input required id='password' class='loginBox' placeholder='Password' type='password' value={this.state.password} onChange={this.handleChange.bind(this)} />
         <br/>
         <button id='submit' type="submit" className='submitButton'>Login</button>
         <div>
