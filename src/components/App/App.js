@@ -3,10 +3,9 @@ import {
   BrowserRouter as Router,
   Link, Redirect, Route, Switch
 } from "react-router-dom";
-import CreateAccount from '../CreateAccount';
 import Home from '../Home';
 import Leaderboard from '../Leaderboard';
-import Login from '../Login';
+import { Login, CreateAccount } from '../Account';
 import Progress from '../Progress';
 import Schedule from '../Schedule';
 import Admin from '../Admin';
