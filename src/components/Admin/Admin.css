@@ -1,0 +1,85 @@
+.progessGrid {
+    /* padding: 8px; */
+    /* overflow-x: hidden; */
+    padding-top: 18px;
+}
+
+.progressFullHeight {
+    height: 100%;
+}
+
+.progressToolbarHeader {
+    flex: 1;
+}
+
+.progressChartCarosoul {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.progressCharts {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.progressChartContainer {
+    flex-grow: 1;
+    align-self: center;
+    height: 80%;
+    position: relative;
+}
+
+.progressCarosoulButton {
+    vertical-align: middle;
+    top: 50%;
+}
+
+.progressSlider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.progressStatPaper {
+    background-color: var(--primary);
+    /* padding: 0 20px; */
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.progressStatTitle {
+    color: rgb(153, 153, 153);
+}
+.progressStatVal {
+    color: var(--primary);
+    font-family: monospace;
+}
+
+.progressChartTitle {
+    padding-top: 16px;
+}
+
+.adminTertText {
+    color: var(--tertiary);
+}
+
+.adminBlankButton {
+    opacity: 0;
+}
+
+.adminPassword {
+    filter: none;
+    user-select: auto;
+    transition: filter 0.5s;
+}
+
+.adminNotPassword {
+    transition: filter 0.5s;
+    filter: blur(0.2rem);
+    user-select: none;
+}

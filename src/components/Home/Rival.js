@@ -1,26 +1,36 @@
 import React, { Component } from "react";
 import './Home.css';
+import UserAvatar from '../UserAvatar';
+import { profilePictures } from './';
 
 class Rival extends Component {
 
   render() {
-    const {username, status} = this.props
-    let statusClass = ""
+    const {user} = this.props
 
-    if (status === "Offline") {
-        statusClass = ("status red")
-      } else {
-        statusClass = ("status green")
-      } 
-
-    return (
-      <li class="rival">
-          <div class={statusClass}></div>
-          <div class="rivalInfo">
-           {username} - {status}
-          </div>
-      </li>
-    )
+    if (user.online) {
+      return (
+        <li className="rival">
+            <div className="rivalPic">
+               <UserAvatar uid={user.id} onlineIndicator pic={profilePictures[user.profilePic]} size='small' />
+            </div>
+            <div className="rivalInfo">
+             {user.name} - {user.status}
+            </div>
+        </li>
+      )
+    } else {
+      return (
+        <li className="rival">
+            <div className="rivalPic">
+               <UserAvatar uid={user.id} offlineIndicator pic={profilePictures[user.profilePic]} size='small' />
+            </div>
+            <div className="rivalInfo">
+             {user.name} - {user.status}
+            </div>
+        </li>
+      )
+    }
   }
 
 

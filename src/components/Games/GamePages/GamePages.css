@@ -1,0 +1,36 @@
+.gamePlayContainer {
+    width: 100%;
+    border: 2px solid red;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.dotFollowDot {
+    width: 48px;
+    height: 48px;
+    position: absolute;
+    border-radius: 100%;
+    background-color: var(--secondary);
+    opacity: 50%;
+    transition: opacity 1s;
+    transition: box-shadow 1s;
+}
+
+.dotFollowDot:hover {
+    box-shadow: 0 0 10px var(--primary);
+    opacity: 75%;
+}
+
+.ballTrackerScore {
+    position: absolute;
+    left: 35%;
+    top: 35%;
+    padding: 2rem;
+}
+.ballTrackerGood {
+    color: var(--primary);
+}
+.ballTrackerBad {
+    color: var(--tertiary);
+}
