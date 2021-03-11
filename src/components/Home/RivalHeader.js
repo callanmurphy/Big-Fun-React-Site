@@ -15,7 +15,7 @@ class RivalHeader extends Component {
     //   } 
 
     return (
-      <li class="rivalsHeader">
+      <li className="rivalsHeader">
             <h2 id="rivalsTitle">RIVALS</h2>
             <input type="text" id="rivalSearch" placeholder="Search Rivals..." title="Type in a Rival's Name"></input>
           </li>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, TextField, Button, MenuItem } from '@material-ui/core';
+import { Grid, TextField, MenuItem } from '@material-ui/core';
 import { getUser } from "../../backend";
 import './Schedule.css';
 

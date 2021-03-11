@@ -75,9 +75,11 @@
 .adminPassword {
     filter: none;
     user-select: auto;
+    transition: filter 0.5s;
 }
 
 .adminNotPassword {
+    transition: filter 0.5s;
     filter: blur(0.2rem);
     user-select: none;
 }
