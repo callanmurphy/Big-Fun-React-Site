@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Link, Redirect, Route, Switch
 } from "react-router-dom";
 import Home from '../Home';
@@ -95,7 +95,7 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
+      <BrowserRouter>
         {this.state.loggedIn ?
           <AppBar position='static'>
             <Toolbar className='homenav' ref={this.navref}>
@@ -166,7 +166,7 @@ class App extends Component {
             <Redirect to={this.state.loggedIn ? '/home' : '/login' } />
           </Route>
         </Switch>
-      </Router >
+      </BrowserRouter >
     );
   }
 }
