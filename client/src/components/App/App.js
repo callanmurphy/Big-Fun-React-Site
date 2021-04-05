@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Link, Redirect, Route, Switch
 } from "react-router-dom";
 import Home from '../Home';
@@ -55,7 +55,9 @@ class App extends Component {
     this.nonNavlinks = [
       {
         path: '/login',
-        element: () => this.state.loggedIn ? <Redirect to='/home' /> : <Login login={(user, pass) => this.login(user, pass)} />
+        element: () => this.state.loggedIn
+          ? (this.state.curUser.name === 'admin' ? <Redirect to='/admin' /> : <Redirect to='/home' />)
+          : <Login login={(user, pass) => this.login(user, pass)} />
       }, {
         path: '/createaccount',
         element: () => (<CreateAccount />)
@@ -95,7 +97,7 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
+      <BrowserRouter>
         {this.state.loggedIn ?
           <AppBar position='static'>
             <Toolbar className='homenav' ref={this.navref}>
@@ -150,9 +152,11 @@ class App extends Component {
           }
           {  // game routes
             this.gamelinks.map(({ title, path, element }) => (
-              <Route key={path} exact path={path}>
-                {element}
-              </Route>
+              <Route key={path} exact path={path}
+                render={this.state.loggedIn
+                  ? () => element
+                  : () => <Redirect to='/login' />}
+              />
             ))
           }
           {  // game routes
@@ -166,7 +170,7 @@ class App extends Component {
             <Redirect to={this.state.loggedIn ? '/home' : '/login' } />
           </Route>
         </Switch>
-      </Router >
+      </BrowserRouter >
     );
   }
 }
