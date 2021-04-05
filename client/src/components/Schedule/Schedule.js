@@ -25,7 +25,7 @@ class Schedule extends Component {
       rivalName: getUser(currUser.rivals[0]).name,
       scheduleDate: dateString,
       scheduled: currUser.rivalGames.map((item) => {
-        return {rname: getUser(item.rid).name, date: item.date}
+        return {rname: getUser(item.rid).name, date: item.date, status: item.status}
       })
     };
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -42,7 +42,8 @@ class Schedule extends Component {
     const scheduled = this.state.scheduled;
     const game = {
       rname: this.state.rivalName, 
-      date: this.state.scheduleDate
+      date: this.state.scheduleDate,
+      status: "PENDING"
     };
 
     // insertion into sorted list
@@ -79,6 +80,7 @@ class Schedule extends Component {
     const scheduled = this.state.scheduled;
     scheduled.splice(i, 1);
     this.setState({scheduled: scheduled})
+    /*********** Needs to make backend request ***********/
   }
 
   handleInputChange(event) {
@@ -119,6 +121,9 @@ class Schedule extends Component {
               Time 
             </TableCell>
             <TableCell>
+              Status 
+            </TableCell>
+            <TableCell>
               {/* Cancel */}
             </TableCell>
           </TableRow>
@@ -132,6 +137,9 @@ class Schedule extends Component {
                   </TableCell>
                   <TableCell>
                     {date.toString()} 
+                  </TableCell>
+                  <TableCell>
+                    {item.status} 
                   </TableCell>
                   <TableCell>
                     <Button onClick={() => this.cancelGame(index)} color='secondary'>Cancel Game</Button>
