@@ -11,6 +11,8 @@ class Schedule extends Component {
 
   constructor(props) {
     super(props);
+    const {user} = this.props
+
     const date = new Date()
     const y = date.getFullYear()
     const m = date.getMonth()
@@ -19,18 +21,19 @@ class Schedule extends Component {
     const min = date.getMinutes()
     const dateString = `${y}-${m < 10 ? 0 : ""}${m}-${d < 10 ? 0 : ""}${d}T${h < 10 ? 0 : ""}${date.getHours()}:${min < 10 ? 0 : ""}${date.getMinutes()}`
     
-    const currUser = getUser(2);
+    /*********** Needs to make backend request ***********/
     this.state = {
-      currUser: currUser,
-      rivalName: getUser(currUser.rivals[0]).name,
+      currUser: user,
+      rivalName: getUser(user.rivals[0]).name,
       scheduleDate: dateString,
-      scheduled: currUser.rivalGames.map((item) => {
-        return {rname: getUser(item.rid).name, date: item.date, status: item.status}
+      scheduled: user.rivalGames.map((item) => {
+        return {rname: getUser(item.rid).name, date: item.date, inviter: item.inviter, confirmed: item.confirmed}
       })
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.scheduleGame = this.scheduleGame.bind(this);
     this.cancelGame = this.cancelGame.bind(this);
+    this.confirmGame = this.confirmGame.bind(this);
 
   }
 
@@ -43,7 +46,8 @@ class Schedule extends Component {
     const game = {
       rname: this.state.rivalName, 
       date: this.state.scheduleDate,
-      status: "PENDING"
+      inviter: true,
+      confirmed: false
     };
 
     // insertion into sorted list
@@ -79,6 +83,13 @@ class Schedule extends Component {
   cancelGame(i) {
     const scheduled = this.state.scheduled;
     scheduled.splice(i, 1);
+    this.setState({scheduled: scheduled})
+    /*********** Needs to make backend request ***********/
+  }
+
+  confirmGame(i) {
+    const scheduled = this.state.scheduled;
+    scheduled[i].confirmed = true
     this.setState({scheduled: scheduled})
     /*********** Needs to make backend request ***********/
   }
@@ -139,10 +150,10 @@ class Schedule extends Component {
                     {date.toString()} 
                   </TableCell>
                   <TableCell>
-                    {item.status} 
+                    {item.confirmed ? "CONFIRMED" : "PENDING"} 
                   </TableCell>
                   <TableCell>
-                    <Button onClick={() => this.cancelGame(index)} color='secondary'>Cancel Game</Button>
+                    <Button onClick={() => item.inviter || item.confirmed ? this.cancelGame(index) : this.confirmGame(index)} color='secondary'>{item.inviter || item.confirmed ? "Cancel" : "Confirm"}</Button>
                   </TableCell>
                 </TableRow>
               )
