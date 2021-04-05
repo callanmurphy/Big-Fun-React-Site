@@ -410,7 +410,7 @@ class Admin extends Component {
                   </Typography>
                   <Divider />
                   <Typography className='progressStatVal' variant='h4' align='center'>
-                    TODO
+                    {filteredUsers.sort((u1, u2) => u1.gamesPlayed - u2.gamesPlayed).reverse()[0].name}
                   </Typography>
                 </Paper>
               </Grid>

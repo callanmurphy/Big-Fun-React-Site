@@ -55,7 +55,9 @@ class App extends Component {
     this.nonNavlinks = [
       {
         path: '/login',
-        element: () => this.state.loggedIn ? <Redirect to='/home' /> : <Login login={(user, pass) => this.login(user, pass)} />
+        element: () => this.state.loggedIn
+          ? (this.state.curUser.name === 'admin' ? <Redirect to='/admin' /> : <Redirect to='/home' />)
+          : <Login login={(user, pass) => this.login(user, pass)} />
       }, {
         path: '/createaccount',
         element: () => (<CreateAccount />)
@@ -150,9 +152,11 @@ class App extends Component {
           }
           {  // game routes
             this.gamelinks.map(({ title, path, element }) => (
-              <Route key={path} exact path={path}>
-                {element}
-              </Route>
+              <Route key={path} exact path={path}
+                render={this.state.loggedIn
+                  ? () => element
+                  : () => <Redirect to='/login' />}
+              />
             ))
           }
           {  // game routes

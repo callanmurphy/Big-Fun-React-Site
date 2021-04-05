@@ -41,7 +41,7 @@ class DotFollow extends Component {
     if (this.keepScore) {
       this.setState({
         score: this.state.score + diff,
-        life: this.state.life + diff
+        // life: this.state.life + diff
       });
     } else if (this.state.life - diff > 0) {
       this.setState({
