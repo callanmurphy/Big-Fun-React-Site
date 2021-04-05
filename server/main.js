@@ -3,7 +3,7 @@ const path = require('path');
 
 const gameRoutes = require('./games');
 
-const clipath = path.join(__dirname, '..', 'client', 'public')
+const clipath = path.join(__dirname, '..', 'client', 'build')
 const app = express();
 
 /*********************
