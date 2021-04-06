@@ -11,3 +11,16 @@ export function login(uname, password) {
 export function getUserByName(name) {
   return users.filter(u => (u.name === name))[0]
 }
+
+export function createUser(username, password) {
+  const req = new Request('http://localhost:5000/api/users/user', {
+  method: 'post',
+  body: JSON.stringify({ "username": username, "password": password}),
+  headers: {
+    'Accept': 'application/json, text/plain, */*',
+    'Content-Type': 'application/json'
+  }
+})
+
+
+}

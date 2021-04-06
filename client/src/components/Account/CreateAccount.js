@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import './Account.css';
+import { createUser } from '../../backend'
 
 class CreateAccount extends Component {
   constructor(props){
@@ -26,6 +27,7 @@ class CreateAccount extends Component {
       if(this.state.password === this.state.confirmPassword){
         // alert("Account successfully created for: " + this.state.username);
         window.location.href = "/";
+        createUser(this.state.username, this.state.password);
       }
       else{
         alert("Passwords don't match");
