@@ -27,11 +27,7 @@ const { mongoose } = require('../db/mongoose')
 mongoose.set('bufferCommands', false);  // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
 
 // import the mongoose models
-const { User } = require('../models/user')
-
-// to validate object IDs
-const { ObjectID } = require('mongodb');
-const { env } = require('process');
+const { User } = require('../models/usere4')
 
 // mongo error handling
 function isMongoError(error) { // checks for first error returned by promise rejection if Mongo database suddently disconnects
@@ -46,11 +42,24 @@ router.get('/', (req, res) => {
     res.send('you\'ve hit the user API!');
 });
 
-router.get('/user', (req, res) => {
+router.get('/user/:name', async (req, res) => {
     /** id: int =>
      * User
      */
-    res.status(413);
+    
+    try {
+        const username = req.params.name;
+        console.log(`Getting user with username ${username}`);
+        const user = await User.findOne({username: username}).exec();
+        res.send(user);
+    } catch (e) {
+        console.log(e);
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+    }
 });
 
 router.post('/user', async (req, res) => {
@@ -58,12 +67,13 @@ router.post('/user', async (req, res) => {
 
     // check mongoose connection established
 	if (mongoose.connection.readyState != 1) {
-		log('Issue with mongoose connection')
+		console.log('Issue with mongoose connection')
 		res.status(500).send('Internal server error')
 		return;
 	}  
 
     // create user
+    console.log(`Attempting to create user with username ${req.body.username} and password ${req.body.password}.`)
     const user = new User({
 		username: req.body.username,
 		password: req.body.password
@@ -74,7 +84,7 @@ router.post('/user', async (req, res) => {
 		const result = await user.save()	
 		res.send(result)
 	} catch(error) {
-		log(error) // log server error to the console, not to the client.
+		console.log(error) // log server error to the console, not to the client.
 		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
 			res.status(500).send('Internal server error')
 		} else {
@@ -85,26 +95,29 @@ router.post('/user', async (req, res) => {
     res.status(413);
 });
 
-router.get('/userbyname', (req, res) => {
-    /** uname: str =>
-     * User
-     */
-    res.status(413);
-});
-
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
     /** uname, pass =>
      * statuscode
      */ 
-    const uname = req.body.uname;
-    const pass = req.body.password;
-    // TODO: authenticate
-    const auth = true;
-    if (auth) {
-        res.redirect('/progress');
-        req.session.uname = uname;
-    } else {
-        res.redirect('/login');
+    try {
+        const username = req.body.username;
+        const password = req.body.password;
+        console.log(`Logging in with ${req.body.username}:${password}`);
+        const user = await User.findOne({username: req.body.username}).exec();
+        if ((user.username === username) && (user.password === password)) {
+            req.session.username = username;
+            req.session.user = user;
+            res.send(user);
+        } else {
+            res.status(400);
+        }
+    } catch (e) {
+        console.log(e);
+        if (isMongoError(e)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
     }
 });
 

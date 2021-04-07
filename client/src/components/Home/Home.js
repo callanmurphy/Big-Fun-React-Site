@@ -20,7 +20,7 @@ class Home extends Component {
   constructor(props) {
     super(props)
     const {user} = this.props
-    this.state = {rivals: user.rivals}
+    this.state = {rivals: user.rivals || []}
   }
 
   componentDidMount() {

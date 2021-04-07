@@ -28,8 +28,7 @@ class Login extends Component {
         // <Alert severity="success">{ this.state.username } + " logged in successfully"</Alert>
         // alert(this.state.username + " logged in successfully");
         // window.location.href = "/home";
-      }
-      else {
+      } else {
         alert("Login error");
       }
   }

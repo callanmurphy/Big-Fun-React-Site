@@ -17,13 +17,6 @@ const app = express();
 const { mongoose } = require('../db/mongoose')
 mongoose.set('bufferCommands', false);  // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
 
-// import the mongoose models
-const { Student } = require('../models/user')
-
-// to validate object IDs
-const { ObjectID } = require('mongodb');
-const { env } = require('process');
-
 
 /*********************
  * Middleware
@@ -70,6 +63,10 @@ const mongoChecker = (req, res, next) => {
  * - parameters can be accessed by accessing req.body.<param>
  * - session information can be accessed by req.session.<param>
  */
+app.use('/api', (req, res, next) => {
+	// useful for debugging (eg. console.log(req.body);)
+	next();
+})
 app.use('/api/admin', adminRoutes);
 app.use('/api/games', gameRoutes);
 app.use('/api/users', userRoutes);

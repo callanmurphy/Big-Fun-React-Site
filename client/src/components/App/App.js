@@ -68,8 +68,8 @@ class App extends Component {
 
   }
 
-  login(user, pass) {
-    if (login(user, pass)) {
+  async login(user, pass) {
+    if (await login(user, pass)) {
       let newlinks = this.navlinks.map(e => e);
       if (user === 'admin') {
         newlinks.push({
@@ -81,8 +81,9 @@ class App extends Component {
       this.setState({
         loggedIn: true,
         navlinks: newlinks,
-        curUser: getUserByName(user)
-      })
+        curUser: 'pending'
+      });
+      getUserByName(user).then(user => this.setState({curUser: user}));
       return true;
     }
     return false;

@@ -4,23 +4,25 @@ export function getUser(id) {
   return users.filter( u => u.id === id)[0]
 }
 
-export function login(uname, password) {
-  return users.filter(u => (u.name === uname) && (u.password === password)).length > 0;
+export async function login(uname, password) {
+  const res = await fetch('/api/users/login', {
+    method: 'post',
+    body: JSON.stringify({username: uname, password: password}),
+    headers: { 'Content-type': 'application/json' }
+  })
+
+  return res.status === 200;
 }
 
-export function getUserByName(name) {
-  return users.filter(u => (u.name === name))[0]
+export async function getUserByName(name) {
+  const res = await fetch(`/api/users/user/${name}`)
+  return res.json();
 }
 
 export function createUser(username, password) {
-  const req = new Request('http://localhost:5000/api/users/user', {
-  method: 'post',
-  body: JSON.stringify({ "username": username, "password": password}),
-  headers: {
-    'Accept': 'application/json, text/plain, */*',
-    'Content-Type': 'application/json'
-  }
-})
-
-
+  fetch('/api/users/user', {
+    method: 'post',
+    body: JSON.stringify({username: username, password: password}),
+    headers: { 'Content-type': 'application/json' }
+  }).catch(err => console.log(err));
 }

@@ -1,16 +1,43 @@
 // referenced e4 code (restaurant.js)
+// and https://mongoosejs.com/docs/guide.html
+
+/** User
+ * id: int                    (can we just use the name?)
+ * name: str
+ * password: str
+ * online: bool
+ * profilePiv: int
+ * rivals: List[id: int]
+ * status: str                (customizable?)
+ * rivalGames: List[{
+ *      gid: int -> game id
+ *      rid: int -> user id
+ *      date: timestamp
+ *      inviter: bool
+ *      confirmed: bool
+ *      points: int           (what is this for?)
+ * }]
+ * ? isAdmin: bool         (maybe we should include this)
+ */
 
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    username: String,
-    password: Number
-});
-
-const RestaurantSchema = new mongoose.Schema({
-    name: String,
-    description: String,
-    reservations: [ReservationSchema]
+    username: {type: String, unique: true},
+    password: String,
+    online: {type: Boolean, default: false},
+    profilePic: {type: Number, default: 0},
+    rivals: [mongoose.Types.ObjectId],
+    status: {type: String, default: 'bumblefucking'},
+    rivalGames: [{
+        gid: mongoose.Types.ObjectId,
+        rid: mongoose.Types.ObjectId,
+        inviter: {type: Boolean, default: true},
+        date: {type: Date, default: Date.now},
+        confirmed: {type: Boolean, default: false},
+        points: Number,
+    }],
+    isAdmin: {type: Boolean, default: false}
 });
 
 const User = mongoose.model('User', UserSchema);
