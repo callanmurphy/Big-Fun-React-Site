@@ -23,7 +23,6 @@ class App extends Component {
     super(props)
 
     this.state = {
-      curUser: getUser(0),
       loggedIn: false
     }
 
@@ -35,19 +34,19 @@ class App extends Component {
       {
         title: 'Leaderboard',
         path: '/leaderboard',
-        element: (<Leaderboard user={this.state.curUser} />)
+        element: () => (<Leaderboard user={this.state.curUser} />)
       }, {
         title: 'Progress',
         path: '/progress',
-        element: (<Progress user={this.state.curUser} games={this.gamelinks.map(g => g.title)} />)
+        element: () => (<Progress user={this.state.curUser} games={this.gamelinks.map(g => g.title)} />)
       }, {
         title: 'Games',
         path: '/games',
-        element: (<Games user={this.state.curUser} gamelinks={this.gamelinks} />)
+        element: () => (<Games user={this.state.curUser} gamelinks={this.gamelinks} />)
       }, {
         title: 'Schedule',
         path: '/schedule',
-        element: (<Schedule user={this.state.curUser} />)
+        element: () => (<Schedule user={this.state.curUser} />)
       },
     ]
     this.state.navlinks = this.navlinks;
@@ -56,8 +55,10 @@ class App extends Component {
       {
         path: '/login',
         element: () => this.state.loggedIn
-          ? (this.state.curUser.name === 'admin' ? <Redirect to='/admin' /> : <Redirect to='/home' />)
-          : <Login login={(user, pass) => this.login(user, pass)} />
+          ? (this.state.username === 'admin'
+              ? <Redirect to='/admin' />
+              : <Redirect to='/home' />)
+          : <Login login={async (user, pass) => await this.login(user, pass)} />
       }, {
         path: '/createaccount',
         element: () => (<CreateAccount />)
@@ -68,22 +69,25 @@ class App extends Component {
 
   }
 
-  async login(user, pass) {
-    if (await login(user, pass)) {
+  async login(username, pass) {
+    if (await login(username, pass)) {
       let newlinks = this.navlinks.map(e => e);
-      if (user === 'admin') {
+      if (username === 'admin') {
         newlinks.push({
           title: 'Admin',
           path: '/admin',
-          element: (<Admin />)
+          element: () => (<Admin />)
         });
       }
-      this.setState({
-        loggedIn: true,
-        navlinks: newlinks,
-        curUser: 'pending'
+      getUserByName(username).then(user => {
+        console.log(user)
+        this.setState({
+          loggedIn: true,
+          navlinks: newlinks,
+          curUser: user,
+          username: username
+        });
       });
-      getUserByName(user).then(user => this.setState({curUser: user}));
       return true;
     }
     return false;
@@ -146,7 +150,7 @@ class App extends Component {
             this.state.navlinks.map(({ title, path, element }) => (
               <Route key={path} exact path={path}
                 render={this.state.loggedIn
-                  ? () => element
+                  ? element
                   : () => <Redirect to='/login' />}
               />
             ))

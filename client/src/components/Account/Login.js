@@ -22,9 +22,11 @@ class Login extends Component {
       this.setState({[e.target.id]: e.target.value});
   }
     
-  handleSubmit(e){
+  async handleSubmit(e){
       e.preventDefault();
-      if(this.state.username.match("^[a-zA-Z0-9]{1,20}$") != null && this.props.login(this.state.username, this.state.password)){
+      const loginSucc = await this.props.login(this.state.username, this.state.password);
+      const strcheck = this.state.username.match("^[a-zA-Z0-9]{1,20}$") != null;
+      if(strcheck && loginSucc){
         // <Alert severity="success">{ this.state.username } + " logged in successfully"</Alert>
         // alert(this.state.username + " logged in successfully");
         // window.location.href = "/home";

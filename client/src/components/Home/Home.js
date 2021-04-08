@@ -21,12 +21,16 @@ class Home extends Component {
     super(props)
     const {user} = this.props
     this.state = {rivals: user.rivals || []}
+    console.log(this.props)
   }
 
   componentDidMount() {
     document.title = 'Home - Big Fun';
   }
 
+  componentDidUpdate() {
+    console.log(this)
+  }
 
   // Modified from an Emma Goto tutorial - https://www.emgoto.com/react-search-bar/
   searchRivals(e) {
