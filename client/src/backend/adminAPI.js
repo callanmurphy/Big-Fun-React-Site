@@ -1,12 +1,14 @@
-import { users } from './tempdata';
 import { getFavoriteGame, gameHistory, getBestRival } from './gameAPI';
-import { getUser } from './userAPI';
 
-export function getUsers() {
-    let ret = users.map(u => {
-        u.favoriteGame = getFavoriteGame(u.id);
-        u.gamesPlayed = gameHistory(u.id).length;
-        u.bestRival = getUser(parseInt(getBestRival(u.id))).name;
+export async function getUsers() {
+    
+    const users = (await fetch(`/api/admin/users`)).json();
+
+    let ret = users.map(async (u) => {
+        const gamehist = await gameHistory(u.username);
+        u.favoriteGame = getFavoriteGame(gamehist);
+        u.gamesPlayed = gamehist.length;
+        u.bestRival = getBestRival(gamehist);
         return u;
     });
     return ret;
