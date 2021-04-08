@@ -95,6 +95,36 @@ router.post('/user', async (req, res) => {
     res.status(413);
 });
 
+router.put('/user', async (req, res) => {
+    // req.body should have username and update
+
+    // check mongoose connection established
+    if (mongoose.connection.readyState != 1) {
+        console.log('Issue with mongoose connection')
+        res.status(500).send('Internal server error')
+        return;
+    }  
+
+    // create user
+    console.log(`Attempting to update user with username ${req.body.username}.`)
+    let user = await User.findOneAndUpdate({username: username}, update).exec()
+
+    // save user + error checking
+    try {
+        const result = await user.save()    
+        res.send(result)
+    } catch(error) {
+        console.log(error) // log server error to the console, not to the client.
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+            res.status(500).send('Internal server error')
+        } else {
+            res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+        }
+    }
+
+    res.status(413);
+});
+
 router.post('/login', async (req, res) => {
     /** uname, pass =>
      * statuscode
