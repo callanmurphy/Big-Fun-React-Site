@@ -5,9 +5,9 @@ import RivalForm  from "./rivalForm";
 
 import { getUser } from "../../backend";
 
-import "./Schedule.css";
+import "./Challenges.css";
 
-class Schedule extends Component {
+class Challenges extends Component {
 
   constructor(props) {
     super(props);
@@ -38,7 +38,7 @@ class Schedule extends Component {
   }
 
   componentDidMount() {
-    document.title = 'Schedule - Big Fun';
+    document.title = 'Challenges - Big Fun';
   }
 
   scheduleGame() {
@@ -49,6 +49,13 @@ class Schedule extends Component {
       inviter: true,
       confirmed: false
     };
+
+    const earliest_deadline = new Date();
+    earliest_deadline.setDate(earliest_deadline.getDate() + 1);
+    if (new Date(this.state.scheduleDate) < earliest_deadline) {
+      alert("Must give Rival at least 24 hours to accept!")
+      return;
+    }
 
     // insertion into sorted list
     if (scheduled.length === 0) {
@@ -122,14 +129,14 @@ class Schedule extends Component {
       
 
 
-      <Table className="schedule">
+      <Table className="challenges">
         <TableBody>
           <TableRow>
             <TableCell>
               Rival 
             </TableCell>
             <TableCell>
-              Time 
+              Deadline 
             </TableCell>
             <TableCell>
               Status 
@@ -153,7 +160,7 @@ class Schedule extends Component {
                     {item.confirmed ? "CONFIRMED" : "PENDING"} 
                   </TableCell>
                   <TableCell>
-                    <Button onClick={() => item.inviter || item.confirmed ? this.cancelGame(index) : this.confirmGame(index)} color='secondary'>{item.inviter || item.confirmed ? "Cancel" : "Confirm"}</Button>
+                    <Button onClick={() => item.inviter || item.confirmed ? this.cancelGame(index) : this.confirmGame(index)} color='secondary'>{item.inviter || item.confirmed ? "Forfeit" : "Accept"}</Button>
                   </TableCell>
                 </TableRow>
               )
@@ -167,4 +174,4 @@ class Schedule extends Component {
   }
 }
 
-export default Schedule;
+export default Challenges;

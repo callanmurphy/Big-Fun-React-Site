@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Grid, TextField, MenuItem } from '@material-ui/core';
 import { getUser } from "../../backend";
-import './Schedule.css';
+import './Challenges.css';
 
 class RivalForm extends Component {
 
@@ -40,7 +40,7 @@ class RivalForm extends Component {
             <TextField
                 id="scheduleDate"
                 name = "scheduleDate"
-                label="Time"
+                label="Deadline"
                 type="datetime-local"
                 defaultValue={scheduleDate}
                 onChange={handleChange}

@@ -7,7 +7,7 @@ import Home from '../Home';
 import Leaderboard from '../Leaderboard';
 import { Login, CreateAccount } from '../Account';
 import Progress from '../Progress';
-import Schedule from '../Schedule';
+import Challenges from '../Challenges';
 import Admin from '../Admin';
 import Games, { gamelinks } from '../Games';
 import './App.css';
@@ -44,9 +44,9 @@ class App extends Component {
         path: '/games',
         element: () => (<Games user={this.state.curUser} gamelinks={this.gamelinks} />)
       }, {
-        title: 'Schedule',
-        path: '/schedule',
-        element: () => (<Schedule user={this.state.curUser} />)
+        title: 'Challenges',
+        path: '/challenges',
+        element: () => (<Challenges user={this.state.curUser} />)
       },
     ]
     this.state.navlinks = this.navlinks;

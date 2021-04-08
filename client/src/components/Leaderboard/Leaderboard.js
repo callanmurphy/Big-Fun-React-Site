@@ -9,6 +9,8 @@ class Leaderboard extends Component {
   constructor(props) {
     super(props);
     const users = []
+    
+    /*********** Needs to make backend request ***********/
     for (let id = 0; id < 5; id++) {
       users.push(getUser(id))
     }
