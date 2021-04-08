@@ -1,7 +1,7 @@
 import { users } from './tempdata';
 
 export function getUser(id) {
-  return users.filter( u => u.id === id)[0]
+  return users.filter( u => u._id === id)[0]
 }
 
 export async function login(uname, password) {
@@ -25,4 +25,20 @@ export function createUser(username, password) {
     body: JSON.stringify({username: username, password: password}),
     headers: { 'Content-type': 'application/json' }
   }).catch(err => console.log(err));
+}
+
+export function addRival(username, rivalUsername) {
+	fetch('/api/users/user', {
+		method: 'put',
+		body: JSON.stringify({username: username, update: {$push: {rivals: rivalUsername}}}),
+		headers: { 'Content-type': 'application/json' }
+	}).catch(err => console.log(err));
+}
+
+export function updateStatus(username, status) {
+	fetch('/api/users/user', {
+		method: 'put',
+		body: JSON.stringify({username: username, update: {$set: {status: status}}}),
+		headers: { 'Content-type': 'application/json' }
+	}).catch(err => console.log(err));
 }
