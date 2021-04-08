@@ -22,7 +22,7 @@ const router = express.Router();
  * }]
  */
 
-
+const { ObjectID } = require('mongodb')
 const { mongoose } = require('../db/mongoose')
 mongoose.set('bufferCommands', false);  // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
 
@@ -61,6 +61,41 @@ router.get('/user/:name', async (req, res) => {
 		}
     }
 });
+
+// Route for getting information for one user by id.
+/* router.get('/user/:id', async (req, res) => {
+
+	const id = req.params.id
+	// Good practise: Validate id immediately.
+	if (!ObjectID.isValid(id)) {
+		res.status(404).send()  // if invalid id, definitely can't find resource, 404.
+		return;  // so that we don't run the rest of the handler.
+	}
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}
+
+	try {
+		const result = await User.findById(id)
+		if (!result) {
+			res.status(404).send('Resource not found')  // could not find this restaurant
+		} else {
+			/// sometimes we wrap returned object in another object:
+			//res.send({restaurant})   
+			res.send(result)
+		}
+
+	}
+	catch (error) {
+		log(error)
+		res.status(500).send('Internal Server Error')  // server error
+	}
+
+}) */
 
 router.post('/user', async (req, res) => {
     // req.body should have username and password
