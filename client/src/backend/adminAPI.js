@@ -20,3 +20,14 @@ export async function delUser(name) {
         method: 'DELETE'
     });
 }
+
+export async function toggleAdmin(name, admin) {
+    await fetch('/api/users/user', {
+		method: 'put',
+		body: JSON.stringify({
+            username: name,
+            update: {$set: {isAdmin: admin}}}
+        ),
+		headers: { 'Content-type': 'application/json' }
+	}).catch(err => console.log(err));
+}
