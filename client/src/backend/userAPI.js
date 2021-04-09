@@ -92,7 +92,8 @@ export const getChallenges = (Challenges) => {
         }
     })
     .then(rival => {
-        rivalNames.push(rival.username)
+        rivalNames.push({id: rid, username: rival.username})
+        //Challenges.setState({rivalName: rival.username})
         Challenges.setState({ rivalNames: rivalNames });
         console.log(rivalNames)
     })
@@ -102,6 +103,7 @@ export const getChallenges = (Challenges) => {
   });
 
   const scheduled = []
+  console.log(currUser.challenges)
   currUser.challenges.forEach(game => {
     fetch(`/api/users/user/id/${game.rid}`)
     .then(res => {
@@ -114,6 +116,7 @@ export const getChallenges = (Challenges) => {
     })
     .then(rival => {
         scheduled.push({rname: rival.username, date: game.date, inviter: game.inviter, confirmed: game.confirmed})
+        scheduled.sort((a, b) => (new Date(a.date) < new Date(b.date)) ? 1 : -1)
         Challenges.setState({ scheduled: scheduled });
         console.log(scheduled)
     })
@@ -122,6 +125,79 @@ export const getChallenges = (Challenges) => {
     });
   });
  
+};
+
+// A function to send two Post requests with challenge objects
+// One Inviter, one for Invitee
+export const makeChallenge = (Component) => {
+  // the URL for the request
+  const currUser = Component.state.currUser
+  const rivalName = Component.state.rivalName
+  console.log(currUser._id.valueOf())
+  const uid = currUser._id
+  const rid = Component.state.rivalNames.filter(r => r.username === rivalName)[0].id
+  const date = Component.state.scheduleDate
+
+  // The data we are going to send in our request
+  const inviterChallenge = {
+    rid: rid, 
+    date: date,
+    inviter: true,
+    confirmed: false
+  }
+  const inviteeChallenge = {
+    rid: uid, 
+    date: date,
+    inviter: false,
+    confirmed: false
+  }
+
+  // Create our request constructor with all the parameters we need
+  const request1 = new Request(`/api/users/challenge/${uid}`, {
+      method: "post",
+      body: JSON.stringify(inviterChallenge),
+      headers: { 'Content-type': 'application/json' }
+  });
+
+  const request2 = new Request(`/api/users/challenge/${rid}`, {
+    method: "post",
+    body: JSON.stringify(inviteeChallenge),
+    headers: { 'Content-type': 'application/json' }
+  });
+
+  // Send the request with fetch()
+  fetch(request1)
+      .then(function (res) {
+          // Handle response we get from the API.
+          // Usually check the error codes to see what happened.
+          if (res.status === 200) {
+              // challenge was added successfully
+              //alert("Challenge added succesfully")
+          } else {
+              // If server couldn't add the challenge, tell the user.
+              //alert("Could not add challenge")
+          }
+      })
+      .catch(error => {
+          console.log(error);
+      });
+
+  fetch(request2)
+      .then(function (res) {
+          // Handle response we get from the API.
+          // Usually check the error codes to see what happened.
+          if (res.status === 200) {
+              // challenge was added successfully
+              //alert("Challenge added succesfully")
+          } else {
+              // If server couldn't add the challenge, tell the user.
+              //alert("Could not add challenge")
+              
+          }
+      })
+      .catch(error => {
+          console.log(error);
+      });
 };
 
 

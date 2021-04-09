@@ -24,12 +24,12 @@ const mongoose = require('mongoose');
 
 const ChallengeSchema = new mongoose.Schema({
     /* gid: mongoose.Types.ObjectId, */
-    rid: mongoose.Types.ObjectId,
+    rid: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     inviter: {type: Boolean, default: true},
     date: {type: Date, default: Date.now},
     confirmed: {type: Boolean, default: false},
     /* points: Number, */
-})
+});
 
 const UserSchema = new mongoose.Schema({
     username: {type: String, unique: true},

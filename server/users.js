@@ -55,7 +55,7 @@ router.get('/user/:name', async (req, res) => {
         res.send(user);
     } catch (e) {
         console.log(e);
-        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+        if (isMongoError(e)) { // check for if mongo server suddenly dissconnected before this request.
 			res.status(500).send('Internal server error')
 		} else {
 			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
@@ -75,7 +75,7 @@ router.get('/user/id/:id', async (req, res) => {
         res.send(user)
     } catch (e) {
         console.log(e);
-        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+        if (isMongoError(e)) { // check for if mongo server suddenly dissconnected before this request.
             res.status(500).send('Internal server error')
         } else {
             res.status(400).send('Bad Request') // 400 for bad request gets sent to client.

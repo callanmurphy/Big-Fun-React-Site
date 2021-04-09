@@ -28,9 +28,9 @@ class RivalForm extends Component {
                 onChange={handleChange}
                 label="Rival"
             >
-              {rivalNames.map(name => (
-                <MenuItem key={name} value={name}>
-                  {name}
+              {rivalNames.map(r => (
+                <MenuItem key={r.id} value={r.username}>
+                  {r.username}
                 </MenuItem>
               ))}
             </TextField> 
