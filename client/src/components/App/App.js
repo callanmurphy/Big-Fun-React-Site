@@ -80,7 +80,7 @@ class App extends Component {
           newlinks.push({
             title: 'Admin',
             path: '/admin',
-            element: () => (<Admin />)
+            element: () => (<Admin user={this.state.curUser} />)
           });
         }
         else {
@@ -169,7 +169,7 @@ class App extends Component {
             this.gamelinks.map(({ title, path, element }) => (
               <Route key={path} exact path={path}
                 render={this.state.loggedIn
-                  ? () => element
+                  ? () => element(this.state.curUser)
                   : () => <Redirect to='/login' />}
               />
             ))

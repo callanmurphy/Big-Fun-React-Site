@@ -3,4 +3,6 @@ import TypeType from './TypeType';
 import DotFollow from './DotFollow';
 
 
-export { Pong, TypeType, DotFollow };
+export { Pong, TypeType, DotFollow};
+
+

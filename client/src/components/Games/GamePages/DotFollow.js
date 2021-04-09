@@ -1,5 +1,6 @@
 import { Divider, Paper, Typography } from "@material-ui/core";
 import React, { Component } from "react";
+import { recordGame } from "../../../backend";
 import './GamePages.css';
 
 
@@ -59,6 +60,12 @@ class DotFollow extends Component {
 
   gameOver() {
     this.doAnimation = false;
+    recordGame({
+      name: 'Follow the dot',
+      user1: this.props.user.username,
+      user2: null,
+      score: this.state.score,
+    });
   }
 
   animate() {
