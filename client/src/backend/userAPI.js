@@ -42,3 +42,22 @@ export function updateStatus(username, status) {
 		headers: { 'Content-type': 'application/json' }
 	}).catch(err => console.log(err));
 }
+
+export const getAllUsers = (component) => {
+  fetch("/api/admin/users")
+  .then(res => {
+      if (res.status === 200) {
+          // return a promise that resolves with the JSON body
+          return res.json();
+      } else {
+          alert("Could not get students");
+      }
+  })
+  .then(json => {
+      // the resolved promise with the JSON body
+      component.setState({ users: json.users });
+  })
+  .catch(error => {
+      console.log(error);
+  });
+};

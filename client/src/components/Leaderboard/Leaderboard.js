@@ -1,32 +1,29 @@
 import React, { Component } from "react";
 import { Table, TableBody, TableCell, TableRow, Avatar, Paper } from '@material-ui/core';
 import { profilePictures } from "../Home"
-import { getUser } from "../../backend"
+import { getAllUsers } from "../../backend"
 import "./Leaderboard.css"
 
 class Leaderboard extends Component {
   
   constructor(props) {
     super(props);
-    const users = []
-    
+
     /*********** Needs to make backend request ***********/
-    for (let id = 0; id < 5; id++) {
-      users.push(getUser(id))
-    }
-    users.sort((a, b) => (a.points < b.points) ? 1 : -1)
+    //users.sort((a, b) => (a.points < b.points) ? 1 : -1)
     this.state = {
-      users: users
+      users: []
     }
   }
 
   componentDidMount() {
     document.title = 'Leaderboard - Big Fun';
+    getAllUsers(this);
+    console.log(this.state.users)
   }
 
 
   render() {
-    console.log(profilePictures)
     return (
       <div>
       <Paper>
@@ -51,7 +48,7 @@ class Leaderboard extends Component {
                 </TableCell>
                 <TableCell>
                   <Avatar alt="" src={profilePictures[user.profilePic].src}/>
-                  {user.name}
+                  {user.username}
                 </TableCell>
                 <TableCell>
                   {user.points}

@@ -30,8 +30,8 @@ router.get('/users', async (req, res) => {
 
 	// async-await
 	try {
-		const result = await User.find()
-		res.send(result)
+		const users = await User.find()
+		res.send({users})
 	}
 	catch (error) {
 		log(error)

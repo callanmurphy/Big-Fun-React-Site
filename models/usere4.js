@@ -37,7 +37,8 @@ const UserSchema = new mongoose.Schema({
         confirmed: {type: Boolean, default: false},
         points: Number,
     }],
-    isAdmin: {type: Boolean, default: false}
+    isAdmin: {type: Boolean, default: false},
+    points: {type: Number, default: 0}
 });
 
 const User = mongoose.model('User', UserSchema);
