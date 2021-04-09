@@ -6,13 +6,15 @@ import ProfilePicture from './ProfilePicture'
 
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 
-import {getUserByName, addRival, updateStatus, clearRivals} from '../../backend/userAPI'
+import {getUserByName, addRival, updateStatus, clearRivals, getUserById, setOnline} from '../../backend/userAPI'
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 
 import Paper from '@material-ui/core/Paper'
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 
 // Anything involving Material UI in this file and related components 
@@ -22,31 +24,35 @@ class Home extends Component {
   constructor(props) {
     super(props)
     const {user} = this.props
-    this.state = {rivals: user.rivals || []}
+    this.state = {rivals: [], user: user, fullRivals: []}
     console.log(this.props)
   }
 
   componentDidMount() {
-    const {user} = this.props
+    const user = this.state.user
     updateStatus(user._id, "On Home Page")
-    document.title = 'Home - Big Fun';
-  }
+    setOnline(user._id)
+    console.log("About to update")
 
-  componentDidUpdate() {
-    console.log(this)
+    this.updateUser.bind(this)().then(this.initFullRivals.bind(this)().then(this.updateTempRivals.bind(this)()))
+    document.title = 'Home - Big Fun';
   }
 
   // Modified from an Emma Goto tutorial - https://www.emgoto.com/react-search-bar/
   searchRivals(e) {
-    const {user} = this.props
+    const user = this.state.user;
     if (e.target.value === "") {
-      this.setState({rivals: user.rivals})
+      console.log("Resetting to users full rival Ids");
+      this.updateTempRivals.bind(this)()
     } else {
-      let newRivals = user.rivals
-      newRivals = newRivals.filter((rival) => {
-        return rival.toLowerCase().includes(e.target.value.toLowerCase());
-      })
-      this.setState({rivals: newRivals})
+      console.log("Let's evaluate which rivals fit");
+      let new_rivals = this.state.fullRivals;
+      new_rivals = new_rivals.filter((rival) => {
+          console.log(e.target.value.toLowerCase(), "in", rival.username.toLowerCase(), "?")
+          return rival.username.toLowerCase().includes(e.target.value.toLowerCase());
+      });
+      console.log("new rivals", new_rivals);
+      this.setState({rivals: new_rivals});
     }
   }
 
@@ -60,27 +66,105 @@ class Home extends Component {
   async tryAddRival() {
     let rivalName = document.getElementById("RivalName").value
 
-    const {user} = this.props
+    const user = this.state.user
     console.log("direct Rivals", user.rivals)
     let rivals = this.state.rivals
-    
-    if (rivals.includes(rivalName)) {
-      alert("You're already Rivals with " + rivalName)
-    } else {
-      console.log("About to try adding ", rivalName)
+
+    try {
       let rival = await getUserByName(rivalName)
-      console.log(rival)
-      addRival(user._id, rival._id)
+      if (rival.rivals.includes(user._id)) {
+        alert("You're already Rivals with " + rivalName)
+      } else if (user.username === rivalName) {
+        alert("You can't do that")
+      } else {
+        console.log("About to try adding ", rivalName)
+        
+        console.log(rival)
+        addRival(user._id, rival._id).then(
+          addRival(rival._id, user._id).then(
+            this.updateUser.bind(this)().then(
+              this.updateFullRivals.bind(this)(rival)
+        )))
+      }
+
+      document.getElementById("RivalName").value = ""
+    } catch {
+      alert("Can't find that user")
     }
   }
 
   async tryClearRivals() {
     const {user} = this.props
-    clearRivals(user._id)
+    clearRivals(user._id).then(this.updateUser.bind(this)())
+  }
+
+  // async updateState() {
+  //   this.updateUser.bind(this)().then(console.log("After updating", this.state))
+  // }
+
+  async updateUser() {
+    const user = this.state.user
+    console.log("User Before")
+    console.log(user)
+    let updatedUser = await getUserById(user._id)
+    this.setState({user: updatedUser})
+    console.log("User Now")
+    console.log(updatedUser)
+    this.initFullRivals.bind(this)()
+  }
+
+  updateFullRivals(rival) {
+    let rivals = this.state.fullRivals
+    rivals.push(rival)
+    this.setState({fullRivals: rivals})
+  }
+
+  async initFullRivals() {
+    const rival_ids = this.state.user.rivals
+    console.log("using these rival_ids:", rival_ids)
+    console.log("Rivals Before")
+    console.log(this.state.fullRivals)
+    
+    let rivals = []
+
+    for (let i = 0; i < rival_ids.length; i++) {
+      getUserById(rival_ids[i]).then(rival => {
+        rivals.push(rival);
+      })
+    }
+
+    this.setState({fullRivals: rivals, rivals: rivals})
+    console.log("Rivals Now")
+    console.log(rivals)
+  }
+
+  updateTempRivals() {
+    console.log("Now Updating Temp Rivals")
+    console.log("Temp Rivals Before", this.state.rivals)
+    this.setState({rivals: this.state.fullRivals})
+    console.log("Temp Rivals Now", this.state.rivals)
+    this.forceUpdate()
+  }
+
+  createRivalTable(rivals) {
+    console.log("These are the rivals to create rows with", rivals)
+    let rivalRows = []
+    for (let i = 0; i < rivals.length; i++) {
+      rivalRows.push(<RivalRow key={i} user={rivals[i]}/>)
+    }
+    console.log("These are the created rival rows", rivalRows)
+    return (<TableBody>{rivalRows}</TableBody>)
   }
 
   render() {
-  	const {user} = this.props
+  	const user = this.state.user
+    let rivals = null 
+    if (this.state.rivals === [] && document.getElementById("RivalName").value === "") {
+      rivals = this.state.fullRivals
+    } else {
+      rivals = this.state.rivals
+    }
+    console.log("In the render method:", rivals)
     return (
       <div>
         <ProfilePicture user={user}/>
@@ -103,18 +187,14 @@ class Home extends Component {
               <Button onClick={this.tryClearRivals.bind(this)}>
                 Clear All Rivals
               </Button>
+              <IconButton aria-label="refresh" onClick={this.updateUser.bind(this)}>
+                <RefreshIcon />
+              </IconButton>
             </div>
           </Paper>
           <Paper>
             <Table aria-label="simple table">
-              <TableBody>
-                {this.state.rivals.map((rival, i) => (
-                  <RivalRow
-                    key={i}
-                    user={getUserByName(rival)}
-                  />
-                ))}
-              </TableBody>
+              {this.createRivalTable.bind(this)(rivals)}
             </Table>
           </Paper>
         </div>  
