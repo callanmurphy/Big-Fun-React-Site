@@ -270,5 +270,62 @@ router.get('/logout', (req, res) => {
 	})
 })
 
+/// Route for adding challenge to a particular user.
+/* 
+Request body expects:
+{
+    rname: <username of rival>, 
+    date: <deadline of challenge>,
+    inviter: <boolean if this user is the inviter>,
+    confirmed: <boolean if this challenge has been confirmed>
+}
+*/
+// POST /challenge/id
+app.post('/challenge/:id', async (req, res) => {
+	// Add code here
+
+	const id = req.params.id
+	// Good practise: Validate id immediately.
+	if (!ObjectID.isValid(id)) {
+		res.status(404).send()  // if invalid id, definitely can't find resource, 404.
+		return;  // so that we don't run the rest of the handler.
+	}
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	// Save restaurant to the database
+	// async-await version:
+	try {
+		const user = await User.findById(id)
+		if (!user) {
+			res.status(404).send('Resource not found')  // could not find this student
+		} 
+		else {
+			const challenge = User.rivalGames.create({
+				rname: req.body.rname,
+				date: req.body.date,
+                inviter: req.body.inviter,
+                confirmed: req.body.confirmed
+			});
+			user.rivalGames.push(reservation)
+	
+			const result = await user.save()
+			res.send(result)
+		}
+
+	} catch(error) {
+		log(error) // log server error to the console, not to the client.
+		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+	}
+})
 
 module.exports = router;

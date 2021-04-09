@@ -58,7 +58,7 @@ export const getAllUsers = (component) => {
           // return a promise that resolves with the JSON body
           return res.json();
       } else {
-          alert("Could not get students");
+          alert("Could not get users");
       }
   })
   .then(json => {
@@ -68,6 +68,54 @@ export const getAllUsers = (component) => {
   .catch(error => {
       console.log(error);
   });
+};
+
+// Gets the challenges 
+export const getChallenges = (Challenges) => {
+  const currUser = Challenges.state.currUser
+  const rivalNames = []
+  console.log(currUser)
+  currUser.rivals.forEach(rid => {
+    fetch(`/api/user/users/id/${rid}`)
+    .then(res => {
+        if (res.status === 200) {
+            // return a promise that resolves with the JSON body
+            return res.json();
+        } else {
+            alert("Could not get users");
+        }
+    })
+    .then(rival => {
+        rivalNames.push(rival.username)
+        Challenges.setState({ rivalNames: rivalNames });
+        console.log(rivalNames)
+    })
+    .catch(error => {
+        console.log(error);
+    });
+  });
+
+  const scheduled = []
+  currUser.rivalGames.forEach(game => {
+    fetch(`/api/user/users/id/${game.rid}`)
+    .then(res => {
+        if (res.status === 200) {
+            // return a promise that resolves with the JSON body
+            return res.json();
+        } else {
+            alert("Could not get users");
+        }
+    })
+    .then(rival => {
+        scheduled.push({rname: rival.username, date: game.date, inviter: game.inviter, confirmed: game.confirmed})
+        Challenges.setState({ scheduled: scheduled });
+        console.log(scheduled)
+    })
+    .catch(error => {
+        console.log(error);
+    });
+  });
+ 
 };
 
 

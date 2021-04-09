@@ -1,4 +1,4 @@
-import { login, getUser, getUserByName, createUser, getAllUsers } from './userAPI';
+import { login, getUser, getUserByName, createUser, getAllUsers, getChallenges } from './userAPI';
 import {
     gameHistory,
     gameInfo,
@@ -23,7 +23,7 @@ import {
  */
 
 
-export { login, getUser, getUserByName, createUser, getAllUsers };
+export { login, getUser, getUserByName, createUser, getAllUsers, getChallenges };
 export {
     gameHistory,
     gameInfo,
