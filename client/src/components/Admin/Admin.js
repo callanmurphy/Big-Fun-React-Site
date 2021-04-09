@@ -24,12 +24,32 @@ class Admin extends Component {
     this.perPage = 6;
     this.usersPerPage = 4;
 
-    this.games = gameInfo();
-    const gameHist = gameHistory()
-    const usrs = getUsers();
+    this.games = gameInfo();  // this is the list of playable games
+    
+    // get infor from teh server
+    getUsers().then(usrs => {
+      usrs.forEach(u =>
+        gameHistory(u.username).then(games => {
+          console.log('Setting games on admin page: ', games);
+          this.setState({
+            recentGames: this.state.recentGames.concat(games)
+          })
+        })
+      );
+      this.setState({
+        users: usrs,
+        userPasswordHidden: usrs.map(u => false),
+      });
+    });
+
+    // initial state
     this.state = {
-      recentGames: gameHist,
-      users: usrs,
+      // will be updated when data loads
+      recentGames: [],
+      users: [],
+      userPasswordHidden: [],
+
+      // does not depenmd on server
       direction: 1,
       by: 'date',
       udirection: 1,
@@ -40,14 +60,13 @@ class Admin extends Component {
       showGame: 0,
       chartTransitions: this.games.map((g, i) => (i === 0 ? 'left' : 'right')),
       chartTransitionsIn: this.games.map((g, i) => (i === 0)),
-      userPasswordHidden: usrs.map(u => false),
       userSearchString: '',
     }
   }
 
 
   componentDidMount() {
-    document.title = 'Progress - Big Fun';
+    document.title = 'Admin - Big Fun';
   }
 
   updateUserFilter(v) {
@@ -98,8 +117,12 @@ class Admin extends Component {
 
   getData(g) {
     const data = this.state.recentGames.filter((game) => game.name === g);
-    const maxX = new Date(d3.max(data.map(d => d.date)).getTime());
-    const minX = new Date(d3.min(data.map(d => d.date)).getTime());
+    let maxX = new Date();
+    let minX = new Date();
+    if (data.length > 0) {
+      maxX = new Date(d3.max(data.map(d => new Date(d.date))).getTime());
+      minX = new Date(d3.min(data.map(d => new Date(d.date))).getTime());
+    }
     
     let ret = [];
     let currDay = minX;
@@ -109,7 +132,8 @@ class Admin extends Component {
     while (currDay < maxX) {
       let tmp = {count: 0, day: new Date(currDay.getTime())};
       data.forEach(d => {
-        if (currDay <= d.date && d.date < tmrw) {
+        const D = new Date(d.date)
+        if (currDay <= D && D < tmrw) {
           tmp.count++;
         }
       })
@@ -174,11 +198,15 @@ class Admin extends Component {
     const filteredGames = this.state.recentGames.map(g => g)
       .filter(gameFilter)
       .sort((a, b) => this.comparator(a, b));
+    console.log(`Filtered ${this.state.recentGames.length} games to ${filteredGames.length}`);
 
-    const userFilter = (u) => u.name.match(this.state.userSearchString) !== null;
+    const userFilter = (u) => u.username.match(this.state.userSearchString) !== null;
     const filteredUsers = this.state.users
       .filter(userFilter)
       .sort((a, b) => this.userComparator(a, b));
+
+    const _sortedUsers = filteredUsers.sort((u1, u2) => u1.gamesPlayed - u2.gamesPlayed).reverse();
+    const bestUser = _sortedUsers[0] ? _sortedUsers[0].username : 'No one';
 
     const charts = gameNames.map((g, i) => (
       <div className='progressSlider' key={uid(g)}>
@@ -207,7 +235,7 @@ class Admin extends Component {
     const today = new Date();
     let weekago = new Date(today.getTime());
     weekago.setDate(weekago.getDate() - 7);
-    const oneWeekFilter = d => (weekago < d.date) && (d.date < today);
+    const oneWeekFilter = d => (weekago < (new Date(d.date))) && ((new Date(d.date)) < today);
 
     return (
       <Container maxWidth={false}>
@@ -301,7 +329,7 @@ class Admin extends Component {
                           key={uid(i)}
                         >
                           <TableCell>
-                            {g.date.toLocaleDateString('en-US')}
+                            {(new Date(g.date)).toLocaleDateString('en-US')}
                           </TableCell>
                           <TableCell>
                             {Math.round(g.score)}
@@ -310,10 +338,10 @@ class Admin extends Component {
                             {g.name}
                           </TableCell>
                           <TableCell>
-                            { getUser(g.user1).name }
+                            { g.user1 }
                           </TableCell>
                           <TableCell>
-                            { getUser(g.user2).name }
+                            { g.user2 }
                           </TableCell>
                         </TableRow>
                       ))
@@ -410,7 +438,7 @@ class Admin extends Component {
                   </Typography>
                   <Divider />
                   <Typography className='progressStatVal' variant='h4' align='center'>
-                    {filteredUsers.sort((u1, u2) => u1.gamesPlayed - u2.gamesPlayed).reverse()[0].name}
+                    { bestUser }
                   </Typography>
                 </Paper>
               </Grid>
@@ -421,7 +449,7 @@ class Admin extends Component {
                   </Typography>
                   <Divider />
                   <Typography className='progressStatVal' variant='h4' align='center'>
-                    { getFavoriteGame() }
+                    { getFavoriteGame(this.state.recentGames) }
                   </Typography>
                 </Paper>
               </Grid>
@@ -515,7 +543,7 @@ class Admin extends Component {
                             key={uid(i)}
                           >
                             <TableCell>
-                              {u.name}
+                              {u.username}
                             </TableCell>
                             <TableCell>
                               {this.state.userPasswordHidden[i]
