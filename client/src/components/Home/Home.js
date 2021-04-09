@@ -169,15 +169,16 @@ class Home extends Component {
     //   rivals = this.state.rivals.slice()
     // }
     // console.log("In the render method:", rivals)
-    console.log("login success: " + this.props.successAlert)
+    // console.log("login success: " + this.props.successAlert)
+    
     return (
       <div>
-        { this.props.successAlert &&
+        {/* { this.props.successAlert &&
         <div>
           <Alert severity="success">Login successful</Alert>
           <p></p>
         </div>
-        }
+        } */}
         <ProfilePicture user={user}/>
         <div id="RivalTable">
           <Paper id="RivalTableHeader">

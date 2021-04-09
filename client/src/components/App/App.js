@@ -153,7 +153,7 @@ class App extends Component {
           {/* home route */}
           <Route exact path='/home'
             render={this.state.loggedIn
-              ? () => <Home user={this.state.curUser} successAlert={this.successAlert}/>
+              ? () => <Home user={this.state.curUser} successAlert = {this.successAlert} />
               : () => <Redirect to='/login' />}
           />
           {  // page routes
