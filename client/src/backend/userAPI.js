@@ -36,11 +36,17 @@ export async function addRival(id, rivalId) {
 	}).catch(err => console.log(err));
 
   console.log(res)
-  // fetch('/api/users/user', {
-  //   method: 'put',
-  //   body: JSON.stringify({username: rivalUsername, update: {$push: {rivals: username}}}),
-  //   headers: { 'Content-type': 'application/json' }
-  // }).catch(err => console.log(err));
+}
+
+export async function removeRival(id, rivalId) {
+  // console.log("Connecting ", username, " and ", rivalUsername)
+  const res = await fetch('/api/users/user', {
+    method: 'put',
+    body: JSON.stringify({id: id, update: {$pull: {rivals: rivalId}}}),
+    headers: { 'Content-type': 'application/json' }
+  }).catch(err => console.log(err));
+
+  console.log(res)
 }
 
 export async function updateStatus(id, status) {
@@ -72,15 +78,48 @@ export const getAllUsers = (component) => {
 
 
 export async function clearRivals(id) {
+  const user = await getUserById(id)
+  for (let i = 0; i < user.rivals.length; i++) {
+    removeRival(user.rivals[i], id)
+  }
   const result = await fetch('/api/users/user', {
     method: 'put',
     body: JSON.stringify({id: id, update: {$set: {rivals: []}}}),
     headers: { 'Content-type': 'application/json' }
   }).catch(err => console.log(err));
-  console.log(result)
 }
 
 export async function getUserById(id) {
   const res = await fetch(`/api/users/user/id/${id}`)
   return res.json();
+}
+
+
+export async function setOnline(id) {
+  const result = await fetch('/api/users/user', {
+    method: 'put',
+    body: JSON.stringify({id: id, update: {$set: {online: true}}}),
+    headers: { 'Content-type': 'application/json' }
+  }).catch(err => console.log(err));
+  console.log(result)
+}
+
+export async function setOffline(id) {
+  const result = await fetch('/api/users/user', {
+    method: 'put',
+    body: JSON.stringify({id: id, update: {$set: {online: false}}}),
+    headers: { 'Content-type': 'application/json' }
+  }).catch(err => console.log(err));
+  console.log(result)
+
+  updateStatus(id, "Offline")
+}
+
+export async function deleteUserById(id) {
+  const result = await fetch('/api/users/user', {
+    method: 'delete',
+    body: JSON.stringify({id: id}),
+    headers: { 'Content-type': 'application/json' }
+  }).catch(err => console.log(err));
+  console.log(result)
 }
