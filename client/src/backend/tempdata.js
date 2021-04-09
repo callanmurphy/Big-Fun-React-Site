@@ -6,18 +6,18 @@ const users = [
   {id: 4, name: 'user4', password: 'user4', online: false, profilePic: 2, rivals: [0,1,2,3], status: 'Offline', rivalGames: [], points: 20},
 ]
 
-const games = [
-  {
-    id: 0,
-    title: 'Follow the dot',
-  }, {
-    id: 0,
-    title: 'Type the keys',
-  }, {
-    id: 0,
-    title: 'Pong',
-  },
-]
+// const games = [
+//   {
+//     id: 0,
+//     title: 'Follow the dot',
+//   }, {
+//     id: 0,
+//     title: 'Type the keys',
+//   }, {
+//     id: 0,
+//     title: 'Pong',
+//   },
+// ]
 
 
-export { users, games };
+export { users };

@@ -2,7 +2,6 @@ import { login, getUser, getUserByName, createUser } from './userAPI';
 import {
     gameHistory,
     gameInfo,
-    soloGames,
     vsGames,
     getBestRival,
     getFavoriteGame,
@@ -28,7 +27,6 @@ export { login, getUser, getUserByName, createUser };
 export {
     gameHistory,
     gameInfo,
-    soloGames,
     vsGames,
     getBestRival,
     getFavoriteGame

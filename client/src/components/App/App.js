@@ -55,7 +55,7 @@ class App extends Component {
       {
         path: '/login',
         element: () => this.state.loggedIn
-          ? (this.state.username === 'admin'
+          ? (this.state.curUser.isAdmin
               ? <Redirect to='/admin' />
               : <Redirect to='/home' />)
           : <Login login={async (user, pass) => await this.login(user, pass)} />
@@ -71,16 +71,16 @@ class App extends Component {
 
   async login(username, pass) {
     if (await login(username, pass)) {
-      let newlinks = this.navlinks.map(e => e);
-      if (username === 'admin') {
-        newlinks.push({
-          title: 'Admin',
-          path: '/admin',
-          element: () => (<Admin />)
-        });
-      }
       getUserByName(username).then(user => {
-        console.log(user)
+        console.log('Logging in as: ', user);
+        let newlinks = this.navlinks.map(e => e);
+        if (user.isAdmin) {
+          newlinks.push({
+            title: 'Admin',
+            path: '/admin',
+            element: () => (<Admin />)
+          });
+        }
         this.setState({
           loggedIn: true,
           navlinks: newlinks,
