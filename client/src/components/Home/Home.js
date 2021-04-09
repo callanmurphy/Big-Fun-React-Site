@@ -147,11 +147,15 @@ class Home extends Component {
     this.forceUpdate()
   }
 
-  createRivalTable(rivals) {
+  createRivalTable() {
+    let rivals = this.state.rivals
     console.log("These are the rivals to create rows with", rivals)
     let rivalRows = []
     for (let i = 0; i < rivals.length; i++) {
-      rivalRows.push(<RivalRow key={i} user={rivals[i]}/>)
+      console.log("Key and rival", i, rivals[i])
+      let row = <RivalRow key={i} user={rivals[i]}/>
+      console.log("Row", rival)
+      rivalRows.push(row)
     }
     console.log("These are the created rival rows", rivalRows)
     return (<TableBody>{rivalRows}</TableBody>)
@@ -159,13 +163,12 @@ class Home extends Component {
 
   render() {
   	const user = this.state.user
-    let rivals = null 
-    if (this.state.rivals === [] && document.getElementById("RivalName").value === "") {
-      rivals = this.state.fullRivals
-    } else {
-      rivals = this.state.rivals
-    }
-    console.log("In the render method:", rivals)
+    // if (this.state.rivals === [] && document.getElementById("RivalName").value === "") {
+    //   rivals = this.state.fullRivals.slice()
+    // } else {
+    //   rivals = this.state.rivals.slice()
+    // }
+    // console.log("In the render method:", rivals)
     console.log("login success: " + this.props.successAlert)
     return (
       <div>
@@ -202,7 +205,7 @@ class Home extends Component {
           </Paper>
           <Paper>
             <Table aria-label="simple table">
-              {this.createRivalTable.bind(this)(rivals)}
+              {this.createRivalTable.bind(this)()}
             </Table>
           </Paper>
         </div>  

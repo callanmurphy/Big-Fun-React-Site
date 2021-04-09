@@ -25,6 +25,8 @@ class RivalRow extends Component {
     const avatar = this.state.avatar
     const i = this.state.i
 
+    console.log("these are the rival row props", this.props)
+
     return (
       <TableRow key={i}>
         <TableCell className="RivalPicture">
