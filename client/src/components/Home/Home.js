@@ -154,7 +154,7 @@ class Home extends Component {
     for (let i = 0; i < rivals.length; i++) {
       console.log("Key and rival", i, rivals[i])
       let row = <RivalRow key={i} user={rivals[i]}/>
-      console.log("Row", rival)
+      console.log("Row", rivals)
       rivalRows.push(row)
     }
     console.log("These are the created rival rows", rivalRows)
@@ -170,7 +170,7 @@ class Home extends Component {
     // }
     // console.log("In the render method:", rivals)
     // console.log("login success: " + this.props.successAlert)
-    
+
     return (
       <div>
         {/* { this.props.successAlert &&

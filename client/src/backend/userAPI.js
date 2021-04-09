@@ -177,3 +177,12 @@ export async function deleteUserById(id) {
   }).catch(err => console.log(err));
   console.log(result)
 }
+
+export async function updatePic(id, pic) {
+  const result = await fetch('/api/users/user', {
+    method: 'put',
+    body: JSON.stringify({id: id, update: {$set: {profilePic: pic}}}),
+    headers: { 'Content-type': 'application/json' }
+  }).catch(err => console.log(err));
+  console.log(result)
+}
