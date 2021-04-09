@@ -7,7 +7,7 @@ import ProfilePicture from './ProfilePicture'
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 
-import {getUserByName, addRival, updateStatus} from '../../backend/userAPI'
+import {getUserByName, addRival, updateStatus, clearRivals} from '../../backend/userAPI'
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -72,8 +72,11 @@ class Home extends Component {
       console.log(rival)
       addRival(user._id, rival._id)
     }
+  }
 
-    
+  async tryClearRivals() {
+    const {user} = this.props
+    clearRivals(user._id)
   }
 
   render() {
@@ -96,6 +99,9 @@ class Home extends Component {
               </form>
               <Button onClick={this.tryAddRival.bind(this)}>
                 Add Rival
+              </Button>
+              <Button onClick={this.tryClearRivals.bind(this)}>
+                Clear All Rivals
               </Button>
             </div>
           </Paper>

@@ -52,12 +52,13 @@ export async function updateStatus(id, status) {
   console.log(result)
 }
 
-export function clearRivals(username) {
-  fetch('/api/users/user', {
+export async function clearRivals(id) {
+  const result = await fetch('/api/users/user', {
     method: 'put',
-    body: JSON.stringify({username: username, update: {$set: {rivals: []}}}),
+    body: JSON.stringify({id: id, update: {$set: {rivals: []}}}),
     headers: { 'Content-type': 'application/json' }
   }).catch(err => console.log(err));
+  console.log(result)
 }
 
 export async function getUserById(id) {
