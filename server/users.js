@@ -181,15 +181,20 @@ router.put('/user', async (req, res) => {
     }  
 
     // update user
-    console.log(`Attempting to update user with id ${req.body.id}.`)
+    console.log(`Attempting to update user with ${req.body.id ? 'id' : 'username'} ${req.body.id || req.body.username}.`)
 
     console.log(req.body)
 
     // save user + error checking
     try {
         // let rival = await User.findOne({username: req.body.update})
-        let user = await User.findOneAndUpdate({_id: req.body.id}, req.body.update)
-        res.send(true)
+        if (req.body.id) {
+            await User.findOneAndUpdate({_id: req.body.id}, req.body.update)
+            res.send(true)            
+        } else {
+            await User.findOneAndUpdate({username: req.body.username}, req.body.update)
+            res.send(true)
+        }
     } catch(error) {
         console.log(error) // log server error to the console, not to the client.
         if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
@@ -317,15 +322,35 @@ router.post('/challenge/:id', async (req, res) => {
 			const result = await user.save()
 			res.send(result)
 		}
-
-	} catch(error) {
-		console.log(error) // log server error to the console, not to the client.
-		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
-			res.status(500).send('Internal server error')
-		} else {
-			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
-		}
-	}
+    } catch(error) {
+        console.log(error) // log server error to the console, not to the client.
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+            res.status(500).send('Internal server error')
+        } else {
+            res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+        }
+    }
 });
+
+// A route to delete a user
+router.delete('/user', async (req, res) => {
+    /** req body contains id
+     */
+    
+    try {
+        const id = req.body.id;
+        console.log(`Deleting user with id ${id}`);
+        const del = await User.deleteOne({_id: id});
+        res.send(del);
+    } catch (e) {
+        console.log(e);
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+            res.status(500).send('Internal server error')
+        } else {
+            res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+        }
+    }
+})
+
 
 module.exports = router;
