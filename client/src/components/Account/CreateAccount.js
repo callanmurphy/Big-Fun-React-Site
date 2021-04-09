@@ -10,7 +10,7 @@ class CreateAccount extends Component {
           username: '',
           password: '',
           confirmPassword: '',
-          signupError: false,
+          signupError: null,
       };
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,16 +27,18 @@ class CreateAccount extends Component {
   handleSubmit(e){
       e.preventDefault();
       const passwordConfirm = this.state.password === this.state.confirmPassword;
-      // const strcheck = this.state.username.match("^[a-zA-Z0-9]{1,20}$") != null;
-      if(passwordConfirm){
+      const strcheck = this.state.username.match("^[a-zA-Z0-9_]*$") != null; // alphanumeric check
+      if(passwordConfirm && strcheck){
         // alert("Account successfully created for: " + this.state.username);
-        this.setState({signupError : false});
+        this.setState({signupError : null});
         window.location.href = "/";
         createUser(this.state.username, this.state.password);
       }
+      else if (!strcheck){
+        this.setState({signupError : "username must be alphanumeric characters"});
+      }
       else{
-        this.setState({signupError : true});
-        // alert("Passwords don't match");
+        this.setState({signupError : "passwords must match"});
       }
   }
 
@@ -46,7 +48,7 @@ class CreateAccount extends Component {
       <div className="centerBox">
         { this.state.signupError &&
         <div>
-          <Alert severity="error">Account error: passwords must match</Alert>
+          <Alert severity="error">Account error: { this.state.signupError }</Alert>
           <p></p>
         </div>
       }

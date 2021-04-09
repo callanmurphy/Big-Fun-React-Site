@@ -20,7 +20,7 @@ class Login extends Component {
       this.state = {
           username: '',
           password: '',
-          loginError: false,
+          loginError: null,
       };
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,14 +37,14 @@ class Login extends Component {
   async handleSubmit(e){
       e.preventDefault();
       const loginSucc = await this.props.login(this.state.username, this.state.password);
-      // const strcheck = this.state.username.match("^[a-zA-Z0-9]{1,20}$") != null;
-      if(loginSucc){
+      const strcheck = this.state.username.match("^[a-zA-Z0-9_]*$") != null;
+      if(loginSucc && strcheck){
         // <Alert severity="success">{ this.state.username } + " logged in successfully"</Alert>
         // alert(this.state.username + " logged in successfully");
         // window.location.href = "/home";
-        this.setState({loginError : false});
+        this.setState({loginError : null});
       } else {
-        this.setState({loginError : true});
+        this.setState({loginError : "check username and password"});
       }
   }
   
@@ -54,7 +54,7 @@ class Login extends Component {
     <div className="centerBox">
       { this.state.loginError &&
         <div>
-          <Alert severity="error">Login error: check username and password</Alert>
+          <Alert severity="error">Login error: { this.state.loginError }</Alert>
           {/* <Alert severity="warning">This is a warning alert — check it out!</Alert>
           <Alert severity="info">This is an info alert — check it out!</Alert>
           <Alert severity="success">This is a success alert — check it out!</Alert> */}
