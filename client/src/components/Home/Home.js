@@ -5,7 +5,9 @@ import RivalRow from './RivalRow'
 import ProfilePicture from './ProfilePicture'
 
 import Input from '@material-ui/core/Input';
-import {getUser} from '../../backend/userAPI'
+import Button from '@material-ui/core/Button';
+
+import {getUserByName, addRival, updateStatus} from '../../backend/userAPI'
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -25,6 +27,8 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    const {user} = this.props
+    updateStatus(user._id, "On Home Page")
     document.title = 'Home - Big Fun';
   }
 
@@ -40,7 +44,7 @@ class Home extends Component {
     } else {
       let newRivals = user.rivals
       newRivals = newRivals.filter((rival) => {
-        return getUser(rival).name.toLowerCase().includes(e.target.value.toLowerCase());
+        return rival.toLowerCase().includes(e.target.value.toLowerCase());
       })
       this.setState({rivals: newRivals})
     }
@@ -53,6 +57,25 @@ class Home extends Component {
     }
   }
 
+  async tryAddRival() {
+    let rivalName = document.getElementById("RivalName").value
+
+    const {user} = this.props
+    console.log("direct Rivals", user.rivals)
+    let rivals = this.state.rivals
+    
+    if (rivals.includes(rivalName)) {
+      alert("You're already Rivals with " + rivalName)
+    } else {
+      console.log("About to try adding ", rivalName)
+      let rival = await getUserByName(rivalName)
+      console.log(rival)
+      addRival(user._id, rival._id)
+    }
+
+    
+  }
+
   render() {
   	const {user} = this.props
     return (
@@ -63,7 +86,7 @@ class Home extends Component {
             <div>
               <h1 id="RivalTableTitle">RIVALS</h1>
               <form id="RivalTableSearch">
-                <Input 
+                <Input id="RivalName" 
                     type="text" 
                     placeholder="Search Rivals..." 
                     title="Type in a Rival's Name" 
@@ -71,6 +94,9 @@ class Home extends Component {
                     onKeyPress={this.disableEnterKey.bind(this)}
                   />
               </form>
+              <Button onClick={this.tryAddRival.bind(this)}>
+                Add Rival
+              </Button>
             </div>
           </Paper>
           <Paper>
@@ -79,7 +105,7 @@ class Home extends Component {
                 {this.state.rivals.map((rival, i) => (
                   <RivalRow
                     key={i}
-                    user={getUser(rival)}
+                    user={getUserByName(rival)}
                   />
                 ))}
               </TableBody>

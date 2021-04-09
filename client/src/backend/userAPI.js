@@ -27,18 +27,40 @@ export function createUser(username, password) {
   }).catch(err => console.log(err));
 }
 
-export function addRival(username, rivalUsername) {
-	fetch('/api/users/user', {
+export async function addRival(id, rivalId) {
+  // console.log("Connecting ", username, " and ", rivalUsername)
+	const res = await fetch('/api/users/user', {
 		method: 'put',
-		body: JSON.stringify({username: username, update: {$push: {rivals: rivalUsername}}}),
+		body: JSON.stringify({id: id, update: {$push: {rivals: rivalId}}}),
 		headers: { 'Content-type': 'application/json' }
 	}).catch(err => console.log(err));
+
+  console.log(res)
+  // fetch('/api/users/user', {
+  //   method: 'put',
+  //   body: JSON.stringify({username: rivalUsername, update: {$push: {rivals: username}}}),
+  //   headers: { 'Content-type': 'application/json' }
+  // }).catch(err => console.log(err));
 }
 
-export function updateStatus(username, status) {
-	fetch('/api/users/user', {
+export async function updateStatus(id, status) {
+	const result = await fetch('/api/users/user', {
 		method: 'put',
-		body: JSON.stringify({username: username, update: {$set: {status: status}}}),
+		body: JSON.stringify({id: id, update: {$set: {status: status}}}),
 		headers: { 'Content-type': 'application/json' }
 	}).catch(err => console.log(err));
+  console.log(result)
+}
+
+export function clearRivals(username) {
+  fetch('/api/users/user', {
+    method: 'put',
+    body: JSON.stringify({username: username, update: {$set: {rivals: []}}}),
+    headers: { 'Content-type': 'application/json' }
+  }).catch(err => console.log(err));
+}
+
+export async function getUserById(id) {
+  const res = await fetch(`/api/users/user/id/${id}`)
+  return res.json();
 }

@@ -25,6 +25,7 @@ const router = express.Router();
 const { ObjectID } = require('mongodb')
 const { mongoose } = require('../db/mongoose')
 mongoose.set('bufferCommands', false);  // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
+mongoose.set('useFindAndModify', false);
 
 // import the mongoose models
 const { User } = require('../models/usere4')
@@ -59,6 +60,45 @@ router.get('/user/:name', async (req, res) => {
 		} else {
 			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
 		}
+    }
+});
+
+router.get('/user/id/:id', async (req, res) => {
+    /** id: int =>
+     * User
+     */
+    
+    try {
+        const id = req.params.id;
+        console.log(`Getting user with id ${id}`)
+        const user = await User.findOne({_id: id})
+        res.send(user)
+    } catch (e) {
+        console.log(e);
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+            res.status(500).send('Internal server error')
+        } else {
+            res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+        }
+    }
+});
+
+router.get('/user', async (req, res) => {
+    /** req body contains id
+     */
+    
+    try {
+        const username = req.params.name;
+        console.log(`Getting user with username ${username}`);
+        const exists = await User.find({_id: username});
+        res.send(exists);
+    } catch (e) {
+        console.log(e);
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+            res.status(500).send('Internal server error')
+        } else {
+            res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+        }
     }
 });
 
@@ -131,7 +171,7 @@ router.post('/user', async (req, res) => {
 });
 
 router.put('/user', async (req, res) => {
-    // req.body should have username and update
+    // req.body should have id and update
 
     // check mongoose connection established
     if (mongoose.connection.readyState != 1) {
@@ -140,14 +180,47 @@ router.put('/user', async (req, res) => {
         return;
     }  
 
-    // create user
-    console.log(`Attempting to update user with username ${req.body.username}.`)
-    let user = await User.findOneAndUpdate({username: username}, update).exec()
+    // update user
+    console.log(`Attempting to update user with id ${req.body.id}.`)
+
+    console.log(req.body)
 
     // save user + error checking
     try {
-        const result = await user.save()    
-        res.send(result)
+        // let rival = await User.findOne({username: req.body.update})
+        let user = await User.findOneAndUpdate({_id: req.body.id}, req.body.update)
+        res.send(true)
+    } catch(error) {
+        console.log(error) // log server error to the console, not to the client.
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+            res.status(500).send('Internal server error')
+        } else {
+            res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+        }
+    }
+
+    res.status(413);
+});
+
+router.get('/user', async (req, res) => {
+    // req.body should have id
+
+    // check mongoose connection established
+    if (mongoose.connection.readyState != 1) {
+        console.log('Issue with mongoose connection')
+        res.status(500).send('Internal server error')
+        return;
+    }  
+
+    // update user
+    console.log(`Attempting to update user with id ${req.body.id}.`)
+
+    console.log(req.body)
+
+    // save user + error checking
+    try {
+        let user = await User.findOne({_id: req.body.id})
+        res.send(user)
     } catch(error) {
         console.log(error) // log server error to the console, not to the client.
         if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.

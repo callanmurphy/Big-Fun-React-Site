@@ -35,7 +35,7 @@ class ProfilePicture extends Component {
     return (
       <div id="ProfileInfo">
         <h1 id="Username">
-          {user.name}
+          {user.username}
         </h1>
             <Avatar id="ProfilePicture" src={this.state.currentProfilePicture ? this.state.currentProfilePicture.srv : 'https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg'} alt="ProfilePicture" />
             <Button id="ChangeButton" onClick={this.UpdatePic.bind(this)}>{this.state.buttonText}</Button>
