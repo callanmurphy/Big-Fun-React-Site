@@ -6,7 +6,7 @@ const { mongoose } = require('../db/mongoose')
 mongoose.set('bufferCommands', false);  // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
 
 // import the mongoose models
-const { User } = require('../models/usere4')
+const { User } = require('../models/user')
 
 // mongo error handling
 function isMongoError(error) { // checks for first error returned by promise rejection if Mongo database suddently disconnects

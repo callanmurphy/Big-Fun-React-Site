@@ -1,5 +1,5 @@
-/* User mongoose model */
-const mongoose = require('mongoose')
+// referenced e4 code (restaurant.js)
+// and https://mongoosejs.com/docs/guide.html
 
 /** User
  * id: int                    (can we just use the name?)
@@ -16,33 +16,31 @@ const mongoose = require('mongoose')
  *      inviter: bool
  *      confirmed: bool
  *      points: int           (what is this for?)
- *    ? isAdmin: bool         (maybe we should include this)
  * }]
+ * ? isAdmin: bool         (maybe we should include this)
  */
 
-const User = mongoose.model('User', {
-	// id: {
-	// 	type: Number,
-	// 	required: true,
-	// },
-	username: {
-		type: String,
-		required: true,
-	},
-	password: {
-		type: String,
-		required: true,
-	},
-	online: {
-		type: Boolean,
-		required: true,
-		default: false
-	},
-	profilePic: {
-		type: Number,
-		required: true,
-		default: 0
-	}
-})
+const mongoose = require('mongoose');
 
-module.exports = { User }
+const UserSchema = new mongoose.Schema({
+    username: {type: String, unique: true},
+    password: String,
+    online: {type: Boolean, default: false},
+    profilePic: {type: Number, default: 0},
+    rivals: [mongoose.Types.ObjectId],
+    status: {type: String, default: 'bumblefucking'},
+    rivalGames: [{
+        gid: mongoose.Types.ObjectId,
+        rid: mongoose.Types.ObjectId,
+        inviter: {type: Boolean, default: true},
+        date: {type: Date, default: Date.now},
+        confirmed: {type: Boolean, default: false},
+        points: Number,
+    }],
+    isAdmin: {type: Boolean, default: false},
+    points: {type: Number, default: 0}
+});
+
+const User = mongoose.model('User', UserSchema);
+
+module.exports = { User };

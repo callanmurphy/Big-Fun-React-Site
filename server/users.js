@@ -28,7 +28,7 @@ mongoose.set('bufferCommands', false);  // don't buffer db requests if the db se
 mongoose.set('useFindAndModify', false);
 
 // import the mongoose models
-const { User } = require('../models/usere4')
+const { User } = require('../models/user')
 
 // mongo error handling
 function isMongoError(error) { // checks for first error returned by promise rejection if Mongo database suddently disconnects
