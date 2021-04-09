@@ -126,9 +126,7 @@ class Progress extends Component {
     const favoriteGame = getFavoriteGame(this.state.recentGames);
 
     let rivalName = getBestRival(this.props.user.username, this.state.recentGames);
-    if (rivalName) {
-      rivalName = rivalName.name;
-    } else {
+    if (!rivalName) {
       rivalName = 'Err';
     }
 
@@ -205,7 +203,7 @@ class Progress extends Component {
                           key={uid(g.date)}
                         >
                           <TableCell>
-                            {g.date}
+                            {(new Date(g.date)).toLocaleDateString()}
                           </TableCell>
                           <TableCell>
                             {Math.round(g.score)}
