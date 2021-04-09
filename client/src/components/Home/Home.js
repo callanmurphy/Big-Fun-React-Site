@@ -25,14 +25,7 @@ class Home extends Component {
   constructor(props) {
     super(props)
     const {user} = this.props
-<<<<<<< HEAD
     this.state = {rivals: [], user: user, fullRivals: []}
-=======
-    this.state = {
-      rivals: user.rivals || [],
-      // message: null,
-    }
->>>>>>> 109b7a99fedb9041c09b8419316c9b1979a4495a
     console.log(this.props)
   }
 
