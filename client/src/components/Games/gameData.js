@@ -1,4 +1,4 @@
-import PongImg from './gamePics/pongGame.png';
+import PongImg from './gamePics/pong.png';
 import DotImg from './gamePics/followTheDot.png';
 import TypeImg from './gamePics/typeTheKeys.png';
 import { Pong, DotFollow, TypeType } from './GamePages';
