@@ -8,17 +8,13 @@ class TypeType extends Component {
 
     this.state = {
       score: 0,
-      life: 10,
+      time: new Date(),
     }
 
-    this.dims = {
-      height: null,
-      width: null,
-    }
   }
-  
+
   render() {
-    return <div><h1>COMING SOON !!!!!!!!</h1></div>;
+    return <div><h1>{this.state.time}</h1></div>;
   }
 }
 
