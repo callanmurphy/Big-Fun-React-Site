@@ -7,7 +7,8 @@ import {
     getFavoriteGame,
 } from './gameAPI';
 import {
-    getUsers
+    getUsers,
+    delUser
 } from './adminAPI';
 
 /** How to communicate with the server
@@ -32,5 +33,6 @@ export {
     getFavoriteGame
 };
 export {
-    getUsers
+    getUsers,
+    delUser
 }

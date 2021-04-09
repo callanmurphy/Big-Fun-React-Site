@@ -11,9 +11,9 @@ import {
   Divider, Container, TextField
 } from '@material-ui/core';
 import { FilterList, ArrowBackIos as BackArrow, ArrowForwardIos as ForwardArrow,
-         DeleteForever, Visibility, VisibilityOff, Search
+         DeleteForever, Visibility, VisibilityOff, Search, CompassCalibrationOutlined
         } from '@material-ui/icons';
-import { getUser, gameHistory, gameInfo, getUsers, getFavoriteGame } from "../../backend";
+import { gameHistory, gameInfo, getUsers, getFavoriteGame, delUser } from "../../backend";
 import * as d3 from 'd3';
 
 
@@ -26,8 +26,9 @@ class Admin extends Component {
 
     this.games = gameInfo();  // this is the list of playable games
     
-    // get infor from teh server
+    // get infor from the server
     getUsers().then(usrs => {
+      console.log(`Setting users on Admin page: `, usrs);
       usrs.forEach(u =>
         gameHistory(u.username).then(games => {
           console.log('Setting games on admin page: ', games);
@@ -53,7 +54,7 @@ class Admin extends Component {
       direction: 1,
       by: 'date',
       udirection: 1,
-      uby: 'name',
+      uby: 'username',
       tablePage: 0,
       utablePage: 0,
       gameFilter: 'All',
@@ -183,6 +184,15 @@ class Admin extends Component {
     })
   }
 
+  delUser(name) {
+    delUser(name);
+    const newusers = this.state.users.filter(u => u.username !== name);
+    this.setState({
+      users: newusers,
+      userPasswordHidden: newusers.map(_ => false),
+    });
+  }
+
   render() {
     const games = this.games;
     const gameNames = games.map(g => g.title);
@@ -202,10 +212,13 @@ class Admin extends Component {
 
     const userFilter = (u) => u.username.match(this.state.userSearchString) !== null;
     const filteredUsers = this.state.users
-      .filter(userFilter)
-      .sort((a, b) => this.userComparator(a, b));
+      .sort((a, b) => this.userComparator(a, b))
+      .filter(userFilter);
 
-    const _sortedUsers = filteredUsers.sort((u1, u2) => u1.gamesPlayed - u2.gamesPlayed).reverse();
+    const _sortedUsers = this.state.users
+      .filter(userFilter)
+      .sort((u1, u2) => u1.gamesPlayed - u2.gamesPlayed)
+      .reverse();
     const bestUser = _sortedUsers[0] ? _sortedUsers[0].username : 'No one';
 
     const charts = gameNames.map((g, i) => (
@@ -236,6 +249,7 @@ class Admin extends Component {
     let weekago = new Date(today.getTime());
     weekago.setDate(weekago.getDate() - 7);
     const oneWeekFilter = d => (weekago < (new Date(d.date))) && ((new Date(d.date)) < today);
+
 
     return (
       <Container maxWidth={false}>
@@ -480,7 +494,7 @@ class Admin extends Component {
                         align='left'
                         active={this.state.uby === 'name'}
                         direction={this.state.udirection === 1 ? 'asc' : 'desc'}
-                        onClick={(e) => this.setUserSort('name')}
+                        onClick={(e) => this.setUserSort('username')}
                       >
                         Name
                       </TableSortLabel>
@@ -569,7 +583,7 @@ class Admin extends Component {
                               {u.bestRival}
                             </TableCell>
                             <TableCell>
-                              <IconButton size='small' edge='start' >
+                              <IconButton size='small' edge='start' onClick={() => this.delUser(u.username)} >
                                 <DeleteForever color='error' />
                               </IconButton>
                             </TableCell>
