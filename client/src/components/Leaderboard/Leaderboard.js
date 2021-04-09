@@ -8,9 +8,6 @@ class Leaderboard extends Component {
   
   constructor(props) {
     super(props);
-
-    /*********** Needs to make backend request ***********/
-    //users.sort((a, b) => (a.points < b.points) ? 1 : -1)
     this.state = {
       users: []
     }
@@ -19,7 +16,9 @@ class Leaderboard extends Component {
   componentDidMount() {
     document.title = 'Leaderboard - Big Fun';
     getAllUsers(this);
-    console.log(this.state.users)
+    const users = this.state.users;
+    users.sort((a, b) => (a.points < b.points) ? 1 : -1)
+    this.setState(users)
   }
 
 
