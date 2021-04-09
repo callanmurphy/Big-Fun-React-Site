@@ -11,6 +11,7 @@ import {getUserByName, addRival, updateStatus, clearRivals} from '../../backend/
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import Alert from '@material-ui/lab/Alert';
 
 import Paper from '@material-ui/core/Paper'
 
@@ -22,7 +23,10 @@ class Home extends Component {
   constructor(props) {
     super(props)
     const {user} = this.props
-    this.state = {rivals: user.rivals || []}
+    this.state = {
+      rivals: user.rivals || [],
+      // message: null,
+    }
     console.log(this.props)
   }
 
@@ -81,8 +85,15 @@ class Home extends Component {
 
   render() {
   	const {user} = this.props
+    console.log("login success: " + this.props.successAlert)
     return (
       <div>
+        { this.props.successAlert &&
+        <div>
+          <Alert severity="success">Login successful</Alert>
+          <p></p>
+        </div>
+        }
         <ProfilePicture user={user}/>
         <div id="RivalTable">
           <Paper id="RivalTableHeader">
