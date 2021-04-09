@@ -11,7 +11,7 @@ const router = express.Router();
  * profilePiv: int
  * rivals: List[id: int]
  * status: str                (customizable?)
- * rivalGames: List[{
+ * challenges: List[{
  *      gid: int -> game id
  *      rid: int -> user id
  *      date: timestamp
@@ -122,10 +122,10 @@ router.get('/user', async (req, res) => {
 	try {
 		const result = await User.findById(id)
 		if (!result) {
-			res.status(404).send('Resource not found')  // could not find this restaurant
+			res.status(404).send('Resource not found')  // could not find this user
 		} else {
 			/// sometimes we wrap returned object in another object:
-			//res.send({restaurant})   
+			//res.send({user})   
 			res.send(result)
 		}
 
@@ -268,20 +268,20 @@ router.get('/logout', (req, res) => {
 			res.redirect('/');
 		}
 	})
-})
+});
 
 /// Route for adding challenge to a particular user.
 /* 
 Request body expects:
 {
-    rname: <username of rival>, 
+    rid: <id of rival>, 
     date: <deadline of challenge>,
     inviter: <boolean if this user is the inviter>,
     confirmed: <boolean if this challenge has been confirmed>
 }
 */
 // POST /challenge/id
-app.post('/challenge/:id', async (req, res) => {
+router.post('/challenge/:id', async (req, res) => {
 	// Add code here
 
 	const id = req.params.id
@@ -298,7 +298,7 @@ app.post('/challenge/:id', async (req, res) => {
 		return;
 	}  
 
-	// Save restaurant to the database
+	// Save user to the database
 	// async-await version:
 	try {
 		const user = await User.findById(id)
@@ -306,26 +306,26 @@ app.post('/challenge/:id', async (req, res) => {
 			res.status(404).send('Resource not found')  // could not find this student
 		} 
 		else {
-			const challenge = User.rivalGames.create({
-				rname: req.body.rname,
+			const challenge = user.challenges.create({
+				rid: req.body.rid,
 				date: req.body.date,
                 inviter: req.body.inviter,
                 confirmed: req.body.confirmed
 			});
-			user.rivalGames.push(reservation)
+			user.challenges.push(challenge)
 	
 			const result = await user.save()
 			res.send(result)
 		}
 
 	} catch(error) {
-		log(error) // log server error to the console, not to the client.
+		console.log(error) // log server error to the console, not to the client.
 		if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
 			res.status(500).send('Internal server error')
 		} else {
 			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
 		}
 	}
-})
+});
 
 module.exports = router;
