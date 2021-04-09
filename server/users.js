@@ -181,15 +181,20 @@ router.put('/user', async (req, res) => {
     }  
 
     // update user
-    console.log(`Attempting to update user with id ${req.body.id}.`)
+    console.log(`Attempting to update user with ${req.body.id ? 'id' : 'username'} ${req.body.id || req.body.username}.`)
 
     console.log(req.body)
 
     // save user + error checking
     try {
         // let rival = await User.findOne({username: req.body.update})
-        let user = await User.findOneAndUpdate({_id: req.body.id}, req.body.update)
-        res.send(true)
+        if (req.body.id) {
+            await User.findOneAndUpdate({_id: req.body.id}, req.body.update)
+            res.send(true)            
+        } else {
+            await User.findOneAndUpdate({username: req.body.username}, req.body.update)
+            res.send(true)
+        }
     } catch(error) {
         console.log(error) // log server error to the console, not to the client.
         if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.

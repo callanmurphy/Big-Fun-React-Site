@@ -45,6 +45,26 @@ export async function gameHistory(user) {
     return games;
 }
 
+export function recordGame(game) {
+    /**
+     * game: {
+     *      name,
+     *      user1,
+     *      user2,
+     *      score,
+     *[opt] date
+     * }
+     */
+    if (!game.date) {
+        game.date = (new Date()).toLocaleString()
+    }
+    fetch(`/api/games/recordgame`, {
+        method: 'post',
+        body: JSON.stringify(game),
+        headers: { 'Content-type': 'application/json' }
+      }).catch(err => console.log(err));
+}
+
 export function gameInfo(gid) {
     if (gid) {
         return gameTypes.map(g => g).filter(({id}) => id === gid)[0];

@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const { ObjectID } = require('mongodb');
-const { users } = require('../client/src/backend/tempdata');
 const { mongoose } = require('../db/mongoose')
 mongoose.set('bufferCommands', false);  // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
 
@@ -46,7 +45,7 @@ router.delete('/users/:name', (req, res) => {
 	
 	try {
 		console.log(`Deleting user ${req.params.name}.`);
-		User.deleteMany({username: req.params.name});
+		User.deleteMany({username: req.params.name}).exec();
 		res.status(200).send();
 	} catch (error) {
 		console.log(error)

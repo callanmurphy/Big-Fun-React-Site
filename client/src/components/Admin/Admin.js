@@ -8,12 +8,12 @@ import {
   Toolbar, Typography, Select, FormControl, MenuItem,
   Input, TablePagination, TableFooter, IconButton,
   Slide,
-  Divider, Container, TextField
+  Divider, Container, TextField, Switch
 } from '@material-ui/core';
 import { FilterList, ArrowBackIos as BackArrow, ArrowForwardIos as ForwardArrow,
          DeleteForever, Visibility, VisibilityOff, Search, CompassCalibrationOutlined
         } from '@material-ui/icons';
-import { gameHistory, gameInfo, getUsers, getFavoriteGame, delUser } from "../../backend";
+import { gameHistory, gameInfo, getUsers, getFavoriteGame, delUser, toggleAdmin } from "../../backend";
 import * as d3 from 'd3';
 
 
@@ -159,6 +159,7 @@ class Admin extends Component {
   }
 
   setUserSort(by) {
+    this.hideAllPasswords();
     if (by === this.state.uby) {
       this.setState({
         udirection: -1 * this.state.udirection
@@ -190,6 +191,12 @@ class Admin extends Component {
     this.setState({
       users: newusers,
       userPasswordHidden: newusers.map(_ => false),
+    });
+  }
+
+  hideAllPasswords() {
+    this.setState({
+      userPasswordHidden: this.state.userPasswordHidden.map(_ => false)
     });
   }
 
@@ -539,7 +546,10 @@ class Admin extends Component {
                         Best Rival
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell padding='checkbox'>
+                    <TableCell padding='checkbox' align='center'>
+                      Admin
+                    </TableCell>
+                    <TableCell padding='checkbox' align='center'>
                       Delete
                     </TableCell>
                   </TableRow>
@@ -576,16 +586,34 @@ class Admin extends Component {
                             <TableCell>
                               {u.favoriteGame}
                             </TableCell>
-                            <TableCell>
+                            <TableCell  align='center'>
                               {u.gamesPlayed}
                             </TableCell>
                             <TableCell>
                               {u.bestRival}
                             </TableCell>
-                            <TableCell>
-                              <IconButton size='small' edge='start' onClick={() => this.delUser(u.username)} >
-                                <DeleteForever color='error' />
-                              </IconButton>
+                            <TableCell  align='center'>
+                              {this.props.user.username === u.username
+                                ? <Switch size="small" checked={true} disabled />
+                                : <Switch size="small" checked={u.isAdmin}
+                                    onChange={() => {
+                                      u.isAdmin = !u.isAdmin;
+                                      toggleAdmin(u.username, u.isAdmin);
+                                      this.forceUpdate();
+                                    }}
+                                  />
+                              }
+                              
+                            </TableCell>
+                            <TableCell  align='center'>
+                              {this.props.user.username === u.username
+                                ? <IconButton size='small' edge='start' disabled >
+                                    <DeleteForever color='default' />
+                                  </IconButton>
+                                : <IconButton size='small' edge='start' onClick={() => this.delUser(u.username)} >
+                                    <DeleteForever color='error' />
+                                  </IconButton>
+                              }
                             </TableCell>
                           </TableRow>
                       )})
@@ -607,6 +635,7 @@ class Admin extends Component {
                                 <DeleteForever color='error' />
                               </IconButton>
                             </TableCell>
+                            <TableCell></TableCell>
                           </TableRow>
                         ))
                       : null
@@ -618,7 +647,12 @@ class Admin extends Component {
                       count={filteredUsers.length}
                       rowsPerPage={this.usersPerPage}
                       page={this.state.utablePage}
-                      onChangePage={(e, p) => this.setState({ utablePage: p })}
+                      onChangePage={(e, p) =>
+                        this.setState({
+                          utablePage: p,
+                          userPasswordHidden: this.state.userPasswordHidden.map(_ => false)
+                        })
+                      }
                       rowsPerPageOptions={[]}
                     />
                   </TableRow>

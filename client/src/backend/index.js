@@ -5,10 +5,12 @@ import {
     vsGames,
     getBestRival,
     getFavoriteGame,
+    recordGame
 } from './gameAPI';
 import {
     getUsers,
-    delUser
+    delUser,
+    toggleAdmin
 } from './adminAPI';
 
 /** How to communicate with the server
@@ -30,9 +32,11 @@ export {
     gameInfo,
     vsGames,
     getBestRival,
-    getFavoriteGame
+    getFavoriteGame,
+    recordGame
 };
 export {
     getUsers,
-    delUser
+    delUser,
+    toggleAdmin
 }
