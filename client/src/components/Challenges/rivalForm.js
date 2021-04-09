@@ -9,15 +9,14 @@ class RivalForm extends Component {
 
     render() {
         const {
-            currUser,
+            rivalNames,
             rivalName,
             scheduleDate,
             handleChange,
             scheduleGame
         } = this.props;
-  
         
-      const rivalNames = currUser.rivals.map((id) => getUser(id).name);
+      //const rivalNames = currUser.rivals.map((id) => getUser(id).name);
       return (
         <Grid className="student-form" container spacing={4}>
 

@@ -1,4 +1,4 @@
-import { login, getUser, getUserByName, createUser, getAllUsers } from './userAPI';
+import { login, getUser, getUserByName, createUser, getAllUsers, getChallenges } from './userAPI';
 import {
     gameHistory,
     gameInfo,
@@ -7,7 +7,8 @@ import {
     getFavoriteGame,
 } from './gameAPI';
 import {
-    getUsers
+    getUsers,
+    delUser
 } from './adminAPI';
 
 /** How to communicate with the server
@@ -23,7 +24,7 @@ import {
  */
 
 
-export { login, getUser, getUserByName, createUser, getAllUsers };
+export { login, getUser, getUserByName, createUser, getAllUsers, getChallenges };
 export {
     gameHistory,
     gameInfo,
@@ -32,5 +33,6 @@ export {
     getFavoriteGame
 };
 export {
-    getUsers
+    getUsers,
+    delUser
 }

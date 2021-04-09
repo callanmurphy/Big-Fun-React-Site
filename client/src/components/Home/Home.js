@@ -12,6 +12,7 @@ import {getUserByName, addRival, updateStatus, clearRivals, getUserById, setOnli
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import Alert from '@material-ui/lab/Alert';
 
 import Paper from '@material-ui/core/Paper'
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -24,7 +25,14 @@ class Home extends Component {
   constructor(props) {
     super(props)
     const {user} = this.props
+<<<<<<< HEAD
     this.state = {rivals: [], user: user, fullRivals: []}
+=======
+    this.state = {
+      rivals: user.rivals || [],
+      // message: null,
+    }
+>>>>>>> 109b7a99fedb9041c09b8419316c9b1979a4495a
     console.log(this.props)
   }
 
@@ -165,8 +173,15 @@ class Home extends Component {
       rivals = this.state.rivals
     }
     console.log("In the render method:", rivals)
+    console.log("login success: " + this.props.successAlert)
     return (
       <div>
+        { this.props.successAlert &&
+        <div>
+          <Alert severity="success">Login successful</Alert>
+          <p></p>
+        </div>
+        }
         <ProfilePicture user={user}/>
         <div id="RivalTable">
           <Paper id="RivalTableHeader">

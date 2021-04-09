@@ -11,7 +11,7 @@ const router = express.Router();
  * profilePiv: int
  * rivals: List[id: int]
  * status: str                (customizable?)
- * rivalGames: List[{
+ * challenges: List[{
  *      gid: int -> game id
  *      rid: int -> user id
  *      date: timestamp
@@ -122,10 +122,10 @@ router.get('/user', async (req, res) => {
 	try {
 		const result = await User.findById(id)
 		if (!result) {
-			res.status(404).send('Resource not found')  // could not find this restaurant
+			res.status(404).send('Resource not found')  // could not find this user
 		} else {
 			/// sometimes we wrap returned object in another object:
-			//res.send({restaurant})   
+			//res.send({user})   
 			res.send(result)
 		}
 
@@ -268,7 +268,64 @@ router.get('/logout', (req, res) => {
 			res.redirect('/');
 		}
 	})
-})
+});
+
+/// Route for adding challenge to a particular user.
+/* 
+Request body expects:
+{
+    rid: <id of rival>, 
+    date: <deadline of challenge>,
+    inviter: <boolean if this user is the inviter>,
+    confirmed: <boolean if this challenge has been confirmed>
+}
+*/
+// POST /challenge/id
+router.post('/challenge/:id', async (req, res) => {
+	// Add code here
+
+	const id = req.params.id
+	// Good practise: Validate id immediately.
+	if (!ObjectID.isValid(id)) {
+		res.status(404).send()  // if invalid id, definitely can't find resource, 404.
+		return;  // so that we don't run the rest of the handler.
+	}
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
+	// Save user to the database
+	// async-await version:
+	try {
+		const user = await User.findById(id)
+		if (!user) {
+			res.status(404).send('Resource not found')  // could not find this student
+		} 
+		else {
+			const challenge = user.challenges.create({
+				rid: req.body.rid,
+				date: req.body.date,
+                inviter: req.body.inviter,
+                confirmed: req.body.confirmed
+			});
+			user.challenges.push(challenge)
+	
+			const result = await user.save()
+			res.send(result)
+		}
+    } catch(error) {
+        console.log(error) // log server error to the console, not to the client.
+        if (isMongoError(error)) { // check for if mongo server suddenly dissconnected before this request.
+            res.status(500).send('Internal server error')
+        } else {
+            res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+        }
+    }
+});
 
 // A route to delete a user
 router.delete('/user', async (req, res) => {

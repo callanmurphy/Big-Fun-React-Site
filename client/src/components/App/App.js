@@ -26,6 +26,8 @@ class App extends Component {
       loggedIn: false
     }
 
+    this.successAlert = false; // login success alert
+
     this.gamelinks = gamelinks
 
     this.navref = React.createRef();
@@ -79,6 +81,14 @@ class App extends Component {
             title: 'Admin',
             path: '/admin',
             element: () => (<Admin />)
+          });
+        }
+        else {
+          this.successAlert = true; // login success alert
+          newlinks.push({
+            title: 'Home',
+            path: '/home',
+            element: () => (<Home user={this.state.curUser} successAlert={this.successAlert} />)
           });
         }
         this.setState({
@@ -143,7 +153,7 @@ class App extends Component {
           {/* home route */}
           <Route exact path='/home'
             render={this.state.loggedIn
-              ? () => <Home user={this.state.curUser} />
+              ? () => <Home user={this.state.curUser} successAlert={this.successAlert}/>
               : () => <Redirect to='/login' />}
           />
           {  // page routes

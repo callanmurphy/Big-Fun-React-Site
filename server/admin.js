@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const { ObjectID } = require('mongodb')
+const { ObjectID } = require('mongodb');
+const { users } = require('../client/src/backend/tempdata');
 const { mongoose } = require('../db/mongoose')
 mongoose.set('bufferCommands', false);  // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
 
@@ -34,16 +35,23 @@ router.get('/users', async (req, res) => {
 		res.send({users})
 	}
 	catch (error) {
-		log(error)
+		console.log(error)
 		res.status(500).send("Internal Server Error")
 	}
 });
 
-router.delete('/users', (req, res) => {
-    /** List of all users in database
-     * ???
+router.delete('/users/:name', (req, res) => {
+    /** delete user with username `name`
      */
-    res.status(413);
+	
+	try {
+		console.log(`Deleting user ${req.params.name}.`);
+		User.deleteMany({username: req.params.name});
+		res.status(200).send();
+	} catch (error) {
+		console.log(error)
+		res.status(500).send("Internal Server Error");
+	}
 });
 
 

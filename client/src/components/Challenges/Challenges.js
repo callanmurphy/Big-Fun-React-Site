@@ -3,7 +3,7 @@ import { uid } from "react-uid";
 import React, { Component } from "react";
 import RivalForm  from "./rivalForm";
 
-import { getUser } from "../../backend";
+import { getChallenges } from "../../backend";
 
 import "./Challenges.css";
 
@@ -24,11 +24,13 @@ class Challenges extends Component {
     /*********** Needs to make backend request ***********/
     this.state = {
       currUser: user,
-      rivalName: getUser(user.rivals[0]).name,
+      rivalNames: [],
+      scheduled: [],
+      /* rivalName: getUser(user.rivals[0]).name,
       scheduleDate: dateString,
       scheduled: user.rivalGames.map((item) => {
         return {rname: getUser(item.rid).name, date: item.date, inviter: item.inviter, confirmed: item.confirmed}
-      })
+      }) */
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.scheduleGame = this.scheduleGame.bind(this);
@@ -39,6 +41,8 @@ class Challenges extends Component {
 
   componentDidMount() {
     document.title = 'Challenges - Big Fun';
+    getChallenges(this)
+
   }
 
   scheduleGame() {
@@ -119,7 +123,7 @@ class Challenges extends Component {
     <Paper>
       <div className="rivalForm">
         <RivalForm 
-          currUser={this.state.currUser}
+          rivalNames={this.state.rivalNames}
           rivalName={this.state.rivalName} 
           scheduleDate={this.state.scheduleDate}
           handleChange={this.handleInputChange}
