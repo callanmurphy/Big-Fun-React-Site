@@ -28,10 +28,8 @@ class Admin extends Component {
     
     // get infor from the server
     getUsers().then(usrs => {
-      console.log(`Setting users on Admin page: `, usrs);
       usrs.forEach(u =>
         gameHistory(u.username).then(games => {
-          console.log('Setting games on admin page: ', games);
           this.setState({
             recentGames: this.state.recentGames.concat(games)
           })
@@ -215,7 +213,6 @@ class Admin extends Component {
     const filteredGames = this.state.recentGames.map(g => g)
       .filter(gameFilter)
       .sort((a, b) => this.comparator(a, b));
-    console.log(`Filtered ${this.state.recentGames.length} games to ${filteredGames.length}`);
 
     const userFilter = (u) => u.username.match(this.state.userSearchString) !== null;
     const filteredUsers = this.state.users
@@ -432,44 +429,44 @@ class Admin extends Component {
             <Grid container spacing={2} alignItems='stretch'>
               <Grid item xs={6}>
                 <Paper className='progressFullHeight progressStatPaper'>
-                  <Typography className='progressStatTitle' variant='h5' align='center' display='block'>
+                  <Typography className='progressStatTitle' variant='h6' align='center' display='block'>
                     Games Played
                   </Typography>
                   <Divider />
-                  <Typography className='progressStatVal' variant='h3' align='center'>
+                  <Typography className='progressStatVal' variant='h4' align='center'>
                       { this.state.recentGames.length }
                   </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={6}>
                 <Paper className='progressFullHeight progressStatPaper'>
-                  <Typography className='progressStatTitle' variant='h5' align='center' display='block'>
+                  <Typography className='progressStatTitle' variant='h6' align='center' display='block'>
                   Games This Week
                   </Typography>
                   <Divider />
-                  <Typography className='progressStatVal' variant='h3' align='center'>
+                  <Typography className='progressStatVal' variant='h4' align='center'>
                     { this.state.recentGames.filter(oneWeekFilter).length }
                   </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={6}>
                 <Paper className='progressFullHeight progressStatPaper'>
-                  <Typography className='progressStatTitle' variant='h5' align='center' display='block'>
+                  <Typography className='progressStatTitle' variant='h6' align='center' display='block'>
                     Best User
                   </Typography>
                   <Divider />
-                  <Typography className='progressStatVal' variant='h4' align='center'>
+                  <Typography className='progressStatVal' variant='h5' align='center'>
                     { bestUser }
                   </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={6}>
                 <Paper className='progressFullHeight progressStatPaper'>
-                  <Typography className='progressStatTitle' variant='h5' align='center' display='block'>
+                  <Typography className='progressStatTitle' variant='h6' align='center' display='block'>
                     Best Game
                   </Typography>
                   <Divider />
-                  <Typography className='progressStatVal' variant='h4' align='center'>
+                  <Typography className='progressStatVal' variant='h5' align='center'>
                     { getFavoriteGame(this.state.recentGames) }
                   </Typography>
                 </Paper>

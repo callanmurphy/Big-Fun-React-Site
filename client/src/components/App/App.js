@@ -67,14 +67,14 @@ class App extends Component {
       }
     ]
 
-
+    this.renderedNavLinks = [];
+    this.homeComp = null;
 
   }
 
   async login(username, pass) {
     if (await login(username, pass)) {
       getUserByName(username).then(user => {
-        console.log('Logging in as: ', user);
         let newlinks = this.navlinks.map(e => e);
         if (user.isAdmin) {
           newlinks.push({
@@ -82,6 +82,17 @@ class App extends Component {
             path: '/admin',
             element: () => (<Admin user={this.state.curUser} />)
           });
+
+          this.homeComp = (<Home user={user} successAlert = {this.successAlert} />);
+
+          this.renderedNavLinks = this.gamelinks.map(({ title, path, element }) => {
+            const el = element(this.state.curUser);
+            return (<Route key={path} exact path={path}
+              render={this.state.loggedIn
+                ? () => el
+                : () => <Redirect to='/login' />}
+            />);
+        });
         } else {
           this.successAlert = true; // login success alert
           // newlinks.push({
@@ -150,11 +161,13 @@ class App extends Component {
 
         <Switch>
           {/* home route */}
-          <Route exact path='/home'
-            render={this.state.loggedIn
-              ? () => <Home user={this.state.curUser} successAlert = {this.successAlert} />
-              : () => <Redirect to='/login' />}
-          />
+          <Route exact path='/home'>
+            {
+              this.state.loggedIn
+                ? this.homeComp
+                : <Redirect to='/login' />
+            }
+          </Route>
           {  // page routes
             this.state.navlinks.map(({ title, path, element }) => (
               <Route key={path} exact path={path}
@@ -165,13 +178,7 @@ class App extends Component {
             ))
           }
           {  // game routes
-            this.gamelinks.map(({ title, path, element }) => (
-              <Route key={path} exact path={path}
-                render={this.state.loggedIn
-                  ? () => element(this.state.curUser)
-                  : () => <Redirect to='/login' />}
-              />
-            ))
+            this.renderedNavLinks
           }
           {  // game routes
             this.nonNavlinks.map(({ path, element }) => (
