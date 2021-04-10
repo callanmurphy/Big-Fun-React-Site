@@ -37,7 +37,7 @@ class ProfilePicture extends Component {
       showProfilePics: !this.state.showProfilePics,
     })
 
-    !this.state.showProfilePics ? this.setState({buttonText: "Confirm"}) : this.setState({buttonText: "Change Picture"})
+    !this.state.showProfilePics ? this.setState({buttonText: "Hide"}) : this.setState({buttonText: "Change Picture"})
   }
   
   disableEnterKey(e) {
