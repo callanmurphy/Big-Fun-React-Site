@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { FilterList, ArrowBackIos as BackArrow, ArrowForwardIos as ForwardArrow } from '@material-ui/icons';
 import { getFavoriteGame, gameHistory, getBestRival } from "../../backend";
+import {updateStatus} from '../../backend/userAPI'
 
 
 class Progress extends Component {

@@ -4,6 +4,8 @@ import React, { Component } from "react";
 import RivalForm  from "./rivalForm";
 
 import { getChallenges } from "../../backend";
+import {updateStatus} from '../../backend/userAPI'
+
 
 import "./Challenges.css";
 import { forfeitChallenge, makeChallenge } from "../../backend/userAPI";

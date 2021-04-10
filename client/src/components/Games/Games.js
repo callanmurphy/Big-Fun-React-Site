@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Card, CardActionArea, CardContent, CardMedia, Typography, Grid } from '@material-ui/core';
 import { gamelinks } from './gameData';
+import {updateStatus} from '../../backend/userAPI'
 import './Games.css';
 
 class Games extends Component {

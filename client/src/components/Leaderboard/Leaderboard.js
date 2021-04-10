@@ -4,6 +4,7 @@ import { profilePictures } from "../Home"
 import { getAllUsers } from "../../backend"
 import "./Leaderboard.css"
 import UserAvatar from '../UserAvatar';
+import {updateStatus} from '../../backend/userAPI'
 
 class Leaderboard extends Component {
   
