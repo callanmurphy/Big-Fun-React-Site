@@ -13,14 +13,14 @@ const gamelinks = [
         element: (user) => (<DotFollow user={user} />),
     
     }, {
-        path: '/games/type-the-keys',
+        path: '/games', // update when the game is complete
         title: 'Type the keys',
         img: TypeImg,
         description: (<span>How fast can <em>you</em> type??</span>),
         element: (user) => (<TypeType user={user} />),
     
     }, {
-        path: '/games',
+        path: '/games', // update when the game is complete
         title: 'Pong',
         img: PongImg,
         description: (<span>Try to battle an AI in the <em>gruelling</em> game of <b>PONG</b>!</span>),
