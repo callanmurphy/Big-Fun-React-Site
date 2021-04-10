@@ -115,7 +115,7 @@ export const getChallenges = (Challenges) => {
     })
     .then(rival => {
         scheduled.push({rname: rival.username, date: game.date, inviter: game.inviter, confirmed: game.confirmed})
-        scheduled.sort((a, b) => (new Date(a.date) < new Date(b.date)) ? 1 : -1)
+        scheduled.sort(function(a, b) {return new Date(a.date) - new Date(b.date)})
         Challenges.setState({ scheduled: scheduled });
     })
     .catch(error => {
@@ -195,6 +195,60 @@ export const makeChallenge = (Component) => {
       .catch(error => {
           console.log(error);
       });
+};
+
+// deletes users challenge at index i
+export const forfeitChallenge = (comp, i) => {
+  const scheduled = comp.state.scheduled;
+
+
+  const uid = comp.state.currUser._id
+  const cid = comp.state.currUser.challenges[i]._id
+  console.log(uid)
+  console.log(cid)
+  const request = new Request(`/api/users/challenge/${uid}/${cid}`, {
+    method: "delete",
+    headers: { 'Content-type': 'application/json' }
+  });
+  fetch(request)
+  .then(res => {
+      if (res.status === 200) {
+          // return a promise that resolves with the JSON body
+          scheduled.splice(i,1)
+          comp.setState({scheduled: scheduled})
+          return res.json();
+      } else {
+          alert("Could not get users");
+      }
+  })
+  .catch(error => {
+      console.log(error);
+  });
+  
+
+/*   const scheduled = []
+  console.log(currUser.challenges)
+  currUser.challenges.forEach(game => {
+    fetch(`/api/users/user/id/${game.rid}`)
+    .then(res => {
+        if (res.status === 200) {
+            // return a promise that resolves with the JSON body
+            return res.json();
+        } else {
+            alert("Could not get users");
+        }
+    })
+    .then(rival => {
+        scheduled.push({rname: rival.username, date: game.date, inviter: game.inviter, confirmed: game.confirmed})
+        scheduled.sort((a, b) => (new Date(a.date) < new Date(b.date)) ? 1 : -1)
+        Challenges.setState({ scheduled: scheduled });
+        console.log(scheduled)
+    })
+    .catch(error => {
+        console.log(error);
+    });
+  }); */
+ 
 };
 
 
