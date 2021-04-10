@@ -26,15 +26,12 @@ class RivalRow extends Component {
       avatar = (<UserAvatar uid={user._id} offlineIndicator pic={pp} size='medium' />)
     }
     this.state = {user: user, avatar: avatar, i:i}
-    console.log("Rival Row", this.props)
   }
 
   render() {
     const user = this.state.user
     const avatar = this.state.avatar
     const i = this.state.i
-
-    console.log("these are the rival row props", this.props)
 
     return (
       <TableRow key={i}>

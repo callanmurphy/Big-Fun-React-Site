@@ -40,8 +40,6 @@ export async function addRival(id, rivalId) {
 		body: JSON.stringify({id: id, update: {$push: {rivals: rivalId}}}),
 		headers: { 'Content-type': 'application/json' }
 	}).catch(err => console.log(err));
-
-  console.log(res)
 }
 
 export async function removeRival(id, rivalId) {
@@ -51,8 +49,6 @@ export async function removeRival(id, rivalId) {
     body: JSON.stringify({id: id, update: {$pull: {rivals: rivalId}}}),
     headers: { 'Content-type': 'application/json' }
   }).catch(err => console.log(err));
-
-  console.log(res)
 }
 
 export async function updateStatus(id, status) {
@@ -86,7 +82,6 @@ export const getAllUsers = (component) => {
 export const getChallenges = (Challenges) => {
   const currUser = Challenges.state.currUser
   const rivalNames = []
-  console.log(currUser)
   currUser.rivals.forEach(rid => {
     fetch(`/api/users/user/id/${rid}`)
     .then(res => {
@@ -101,7 +96,6 @@ export const getChallenges = (Challenges) => {
         rivalNames.push({id: rid, username: rival.username})
         //Challenges.setState({rivalName: rival.username})
         Challenges.setState({ rivalNames: rivalNames });
-        console.log(rivalNames)
     })
     .catch(error => {
         console.log(error);
@@ -109,7 +103,6 @@ export const getChallenges = (Challenges) => {
   });
 
   const scheduled = []
-  console.log(currUser.challenges)
   currUser.challenges.forEach(game => {
     fetch(`/api/users/user/id/${game.rid}`)
     .then(res => {
@@ -124,7 +117,6 @@ export const getChallenges = (Challenges) => {
         scheduled.push({rname: rival.username, date: game.date, inviter: game.inviter, confirmed: game.confirmed})
         scheduled.sort((a, b) => (new Date(a.date) < new Date(b.date)) ? 1 : -1)
         Challenges.setState({ scheduled: scheduled });
-        console.log(scheduled)
     })
     .catch(error => {
         console.log(error);
@@ -139,7 +131,6 @@ export const makeChallenge = (Component) => {
   // the URL for the request
   const currUser = Component.state.currUser
   const rivalName = Component.state.rivalName
-  console.log(currUser._id.valueOf())
   const uid = currUser._id
   const rid = Component.state.rivalNames.filter(r => r.username === rivalName)[0].id
   const date = Component.state.scheduleDate
@@ -231,7 +222,6 @@ export async function setOnline(id) {
     body: JSON.stringify({id: id, update: {$set: {online: true}}}),
     headers: { 'Content-type': 'application/json' }
   }).catch(err => console.log(err));
-  console.log(result)
 }
 
 export async function setOffline(id) {
@@ -240,8 +230,6 @@ export async function setOffline(id) {
     body: JSON.stringify({id: id, update: {$set: {online: false}}}),
     headers: { 'Content-type': 'application/json' }
   }).catch(err => console.log(err));
-  console.log(result)
-
   updateStatus(id, "Offline")
 }
 
@@ -251,7 +239,6 @@ export async function deleteUserById(id) {
     body: JSON.stringify({id: id}),
     headers: { 'Content-type': 'application/json' }
   }).catch(err => console.log(err));
-  console.log(result)
 }
 
 export async function updatePic(id, pic) {
@@ -260,7 +247,6 @@ export async function updatePic(id, pic) {
     body: JSON.stringify({id: id, update: {$set: {profilePic: pic}}}),
     headers: { 'Content-type': 'application/json' }
   }).catch(err => console.log(err));
-  console.log(result)
 }
 
 export async function setCustomPic(id, url) {

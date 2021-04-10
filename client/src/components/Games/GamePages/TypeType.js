@@ -65,7 +65,14 @@ class TypeType extends Component {
     window.requestAnimationFrame(() => this.animate())
   }
 
+  handleKeyPress(e)  {
+    if(e.key === 'Enter'){
+      console.log('enter press here!')
+    }
+  }
+
   componentDidUpdate() {
+    
   }
 
   componentWillUnmount() {
@@ -75,7 +82,7 @@ class TypeType extends Component {
 
   render() {
     return (
-    <div>
+    <div className='gamePlayContainer'>
       <div className='scoreBox'>
         <h1>Type the keys</h1>
         <p>{ Math.round(this.state.time * 100) / 100 }</p>
