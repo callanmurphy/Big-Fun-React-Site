@@ -24,7 +24,7 @@ class TypeType extends Component {
   }
 
   updateTime(diff) {
-    if (this.state.life - diff < 0) {
+    if (this.state.time - diff < 0) {
       this.setState({
         score: this.state.score,
         time: 0,
@@ -35,8 +35,6 @@ class TypeType extends Component {
         score: this.state.score,
         time: this.state.time - diff,
       });
-      console.log("UPDATE");
-      console.log(this.state.time);
     }
   }
 
@@ -44,8 +42,8 @@ class TypeType extends Component {
     if (!this.doAnimation) {
       return;
     }
-    const diff = curr - this.stats.lastTime;
     const curr = new Date();
+    const diff = curr - this.stats.lastTime;
 
     this.updateTime(diff / 1000);
     if (this.doAnimation) {
@@ -72,7 +70,6 @@ class TypeType extends Component {
   }
 
   componentDidUpdate() {
-    console.log("componentDidUpdate")
   }
 
   componentWillUnmount() {
@@ -85,7 +82,7 @@ class TypeType extends Component {
     <div>
       <div>
         <h1>Type the keys</h1>
-        <p>{ Math.round(this.state.life * 100) / 100 }</p>
+        <p>{ Math.round(this.state.time * 100) / 100 }</p>
       </div>
       <div 
         className='gamePlayContainer'

@@ -82,14 +82,13 @@ class App extends Component {
             path: '/admin',
             element: () => (<Admin user={this.state.curUser} />)
           });
-        }
-        else {
+        } else {
           this.successAlert = true; // login success alert
-          newlinks.push({
-            title: 'Home',
-            path: '/home',
-            element: () => (<Home user={this.state.curUser} successAlert={this.successAlert} />)
-          });
+          // newlinks.push({
+          //   title: 'Home',
+          //   path: '/home',
+          //   element: () => (<Home user={this.state.curUser} successAlert={this.successAlert} />)
+          // });
         }
         this.setState({
           loggedIn: true,
