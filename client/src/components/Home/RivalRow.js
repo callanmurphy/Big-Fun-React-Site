@@ -11,10 +11,19 @@ class RivalRow extends Component {
     super(props)
     const {user, i} = this.props
     let avatar = null
-    if (user.online) {
-      avatar = (<UserAvatar uid={user._id} onlineIndicator pic={profilePictures[user.profilePic]} size='medium' />)
+
+    let pp = null
+
+    if (user.profilePic === -1) {
+      pp = {src: user.customProfilePic, name: "Custom"}
     } else {
-      avatar = (<UserAvatar uid={user._id} offlineIndicator pic={profilePictures[user.profilePic]} size='medium' />)
+      pp = profilePictures[user.profilePic]
+    }
+
+    if (user.online) {
+      avatar = (<UserAvatar uid={user._id} onlineIndicator pic={pp} size='medium' />)
+    } else {
+      avatar = (<UserAvatar uid={user._id} offlineIndicator pic={pp} size='medium' />)
     }
     this.state = {user: user, avatar: avatar, i:i}
     console.log("Rival Row", this.props)

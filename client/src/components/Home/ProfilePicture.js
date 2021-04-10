@@ -61,7 +61,7 @@ class ProfilePicture extends Component {
           {
             this.state.showProfilePics ?
             <div>
-                  <Input id="Custom" onKeyPress={this.disableEnterKey.bind(this)}/>
+                  <Input id="Custom" placeholder="Custom Picture URL..."  onKeyPress={this.disableEnterKey.bind(this)}/>
                   <GridList className="PictureChoices" cols={3}>
                     {(this.state.profilePictures.map((pic, i) => (
                      

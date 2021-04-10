@@ -34,6 +34,7 @@ class Home extends Component {
       successAlert: true,
     }
     setTimeout(() => {this.setState({ successAlert: false });}, 3000);
+    this.searchRivals(null)
     console.log(this.props)
   }
 
@@ -50,7 +51,7 @@ class Home extends Component {
   // Modified from an Emma Goto tutorial - https://www.emgoto.com/react-search-bar/
   searchRivals = (e) => {
     const user = this.state.user;
-    if (e.target.value === "") {
+    if (e === null || e.target.value === "") {
       console.log("Resetting to users full rival Ids");
       this.updateTempRivals.bind(this)()
     } else {
@@ -83,9 +84,9 @@ class Home extends Component {
     try {
       let rival = await getUserByName(rivalName)
       if (rival.rivals.includes(user._id)) {
-        alert("You're already Rivals with " + rivalName)
+        alert("You're already Rivals with " + rivalName) //<Alert severity="error">{ "You're already Rivals with " + rivalName }</Alert>
       } else if (user.username === rivalName) {
-        alert("You can't do that")
+        alert("You can't do that") //<Alert severity="error">{ "You can't do that, silly..." }</Alert>
       } else {
         console.log("About to try adding ", rivalName)
         
@@ -99,7 +100,7 @@ class Home extends Component {
 
       document.getElementById("RivalName").value = ""
     } catch {
-      alert("Can't find that user")
+      alert("Can't find that user") //<Alert severity="error">{ "You can't do that, silly..." }</Alert>
     }
   }
 
