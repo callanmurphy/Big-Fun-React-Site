@@ -22,6 +22,14 @@ Using an alphanumeric username and a password that matches the confirm password 
 for an account - which will redirect you back to login. Instead, you can also click the "Have an account?" 
 hyperlink at the bottom of the page to return to login at any time.
 
+### Leaderboard
+A page that displays all the users in the database and their scores.
+
+### Challenges 
+Able to challenge your rivals in the Challenges page.
+Can forfeit challenges already present or add new ones.
+After adding challenges you must refresh the page in order to forfeit them.
+Functionality to accept challenges is incomplete.
 
 ## Dependencies
 ### Frontend Dependencies
