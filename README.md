@@ -9,8 +9,16 @@ Site: [https://biggest-fun.herokuapp.com](https://biggest-fun.herokuapp.com)
 
 ## Details
 
-The site features two types of accounts: users and admins.
-Visiting the site will take you to the login page, where you can sign in with user or admin credentials.
+### Login
+Big Fun features two types of accounts: users and admins.
+Visiting the site will take you to the Login page, where you can sign in with user or admin credentials.
+If you don't yet have an account, select the "Create account" hyperlink at the bottom of the login page - 
+this will take you to the Create Account page.
+
+### Create Account
+Using an alphanumeric username and a password that matches the confirm password field, you can sign up 
+for an account - which will redirect you back to login. Instead, you can also click the "Have an account?" 
+hyperlink at the bottom of the page to return to login at any time.
 
 
 ## Dependencies
