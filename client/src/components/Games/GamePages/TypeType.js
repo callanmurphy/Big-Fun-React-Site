@@ -16,11 +16,6 @@ class TypeType extends Component {
       lastTime: new Date(),
     }
 
-    // this.dims = {
-    //   height: null,
-    //   width: null,
-    // }
-
   }
 
   updateTime(diff) {
@@ -57,6 +52,7 @@ class TypeType extends Component {
 
   gameOver() {
     this.doAnimation = false;
+    console.log("GAME OVER");
   }
 
   componentDidMount() {
@@ -80,7 +76,7 @@ class TypeType extends Component {
   render() {
     return (
     <div>
-      <div>
+      <div className='scoreBox'>
         <h1>Type the keys</h1>
         <p>{ Math.round(this.state.time * 100) / 100 }</p>
       </div>
