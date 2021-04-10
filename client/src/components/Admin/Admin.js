@@ -8,12 +8,12 @@ import {
   Toolbar, Typography, Select, FormControl, MenuItem,
   Input, TablePagination, TableFooter, IconButton,
   Slide,
-  Divider, Container, TextField
+  Divider, Container, TextField, Switch
 } from '@material-ui/core';
 import { FilterList, ArrowBackIos as BackArrow, ArrowForwardIos as ForwardArrow,
-         DeleteForever, Visibility, VisibilityOff, Search
+         DeleteForever, Visibility, VisibilityOff, Search, CompassCalibrationOutlined
         } from '@material-ui/icons';
-import { getUser, gameHistory, gameInfo, getUsers, getFavoriteGame } from "../../backend";
+import { gameHistory, gameInfo, getUsers, getFavoriteGame, delUser, toggleAdmin } from "../../backend";
 import * as d3 from 'd3';
 
 
@@ -24,30 +24,48 @@ class Admin extends Component {
     this.perPage = 6;
     this.usersPerPage = 4;
 
-    this.games = gameInfo();
-    const gameHist = gameHistory()
-    const usrs = getUsers();
+    this.games = gameInfo();  // this is the list of playable games
+    
+    // get infor from the server
+    getUsers().then(usrs => {
+      usrs.forEach(u =>
+        gameHistory(u.username).then(games => {
+          this.setState({
+            recentGames: this.state.recentGames.concat(games)
+          })
+        })
+      );
+      this.setState({
+        users: usrs,
+        userPasswordHidden: usrs.map(u => false),
+      });
+    });
+
+    // initial state
     this.state = {
-      recentGames: gameHist,
-      users: usrs,
+      // will be updated when data loads
+      recentGames: [],
+      users: [],
+      userPasswordHidden: [],
+
+      // does not depenmd on server
       direction: 1,
       by: 'date',
       udirection: 1,
-      uby: 'name',
+      uby: 'username',
       tablePage: 0,
       utablePage: 0,
       gameFilter: 'All',
       showGame: 0,
       chartTransitions: this.games.map((g, i) => (i === 0 ? 'left' : 'right')),
       chartTransitionsIn: this.games.map((g, i) => (i === 0)),
-      userPasswordHidden: usrs.map(u => false),
       userSearchString: '',
     }
   }
 
 
   componentDidMount() {
-    document.title = 'Progress - Big Fun';
+    document.title = 'Admin - Big Fun';
   }
 
   updateUserFilter(v) {
@@ -98,8 +116,12 @@ class Admin extends Component {
 
   getData(g) {
     const data = this.state.recentGames.filter((game) => game.name === g);
-    const maxX = new Date(d3.max(data.map(d => d.date)).getTime());
-    const minX = new Date(d3.min(data.map(d => d.date)).getTime());
+    let maxX = new Date();
+    let minX = new Date();
+    if (data.length > 0) {
+      maxX = new Date(d3.max(data.map(d => new Date(d.date))).getTime());
+      minX = new Date(d3.min(data.map(d => new Date(d.date))).getTime());
+    }
     
     let ret = [];
     let currDay = minX;
@@ -109,7 +131,8 @@ class Admin extends Component {
     while (currDay < maxX) {
       let tmp = {count: 0, day: new Date(currDay.getTime())};
       data.forEach(d => {
-        if (currDay <= d.date && d.date < tmrw) {
+        const D = new Date(d.date)
+        if (currDay <= D && D < tmrw) {
           tmp.count++;
         }
       })
@@ -134,6 +157,7 @@ class Admin extends Component {
   }
 
   setUserSort(by) {
+    this.hideAllPasswords();
     if (by === this.state.uby) {
       this.setState({
         udirection: -1 * this.state.udirection
@@ -159,6 +183,21 @@ class Admin extends Component {
     })
   }
 
+  delUser(name) {
+    delUser(name);
+    const newusers = this.state.users.filter(u => u.username !== name);
+    this.setState({
+      users: newusers,
+      userPasswordHidden: newusers.map(_ => false),
+    });
+  }
+
+  hideAllPasswords() {
+    this.setState({
+      userPasswordHidden: this.state.userPasswordHidden.map(_ => false)
+    });
+  }
+
   render() {
     const games = this.games;
     const gameNames = games.map(g => g.title);
@@ -175,10 +214,16 @@ class Admin extends Component {
       .filter(gameFilter)
       .sort((a, b) => this.comparator(a, b));
 
-    const userFilter = (u) => u.name.match(this.state.userSearchString) !== null;
+    const userFilter = (u) => u.username.match(this.state.userSearchString) !== null;
     const filteredUsers = this.state.users
+      .sort((a, b) => this.userComparator(a, b))
+      .filter(userFilter);
+
+    const _sortedUsers = this.state.users
       .filter(userFilter)
-      .sort((a, b) => this.userComparator(a, b));
+      .sort((u1, u2) => u1.gamesPlayed - u2.gamesPlayed)
+      .reverse();
+    const bestUser = _sortedUsers[0] ? _sortedUsers[0].username : 'No one';
 
     const charts = gameNames.map((g, i) => (
       <div className='progressSlider' key={uid(g)}>
@@ -207,7 +252,8 @@ class Admin extends Component {
     const today = new Date();
     let weekago = new Date(today.getTime());
     weekago.setDate(weekago.getDate() - 7);
-    const oneWeekFilter = d => (weekago < d.date) && (d.date < today);
+    const oneWeekFilter = d => (weekago < (new Date(d.date))) && ((new Date(d.date)) < today);
+
 
     return (
       <Container maxWidth={false}>
@@ -301,7 +347,7 @@ class Admin extends Component {
                           key={uid(i)}
                         >
                           <TableCell>
-                            {g.date.toLocaleDateString('en-US')}
+                            {(new Date(g.date)).toLocaleDateString('en-US')}
                           </TableCell>
                           <TableCell>
                             {Math.round(g.score)}
@@ -310,10 +356,10 @@ class Admin extends Component {
                             {g.name}
                           </TableCell>
                           <TableCell>
-                            { getUser(g.user1).name }
+                            { g.user1 }
                           </TableCell>
                           <TableCell>
-                            { getUser(g.user2).name }
+                            { g.user2 }
                           </TableCell>
                         </TableRow>
                       ))
@@ -383,45 +429,45 @@ class Admin extends Component {
             <Grid container spacing={2} alignItems='stretch'>
               <Grid item xs={6}>
                 <Paper className='progressFullHeight progressStatPaper'>
-                  <Typography className='progressStatTitle' variant='h5' align='center' display='block'>
+                  <Typography className='progressStatTitle' variant='h6' align='center' display='block'>
                     Games Played
                   </Typography>
                   <Divider />
-                  <Typography className='progressStatVal' variant='h3' align='center'>
+                  <Typography className='progressStatVal' variant='h4' align='center'>
                       { this.state.recentGames.length }
                   </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={6}>
                 <Paper className='progressFullHeight progressStatPaper'>
-                  <Typography className='progressStatTitle' variant='h5' align='center' display='block'>
+                  <Typography className='progressStatTitle' variant='h6' align='center' display='block'>
                   Games This Week
                   </Typography>
                   <Divider />
-                  <Typography className='progressStatVal' variant='h3' align='center'>
+                  <Typography className='progressStatVal' variant='h4' align='center'>
                     { this.state.recentGames.filter(oneWeekFilter).length }
                   </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={6}>
                 <Paper className='progressFullHeight progressStatPaper'>
-                  <Typography className='progressStatTitle' variant='h5' align='center' display='block'>
+                  <Typography className='progressStatTitle' variant='h6' align='center' display='block'>
                     Best User
                   </Typography>
                   <Divider />
-                  <Typography className='progressStatVal' variant='h4' align='center'>
-                    {filteredUsers.sort((u1, u2) => u1.gamesPlayed - u2.gamesPlayed).reverse()[0].name}
+                  <Typography className='progressStatVal' variant='h5' align='center'>
+                    { bestUser }
                   </Typography>
                 </Paper>
               </Grid>
               <Grid item xs={6}>
                 <Paper className='progressFullHeight progressStatPaper'>
-                  <Typography className='progressStatTitle' variant='h5' align='center' display='block'>
+                  <Typography className='progressStatTitle' variant='h6' align='center' display='block'>
                     Best Game
                   </Typography>
                   <Divider />
-                  <Typography className='progressStatVal' variant='h4' align='center'>
-                    { getFavoriteGame() }
+                  <Typography className='progressStatVal' variant='h5' align='center'>
+                    { getFavoriteGame(this.state.recentGames) }
                   </Typography>
                 </Paper>
               </Grid>
@@ -452,7 +498,7 @@ class Admin extends Component {
                         align='left'
                         active={this.state.uby === 'name'}
                         direction={this.state.udirection === 1 ? 'asc' : 'desc'}
-                        onClick={(e) => this.setUserSort('name')}
+                        onClick={(e) => this.setUserSort('username')}
                       >
                         Name
                       </TableSortLabel>
@@ -497,7 +543,10 @@ class Admin extends Component {
                         Best Rival
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell padding='checkbox'>
+                    <TableCell padding='checkbox' align='center'>
+                      Admin
+                    </TableCell>
+                    <TableCell padding='checkbox' align='center'>
                       Delete
                     </TableCell>
                   </TableRow>
@@ -515,7 +564,7 @@ class Admin extends Component {
                             key={uid(i)}
                           >
                             <TableCell>
-                              {u.name}
+                              {u.username}
                             </TableCell>
                             <TableCell>
                               {this.state.userPasswordHidden[i]
@@ -534,16 +583,34 @@ class Admin extends Component {
                             <TableCell>
                               {u.favoriteGame}
                             </TableCell>
-                            <TableCell>
+                            <TableCell  align='center'>
                               {u.gamesPlayed}
                             </TableCell>
                             <TableCell>
                               {u.bestRival}
                             </TableCell>
-                            <TableCell>
-                              <IconButton size='small' edge='start' >
-                                <DeleteForever color='error' />
-                              </IconButton>
+                            <TableCell  align='center'>
+                              {this.props.user.username === u.username
+                                ? <Switch size="small" checked={true} disabled />
+                                : <Switch size="small" checked={u.isAdmin}
+                                    onChange={() => {
+                                      u.isAdmin = !u.isAdmin;
+                                      toggleAdmin(u.username, u.isAdmin);
+                                      this.forceUpdate();
+                                    }}
+                                  />
+                              }
+                              
+                            </TableCell>
+                            <TableCell  align='center'>
+                              {this.props.user.username === u.username
+                                ? <IconButton size='small' edge='start' disabled >
+                                    <DeleteForever color='default' />
+                                  </IconButton>
+                                : <IconButton size='small' edge='start' onClick={() => this.delUser(u.username)} >
+                                    <DeleteForever color='error' />
+                                  </IconButton>
+                              }
                             </TableCell>
                           </TableRow>
                       )})
@@ -565,6 +632,7 @@ class Admin extends Component {
                                 <DeleteForever color='error' />
                               </IconButton>
                             </TableCell>
+                            <TableCell></TableCell>
                           </TableRow>
                         ))
                       : null
@@ -576,7 +644,12 @@ class Admin extends Component {
                       count={filteredUsers.length}
                       rowsPerPage={this.usersPerPage}
                       page={this.state.utablePage}
-                      onChangePage={(e, p) => this.setState({ utablePage: p })}
+                      onChangePage={(e, p) =>
+                        this.setState({
+                          utablePage: p,
+                          userPasswordHidden: this.state.userPasswordHidden.map(_ => false)
+                        })
+                      }
                       rowsPerPageOptions={[]}
                     />
                   </TableRow>

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import './Account.css';
+import { createUser } from '../../backend'
+import Alert from '@material-ui/lab/Alert';
 
 class CreateAccount extends Component {
   constructor(props){
@@ -8,6 +10,7 @@ class CreateAccount extends Component {
           username: '',
           password: '',
           confirmPassword: '',
+          signupError: null,
       };
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,12 +26,19 @@ class CreateAccount extends Component {
     
   handleSubmit(e){
       e.preventDefault();
-      if(this.state.password === this.state.confirmPassword){
+      const passwordConfirm = this.state.password === this.state.confirmPassword;
+      const strcheck = this.state.username.match("^[a-zA-Z0-9_]*$") != null; // alphanumeric check
+      if(passwordConfirm && strcheck){
         // alert("Account successfully created for: " + this.state.username);
+        this.setState({signupError : null});
         window.location.href = "/";
+        createUser(this.state.username, this.state.password);
+      }
+      else if (!strcheck){
+        this.setState({signupError : "username must be alphanumeric characters"});
       }
       else{
-        alert("Passwords don't match");
+        this.setState({signupError : "passwords must match"});
       }
   }
 
@@ -36,6 +46,12 @@ class CreateAccount extends Component {
       
     return (
       <div className="centerBox">
+        { this.state.signupError &&
+        <div>
+          <Alert severity="error">Account error: { this.state.signupError }</Alert>
+          <p></p>
+        </div>
+      }
         <img className='loginLogo' src={'/img/icon-circle.png'} alt="Big Fun Logo"/>
         <h1 className='headingText'>Create Account</h1>
         <form name='registerForm' onSubmit={this.handleSubmit}>

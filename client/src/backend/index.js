@@ -1,25 +1,42 @@
-import { login, getUser, getUserByName } from './userAPI';
+import { login, getUser, getUserByName, createUser, getAllUsers, getChallenges } from './userAPI';
 import {
     gameHistory,
     gameInfo,
-    soloGames,
     vsGames,
     getBestRival,
     getFavoriteGame,
+    recordGame
 } from './gameAPI';
 import {
-    getUsers
+    getUsers,
+    delUser,
+    toggleAdmin
 } from './adminAPI';
 
-export { login, getUser, getUserByName };
+/** How to communicate with the server
+ * const req = new Request(url, {
+ *      method: 'get/post/delete/put/...',
+ *      body: Json.stringify({...}),
+ *      headers: {
+ *           'Accept': 'application/json, text/plain, * /*',
+ *           'Content-Type': 'application/json'
+ *      }
+ * })
+ * will be a promise (.then().catch() and await)
+ */
+
+
+export { login, getUser, getUserByName, createUser, getAllUsers, getChallenges };
 export {
     gameHistory,
     gameInfo,
-    soloGames,
     vsGames,
     getBestRival,
-    getFavoriteGame
+    getFavoriteGame,
+    recordGame
 };
 export {
-    getUsers
+    getUsers,
+    delUser,
+    toggleAdmin
 }

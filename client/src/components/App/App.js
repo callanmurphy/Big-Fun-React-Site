@@ -7,7 +7,7 @@ import Home from '../Home';
 import Leaderboard from '../Leaderboard';
 import { Login, CreateAccount } from '../Account';
 import Progress from '../Progress';
-import Schedule from '../Schedule';
+import Challenges from '../Challenges';
 import Admin from '../Admin';
 import Games, { gamelinks } from '../Games';
 import './App.css';
@@ -16,16 +16,17 @@ import { ExitToApp } from '@material-ui/icons';
 import 'fontsource-roboto';
 
 
-import { login, getUser, getUserByName } from '../../backend/userAPI'
+import { login, getUser, getUserByName, setOffline } from '../../backend/userAPI'
 
 class App extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      curUser: getUser(0),
       loggedIn: false
     }
+
+    this.successAlert = false; // login success alert
 
     this.gamelinks = gamelinks
 
@@ -35,19 +36,19 @@ class App extends Component {
       {
         title: 'Leaderboard',
         path: '/leaderboard',
-        element: (<Leaderboard user={this.state.curUser} />)
+        element: () => (<Leaderboard user={this.state.curUser} />)
       }, {
         title: 'Progress',
         path: '/progress',
-        element: (<Progress user={this.state.curUser} games={this.gamelinks.map(g => g.title)} />)
+        element: () => (<Progress user={this.state.curUser} games={this.gamelinks.map(g => g.title)} />)
       }, {
         title: 'Games',
         path: '/games',
-        element: (<Games user={this.state.curUser} gamelinks={this.gamelinks} />)
+        element: () => (<Games user={this.state.curUser} gamelinks={this.gamelinks} />)
       }, {
-        title: 'Schedule',
-        path: '/schedule',
-        element: (<Schedule user={this.state.curUser} />)
+        title: 'Challenges',
+        path: '/challenges',
+        element: () => (<Challenges user={this.state.curUser} />)
       },
     ]
     this.state.navlinks = this.navlinks;
@@ -56,40 +57,54 @@ class App extends Component {
       {
         path: '/login',
         element: () => this.state.loggedIn
-          ? (this.state.curUser.name === 'admin' ? <Redirect to='/admin' /> : <Redirect to='/home' />)
-          : <Login login={(user, pass) => this.login(user, pass)} />
+          ? (this.state.curUser.isAdmin
+              ? <Redirect to='/admin' />
+              : <Redirect to='/home' />)
+          : <Login login={async (user, pass) => await this.login(user, pass)} />
       }, {
         path: '/createaccount',
         element: () => (<CreateAccount />)
       }
     ]
 
-
+    this.homeComp = null;
 
   }
 
-  login(user, pass) {
-    if (login(user, pass)) {
-      let newlinks = this.navlinks.map(e => e);
-      if (user === 'admin') {
-        newlinks.push({
-          title: 'Admin',
-          path: '/admin',
-          element: (<Admin />)
+  async login(username, pass) {
+    if (await login(username, pass)) {
+      getUserByName(username).then(user => {
+        let newlinks = this.navlinks.map(e => e);
+        if (user.isAdmin) {
+          newlinks.push({
+            title: 'Admin',
+            path: '/admin',
+            element: () => (<Admin user={this.state.curUser} />)
+          });
+        } else {
+          this.successAlert = true; // login success alert
+          // newlinks.push({
+          //   title: 'Home',
+          //   path: '/home',
+          //   element: () => (<Home user={this.state.curUser} successAlert={this.successAlert} />)
+          // });
+        }
+        this.setState({
+          loggedIn: true,
+          navlinks: newlinks,
+          curUser: user,
+          username: username
         });
-      }
-      this.setState({
-        loggedIn: true,
-        navlinks: newlinks,
-        curUser: getUserByName(user)
-      })
+      });
       return true;
     }
     return false;
   }
 
   logout() {
+    setOffline(this.state.curUser._id)
     this.setState({
+      curUser: null,
       loggedIn: false,
       navlinks: this.navlinks
     })
@@ -138,14 +153,14 @@ class App extends Component {
           {/* home route */}
           <Route exact path='/home'
             render={this.state.loggedIn
-              ? () => <Home user={this.state.curUser} />
+              ? () => <Home user={this.state.curUser} successAlert = {this.successAlert} />
               : () => <Redirect to='/login' />}
           />
           {  // page routes
             this.state.navlinks.map(({ title, path, element }) => (
               <Route key={path} exact path={path}
                 render={this.state.loggedIn
-                  ? () => element
+                  ? element
                   : () => <Redirect to='/login' />}
               />
             ))
@@ -154,7 +169,7 @@ class App extends Component {
             this.gamelinks.map(({ title, path, element }) => (
               <Route key={path} exact path={path}
                 render={this.state.loggedIn
-                  ? () => element
+                  ? () => element(this.state.curUser)
                   : () => <Redirect to='/login' />}
               />
             ))

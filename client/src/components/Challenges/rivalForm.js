@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Grid, TextField, MenuItem } from '@material-ui/core';
 import { getUser } from "../../backend";
-import './Schedule.css';
+import './Challenges.css';
 
 class RivalForm extends Component {
 
@@ -9,15 +9,14 @@ class RivalForm extends Component {
 
     render() {
         const {
-            currUser,
+            rivalNames,
             rivalName,
             scheduleDate,
             handleChange,
             scheduleGame
         } = this.props;
-  
         
-      const rivalNames = currUser.rivals.map((id) => getUser(id).name);
+      //const rivalNames = currUser.rivals.map((id) => getUser(id).name);
       return (
         <Grid className="student-form" container spacing={4}>
 
@@ -29,9 +28,9 @@ class RivalForm extends Component {
                 onChange={handleChange}
                 label="Rival"
             >
-              {rivalNames.map(name => (
-                <MenuItem key={name} value={name}>
-                  {name}
+              {rivalNames.map(r => (
+                <MenuItem key={r.id} value={r.username}>
+                  {r.username}
                 </MenuItem>
               ))}
             </TextField> 
@@ -40,7 +39,7 @@ class RivalForm extends Component {
             <TextField
                 id="scheduleDate"
                 name = "scheduleDate"
-                label="Time"
+                label="Deadline"
                 type="datetime-local"
                 defaultValue={scheduleDate}
                 onChange={handleChange}

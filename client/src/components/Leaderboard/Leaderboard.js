@@ -1,30 +1,51 @@
 import React, { Component } from "react";
 import { Table, TableBody, TableCell, TableRow, Avatar, Paper } from '@material-ui/core';
 import { profilePictures } from "../Home"
-import { getUser } from "../../backend"
+import { getAllUsers } from "../../backend"
 import "./Leaderboard.css"
+import UserAvatar from '../UserAvatar';
+import {updateStatus} from '../../backend/userAPI'
 
 class Leaderboard extends Component {
   
   constructor(props) {
     super(props);
-    const users = []
-    for (let id = 0; id < 5; id++) {
-      users.push(getUser(id))
-    }
-    users.sort((a, b) => (a.points < b.points) ? 1 : -1)
     this.state = {
-      users: users
+      users: []
     }
   }
 
   componentDidMount() {
     document.title = 'Leaderboard - Big Fun';
+    getAllUsers(this);
+    const users = this.state.users;
+    this.setState(users)
+    const {user} = this.props
+    updateStatus(user._id, "On Leaderboard")
+  }
+
+  getAvatar(user) {
+    let pp = null
+    let avatar = null
+
+    if (user.profilePic === -1) {
+      pp = {src: user.customProfilePic, name: "Custom"}
+    } else {
+      pp = profilePictures[user.profilePic]
+    }
+
+    if (user.online) {
+      avatar = (<UserAvatar uid={user._id} onlineIndicator pic={pp} size='medium' />)
+    } else {
+      avatar = (<UserAvatar uid={user._id} offlineIndicator pic={pp} size='medium' />)
+    }
+
+    return avatar
   }
 
 
   render() {
-    console.log(profilePictures)
+
     return (
       <div>
       <Paper>
@@ -48,8 +69,8 @@ class Leaderboard extends Component {
                   {i+1}
                 </TableCell>
                 <TableCell>
-                  <Avatar alt="" src={profilePictures[user.profilePic].src}/>
-                  {user.name}
+                  {this.getAvatar(user)}
+                  {user.username}
                 </TableCell>
                 <TableCell>
                   {user.points}

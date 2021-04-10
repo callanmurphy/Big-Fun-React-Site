@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Card, CardActionArea, CardContent, CardMedia, Typography, Grid } from '@material-ui/core';
 import { gamelinks } from './gameData';
+import {updateStatus} from '../../backend/userAPI'
 import './Games.css';
 
 class Games extends Component {
@@ -15,6 +16,8 @@ class Games extends Component {
 
   componentDidMount() {
     document.title = 'Games - Big Fun';
+    const {user} = this.props
+    updateStatus(user._id, "Playing Games")
   }
 
   render() {
@@ -35,6 +38,16 @@ class Games extends Component {
                     title={g.title}
                     className='gameCardImage'
                   />
+                  {g.title === 'Type the keys' &&
+                  <div className='comingSoonOverlay'>
+                    <div className='comingSoonText'>Coming Soon!</div>
+                  </div>
+                  }
+                  {g.title === 'Pong' &&
+                  <div className='comingSoonOverlay'>
+                    <div className='comingSoonText'>Coming Soon!</div>
+                  </div>
+                  }
                   <CardContent>
                     <Typography
                       // gutterBottom

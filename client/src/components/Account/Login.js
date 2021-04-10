@@ -1,7 +1,18 @@
 import React, { Component } from "react";
 import './Account.css';
 // import { Button, TextField, Box, Paper } from '@material-ui/core';
-// import Alert from '@material-ui/lab/Alert';
+// import { makeStyles } from '@material-ui/core/styles';
+import Alert from '@material-ui/lab/Alert';
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     width: '100%',
+//     '& > * + *': {
+//       marginTop: theme.spacing(2),
+//     },
+//   },
+// }));
+
 
 class Login extends Component {
   constructor(props){
@@ -9,6 +20,7 @@ class Login extends Component {
       this.state = {
           username: '',
           password: '',
+          loginError: null,
       };
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,15 +34,18 @@ class Login extends Component {
       this.setState({[e.target.id]: e.target.value});
   }
     
-  handleSubmit(e){
+  async handleSubmit(e){
       e.preventDefault();
-      if(this.state.username.match("^[a-zA-Z0-9]{1,20}$") != null && this.props.login(this.state.username, this.state.password)){
+      const loginSucc = await this.props.login(this.state.username, this.state.password);
+      const strcheck = this.state.username.match("^[a-zA-Z0-9_]*$") != null;
+      if(loginSucc && strcheck){
         // <Alert severity="success">{ this.state.username } + " logged in successfully"</Alert>
         // alert(this.state.username + " logged in successfully");
         // window.location.href = "/home";
-      }
-      else {
-        alert("Login error");
+        this.setState({loginError : null});
+      } else {
+        this.setState({loginError : "check username and password"});
+        // alert('Failed to login. Try using the correct credentials.');
       }
   }
   
@@ -38,6 +53,15 @@ class Login extends Component {
       
     return (
     <div className="centerBox">
+      { this.state.loginError &&
+        <div>
+          <Alert severity="error">Login error: { this.state.loginError }</Alert>
+          {/* <Alert severity="warning">This is a warning alert — check it out!</Alert>
+          <Alert severity="info">This is an info alert — check it out!</Alert>
+          <Alert severity="success">This is a success alert — check it out!</Alert> */}
+          <p></p>
+        </div>
+      }
       <img className='loginLogo' src={'/img/icon-circle.png'} alt="Big Fun Logo"/>
       <h1 className='headingText'>Login to Big Fun</h1>
       <form name='registerForm' onSubmit={this.handleSubmit}>

@@ -1,10 +1,14 @@
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 
+const adminRoutes = require('./admin');
 const gameRoutes = require('./games');
+const userRoutes = require('./users');
 
 const clipath = path.join(__dirname, '..', 'client', 'build')
 const app = express();
+
 
 /*********************
  * Mongoose Setup
@@ -13,26 +17,59 @@ const app = express();
 const { mongoose } = require('../db/mongoose')
 mongoose.set('bufferCommands', false);  // don't buffer db requests if the db server isn't connected - minimizes http requests hanging if this is the case.
 
-// import the mongoose models
-const { Student } = require('../models/user')
 
-// to validate object IDs
-const { ObjectID } = require('mongodb')
+/*********************
+ * Middleware
+ *********************/
+//sessions
+app.use(session({
+    secret: process.env.COOKIE || 'csc309team05',
+    cookie: {
+        expires: 600000,
+        httpOnly: true
+	},
+    saveUninitialized: false,
+    resave: false,
+}));
 
-// body-parser: middleware for parsing HTTP JSON body into a usable object
-const bodyParser = require('body-parser') 
-app.use(bodyParser.json())
 
-/*** Helper functions below **********************************/
-function isMongoError(error) { // checks for first error returned by promise rejection if Mongo database suddently disconnects
-	return typeof error === 'object' && error !== null && error.name === "MongoNetworkError"
+// bodyparser
+app.use(express.json());
+
+// sessions
+const sessionChecker = (req, res, next) => {
+	if (req.session.user) {
+		res.redirect('/???'); // redirect to dashboard if logged in.
+	} else {
+		next(); // next() moves on to the route.
+	}    
+};
+
+// mongo
+const mongoChecker = (req, res, next) => {
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	} else {
+		next()	
+	}	
 }
 
 
 /*********************
  * These are the API routes
+ * - parameters can be accessed by accessing req.body.<param>
+ * - session information can be accessed by req.session.<param>
  */
+app.use('/api', (req, res, next) => {
+	// useful for debugging (eg. console.log(req.body);)
+	next();
+})
+app.use('/api/admin', adminRoutes);
 app.use('/api/games', gameRoutes);
+app.use('/api/users', userRoutes);
 
 
 /*********************

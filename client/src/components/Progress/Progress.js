@@ -11,7 +11,8 @@ import {
   Divider, Container
 } from '@material-ui/core';
 import { FilterList, ArrowBackIos as BackArrow, ArrowForwardIos as ForwardArrow } from '@material-ui/icons';
-import { getUser, gameHistory, getBestRival } from "../../backend";
+import { getFavoriteGame, gameHistory, getBestRival } from "../../backend";
+import {updateStatus} from '../../backend/userAPI'
 
 
 class Progress extends Component {
@@ -21,7 +22,7 @@ class Progress extends Component {
     this.perPage = 8;
 
     this.state = {
-      recentGames: gameHistory(this.props.user.id),
+      recentGames: [],
       direction: 1,
       by: 'date',
       tablePage: 0,
@@ -30,11 +31,17 @@ class Progress extends Component {
       chartTransitions: this.props.games.map((g, i) => (i === 0 ? 'left' : 'right')),
       chartTransitionsIn: this.props.games.map((g, i) => (i === 0)),
     }
+
+    gameHistory(this.props.user.username).then(games => {
+      this.setState({recentGames: games});
+    });
   }
 
 
   componentDidMount() {
     document.title = 'Progress - Big Fun';
+    const user = this.props.user
+    updateStatus(user._id, "On Progress Page")
   }
 
   moveChart(n) {
@@ -110,7 +117,7 @@ class Progress extends Component {
             title={g}
             data={this.state.recentGames.filter((game) => game.name === g)}
             gety={(d, i) => d.score}
-            getx={(d, i) => d.date}
+            getx={(d, i) => new Date(d.date)}
             xaxisTime
             blocky
           />
@@ -118,21 +125,10 @@ class Progress extends Component {
       </div>
     ));
 
-    let gamecounts = this.props.games.map(g => 0)
-    this.state.recentGames.forEach(g => {
-      gamecounts[this.props.games.indexOf(g.name)] += 1;
-    });
-    let favoriteGame = this.props.games[gamecounts.indexOf(Math.max(...gamecounts))]
+    const favoriteGame = getFavoriteGame(this.state.recentGames);
 
-    let rivalName = getBestRival(this.props.user.id);
-    if (rivalName) {
-      rivalName = getUser(parseInt(rivalName))
-    } else {
-      rivalName = 'Err';
-    }
-    if (rivalName) {
-      rivalName = rivalName.name;
-    } else {
+    let rivalName = getBestRival(this.props.user.username, this.state.recentGames);
+    if (!rivalName) {
       rivalName = 'Err';
     }
 
@@ -206,10 +202,10 @@ class Progress extends Component {
                       .map(g => (
                         <TableRow
                           hover
-                          key={uid(g.date.toLocaleDateString('en-US'))}
+                          key={uid(g.date)}
                         >
                           <TableCell>
-                            {g.date.toLocaleDateString('en-US')}
+                            {(new Date(g.date)).toLocaleDateString()}
                           </TableCell>
                           <TableCell>
                             {Math.round(g.score)}

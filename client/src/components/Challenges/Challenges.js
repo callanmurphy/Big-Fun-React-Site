@@ -3,11 +3,14 @@ import { uid } from "react-uid";
 import React, { Component } from "react";
 import RivalForm  from "./rivalForm";
 
-import { getUser } from "../../backend";
+import { getChallenges } from "../../backend";
+import {updateStatus} from '../../backend/userAPI'
 
-import "./Schedule.css";
 
-class Schedule extends Component {
+import "./Challenges.css";
+import { forfeitChallenge, makeChallenge } from "../../backend/userAPI";
+
+class Challenges extends Component {
 
   constructor(props) {
     super(props);
@@ -21,14 +24,16 @@ class Schedule extends Component {
     const min = date.getMinutes()
     const dateString = `${y}-${m < 10 ? 0 : ""}${m}-${d < 10 ? 0 : ""}${d}T${h < 10 ? 0 : ""}${date.getHours()}:${min < 10 ? 0 : ""}${date.getMinutes()}`
     
-    /*********** Needs to make backend request ***********/
     this.state = {
       currUser: user,
-      rivalName: getUser(user.rivals[0]).name,
+      rivalNames: [],
+      scheduled: [],
+      scheduleDate: dateString,
+      /* rivalName: getUser(user.rivals[0]).name,
       scheduleDate: dateString,
       scheduled: user.rivalGames.map((item) => {
         return {rname: getUser(item.rid).name, date: item.date, inviter: item.inviter, confirmed: item.confirmed}
-      })
+      }) */
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.scheduleGame = this.scheduleGame.bind(this);
@@ -38,7 +43,11 @@ class Schedule extends Component {
   }
 
   componentDidMount() {
-    document.title = 'Schedule - Big Fun';
+    document.title = 'Challenges - Big Fun';
+    const {user} = this.props
+    updateStatus(user._id, "Looking at Challenges")
+    getChallenges(this)
+
   }
 
   scheduleGame() {
@@ -49,6 +58,13 @@ class Schedule extends Component {
       inviter: true,
       confirmed: false
     };
+
+    const earliest_deadline = new Date();
+    earliest_deadline.setDate(earliest_deadline.getDate() + 1);
+    if (new Date(this.state.scheduleDate) < earliest_deadline) {
+      alert("Must give Rival at least 24 hours to accept!")
+      return;
+    }
 
     // insertion into sorted list
     if (scheduled.length === 0) {
@@ -76,15 +92,16 @@ class Schedule extends Component {
       
 
     }
-    /*********** Needs to make backend request ***********/
     this.setState({scheduled: scheduled});
+    makeChallenge(this)
   }
 
   cancelGame(i) {
-    const scheduled = this.state.scheduled;
-    scheduled.splice(i, 1);
-    this.setState({scheduled: scheduled})
+    
     /*********** Needs to make backend request ***********/
+    forfeitChallenge(this, i)
+
+    
   }
 
   confirmGame(i) {
@@ -112,7 +129,7 @@ class Schedule extends Component {
     <Paper>
       <div className="rivalForm">
         <RivalForm 
-          currUser={this.state.currUser}
+          rivalNames={this.state.rivalNames}
           rivalName={this.state.rivalName} 
           scheduleDate={this.state.scheduleDate}
           handleChange={this.handleInputChange}
@@ -122,14 +139,14 @@ class Schedule extends Component {
       
 
 
-      <Table className="schedule">
+      <Table className="challenges">
         <TableBody>
           <TableRow>
             <TableCell>
               Rival 
             </TableCell>
             <TableCell>
-              Time 
+              Deadline 
             </TableCell>
             <TableCell>
               Status 
@@ -153,7 +170,7 @@ class Schedule extends Component {
                     {item.confirmed ? "CONFIRMED" : "PENDING"} 
                   </TableCell>
                   <TableCell>
-                    <Button onClick={() => item.inviter || item.confirmed ? this.cancelGame(index) : this.confirmGame(index)} color='secondary'>{item.inviter || item.confirmed ? "Cancel" : "Confirm"}</Button>
+                    <Button onClick={() => item.inviter || item.confirmed ? this.cancelGame(index) : this.confirmGame(index)} color='secondary'>{item.inviter || item.confirmed ? "Forfeit" : "Accept"}</Button>
                   </TableCell>
                 </TableRow>
               )
@@ -167,4 +184,4 @@ class Schedule extends Component {
   }
 }
 
-export default Schedule;
+export default Challenges;

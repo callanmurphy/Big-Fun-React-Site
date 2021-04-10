@@ -1,5 +1,6 @@
 import { Divider, Paper, Typography } from "@material-ui/core";
 import React, { Component } from "react";
+import { recordGame } from "../../../backend";
 import './GamePages.css';
 
 
@@ -59,6 +60,12 @@ class DotFollow extends Component {
 
   gameOver() {
     this.doAnimation = false;
+    recordGame({
+      name: 'Follow the dot',
+      user1: this.props.user.username,
+      user2: null,
+      score: this.state.score,
+    });
   }
 
   animate() {
@@ -158,11 +165,11 @@ class DotFollow extends Component {
         >
         </div>
         <Paper className='ballTrackerScore'>
-          <Typography variant='h1' className='ballTrackerGood'>
+          <Typography variant='h2' className='ballTrackerGood'>
             { Math.round(this.state.score * 100) / 100 }
           </Typography>
           <Divider />
-          <Typography variant='h1' className='ballTrackerBad'>
+          <Typography variant='h2' className='ballTrackerBad'>
             { Math.round(this.state.life * 100) / 100 }
           </Typography>
         </Paper>
