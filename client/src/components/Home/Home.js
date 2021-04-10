@@ -159,6 +159,7 @@ class Home extends Component {
 
   render() {
   	const user = this.state.user
+    this.searchRivals(null)
     // if (this.state.rivals === [] && document.getElementById("RivalName").value === "") {
     //   rivals = this.state.fullRivals.slice()
     // } else {

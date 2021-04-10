@@ -4,6 +4,7 @@ import { profilePictures } from "../Home"
 import { getAllUsers } from "../../backend"
 import "./Leaderboard.css"
 import UserAvatar from '../UserAvatar';
+import {updateStatus} from '../../backend/userAPI'
 
 class Leaderboard extends Component {
   
@@ -17,6 +18,10 @@ class Leaderboard extends Component {
   componentDidMount() {
     document.title = 'Leaderboard - Big Fun';
     getAllUsers(this);
+    const users = this.state.users;
+    this.setState(users)
+    const {user} = this.props
+    updateStatus(user._id, "On Leaderboard")
   }
 
   getAvatar(user) {

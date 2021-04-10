@@ -4,6 +4,8 @@ import React, { Component } from "react";
 import RivalForm  from "./rivalForm";
 
 import { getChallenges } from "../../backend";
+import {updateStatus} from '../../backend/userAPI'
+
 
 import "./Challenges.css";
 import { forfeitChallenge, makeChallenge } from "../../backend/userAPI";
@@ -42,6 +44,8 @@ class Challenges extends Component {
 
   componentDidMount() {
     document.title = 'Challenges - Big Fun';
+    const {user} = this.props
+    updateStatus(user._id, "Looking at Challenges")
     getChallenges(this)
 
   }
