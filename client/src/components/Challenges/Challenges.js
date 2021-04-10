@@ -6,7 +6,7 @@ import RivalForm  from "./rivalForm";
 import { getChallenges } from "../../backend";
 
 import "./Challenges.css";
-import { makeChallenge } from "../../backend/userAPI";
+import { forfeitChallenge, makeChallenge } from "../../backend/userAPI";
 
 class Challenges extends Component {
 
@@ -93,10 +93,11 @@ class Challenges extends Component {
   }
 
   cancelGame(i) {
-    const scheduled = this.state.scheduled;
-    scheduled.splice(i, 1);
-    this.setState({scheduled: scheduled})
+    
     /*********** Needs to make backend request ***********/
+    forfeitChallenge(this, i)
+
+    
   }
 
   confirmGame(i) {
