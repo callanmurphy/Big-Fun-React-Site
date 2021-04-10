@@ -17,10 +17,11 @@ class ProfilePicture extends Component {
     let pp = null
 
     if (user.profilePic === -1) {
-      pp = {currentProfilePicture: {src: user.customProfilePic, name: "Custom"}}
+      pp = {src: user.customProfilePic, name: "Custom"}
     } else {
       pp = profilePictures[user.profilePic]
     }
+
 
     this.state = {
       showProfilePics: false,
@@ -43,9 +44,8 @@ class ProfilePicture extends Component {
     const {user} = this.props
     if (e.which === 13) {
       e.preventDefault();
-      let url = document.getElementById("Custom").value
-      this.setState({currentProfilePicture: {src: url, name: "Custom"}})
-      setCustomPic(user._id, url)
+      this.setState({currentProfilePicture: {src: e.target.value, name: "Custom"}})
+      setCustomPic(user._id, e.target.value)
     }
   }
 
@@ -66,7 +66,9 @@ class ProfilePicture extends Component {
                     {(this.state.profilePictures.map((pic, i) => (
                      
                       <GridListTile key={i} cols={1}>
-                        <img className="PictureChoicesImage" src={pic.src} alt={pic.name} onClick={ () => {this.setState({currentProfilePicture: pic}); updatePic(user._id, i); }} />
+                        <img className="PictureChoicesImage" src={pic.src} alt={pic.name} onClick={ () => {
+                          this.setState({currentProfilePicture: pic}); 
+                          updatePic(user._id, i); }} />
                       </GridListTile>
                     )))}
 

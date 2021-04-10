@@ -104,7 +104,7 @@ class App extends Component {
   }
 
   logout() {
-    setOffline(this.curUser._id)
+    setOffline(this.state.curUser._id)
     this.setState({
       curUser: null,
       loggedIn: false,
