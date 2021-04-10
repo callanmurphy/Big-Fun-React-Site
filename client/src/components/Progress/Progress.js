@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { FilterList, ArrowBackIos as BackArrow, ArrowForwardIos as ForwardArrow } from '@material-ui/icons';
 import { getFavoriteGame, gameHistory, getBestRival } from "../../backend";
+import {updateStatus} from '../../backend/userAPI'
 
 
 class Progress extends Component {
@@ -39,6 +40,8 @@ class Progress extends Component {
 
   componentDidMount() {
     document.title = 'Progress - Big Fun';
+    const user = this.props.user
+    updateStatus(user._id, "On Progress Page")
   }
 
   moveChart(n) {
