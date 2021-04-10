@@ -25,7 +25,13 @@ class Home extends Component {
   constructor(props) {
     super(props)
     const {user} = this.props
-    this.state = {rivals: [], user: user, fullRivals: []}
+    this.state = {
+      rivals: [], 
+      user: user, 
+      fullRivals: [],
+      successAlert: true,
+    }
+    setTimeout(() => {this.setState({ successAlert: false });}, 3000);
     console.log(this.props)
   }
 
@@ -173,7 +179,8 @@ class Home extends Component {
 
     return (
       <div>
-        { this.props.successAlert &&
+        {/* { this.props.successAlert && */}
+        { this.state.successAlert &&
         <div>
           <Alert severity="success">Login successful</Alert>
           <p></p>
