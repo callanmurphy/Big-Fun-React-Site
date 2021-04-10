@@ -19,14 +19,16 @@
 }
 
 .dotFollowDot:hover {
-    box-shadow: 0 0 10px var(--primary);
+    /* box-shadow: 0 0 10px var(--primary); */
     opacity: 75%;
 }
 
 .ballTrackerScore {
     position: absolute;
-    left: 35%;
-    top: 35%;
+    margin: auto;
+    margin-left: 5px;
+    margin-top: 5px;
+    min-width: 25%;
     padding: 2rem;
 }
 .ballTrackerGood {

@@ -165,11 +165,11 @@ class DotFollow extends Component {
         >
         </div>
         <Paper className='ballTrackerScore'>
-          <Typography variant='h1' className='ballTrackerGood'>
+          <Typography variant='h2' className='ballTrackerGood'>
             { Math.round(this.state.score * 100) / 100 }
           </Typography>
           <Divider />
-          <Typography variant='h1' className='ballTrackerBad'>
+          <Typography variant='h2' className='ballTrackerBad'>
             { Math.round(this.state.life * 100) / 100 }
           </Typography>
         </Paper>
