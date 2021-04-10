@@ -32,9 +32,6 @@ The third section is a list of 4 statistics relevant to the website. These cards
 
 The last component of the admin page is a table that is meant to allow the admin to manage the users that participate in the website. The admin can search users by their username, view their passwords, delete users, and give users admin privelages. The  users' favorite game, number of games played, and favorite rival are also shown in the table. The admin is alowed to remove admin privelages from other users, but cannot remove admin privelages from or delete themself.
 
-### Progress
-progress page
-
 
 ### Leaderboard
 A page that displays all the users in the database and their scores.
@@ -48,6 +45,20 @@ Functionality to accept challenges is incomplete.
 
 ### Home Page
 In terms of the Home Page, which you access immediately upon logging in (unless you're an admin) or by clicking on the octopus icon, there are a few things you have access to. First, you can change the profile picture. You have 3 given options listed, but you also have the option to input a url of an image. This is also including gifs, apparently. You enter the url and press enter. For the rivals, intially they will be blank, but once you enter any keys, they populate. This seems to be a strange react async problem. Then the users filter based on what you write. That said, sometimes there's an issue regarding filtering users below the top one, but any issues can be resolved by entering characters that don't fit any user and deleting them. You can also add a rival by entering their name in the box and click the add Rival button. You can also clear all your users, after which you need to click the refresh button to update. Again, if there's any issues, they can be solved using the same technique as before, or simply coming back.
+
+
+### Progress
+Here you can see your progress. In terms of how to use it, the graphs and tables are classic material UI. You can cycle between performance on games or sort by different stats.
+
+
+### Games
+Here's where you can play the biggest funnest games! In the current version of the site, you will see 3 options:
+Follow the dot, Type the keys, and Pong. Since Type the keys and Pong are still in development, they have a "Coming Soon!"
+overlay on the game icon. Selecting one of these two will refresh the current Games page (at least for now!). Follow the dot
+is the only fully operational game in this early version of the site. Unlike the other two games, you will be able to click Follow the dot to play the game.
+
+### Follow the Dot
+Try for the top score in Follow the Dot! Hover your mouse over the moving circle to accumulate score. While hovered over the circle, the countdown will stop and the circle will disappear (but it won't stop moving!). Get the highest score you can before time runs out.
 
 
 ## Dependencies
