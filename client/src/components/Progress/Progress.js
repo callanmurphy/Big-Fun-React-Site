@@ -39,6 +39,8 @@ class Progress extends Component {
 
   componentDidMount() {
     document.title = 'Progress - Big Fun';
+    const user = this.props.user
+    updateStatus(user._id, "On Progress Page")
   }
 
   moveChart(n) {

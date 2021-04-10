@@ -15,6 +15,8 @@ class Games extends Component {
 
   componentDidMount() {
     document.title = 'Games - Big Fun';
+    const {user} = this.props
+    updateStatus(user._id, "Playing Games")
   }
 
   render() {

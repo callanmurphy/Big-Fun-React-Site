@@ -130,7 +130,7 @@ class DotFollow extends Component {
     window.addEventListener('resize', this.updateSize);
 
     this.updateSize();
-
+    updateStatus(user._id, "On Home Page")
     window.requestAnimationFrame(() => this.animate())
   }
 

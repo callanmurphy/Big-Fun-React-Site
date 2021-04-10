@@ -20,6 +20,8 @@ class Leaderboard extends Component {
     const users = this.state.users;
     users.sort((a, b) => (a.points < b.points) ? 1 : -1)
     this.setState(users)
+    const {user} = this.props
+    updateStatus(user._id, "On Leaderboard")
   }
 
   getAvatar(user) {

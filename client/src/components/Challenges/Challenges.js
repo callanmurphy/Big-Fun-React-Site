@@ -42,6 +42,8 @@ class Challenges extends Component {
 
   componentDidMount() {
     document.title = 'Challenges - Big Fun';
+    const {user} = this.props
+    updateStatus(user._id, "Looking at Challenges")
     getChallenges(this)
 
   }
