@@ -44,13 +44,17 @@ function datesInRange(n, daysAgo=28) {
     return ret;
 }
 
-function gamesBetweenCos(n, user1, user2, dayOffset=0) {
+
+const gameNames = ['Follow the dot', 'Type the keys', 'Pong'];
+
+
+function gamesBetweenCos(n, user1, user2, dayOffset=0, gameIndex=0) {
     const dates = datesInRange(n);
     const scores = randomCos(n).map(s => s * (50 + 50 * Math.random()));
     for (let i of dates.keys()) {
         dates[i].setDate(dates[i].getDate() - dayOffset);
         populateGame({
-            name: 'Follow the dot',
+            name: gameNames[gameIndex],
             user1: user1,
             user2: user2,
             score: scores[i],

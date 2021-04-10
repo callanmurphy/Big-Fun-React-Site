@@ -32,7 +32,6 @@ class Progress extends Component {
     }
 
     gameHistory(this.props.user.username).then(games => {
-      console.log('Setting games in progress component: ', games);
       this.setState({recentGames: games});
     });
   }

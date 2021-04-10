@@ -25,15 +25,18 @@ class Home extends Component {
   constructor(props) {
     super(props)
     const {user} = this.props
-    this.state = {rivals: [], user: user, fullRivals: []}
-    console.log(this.props)
+    this.state = {
+      rivals: [], 
+      user: user, 
+      fullRivals: [],
+      successAlert: true,
+    }
   }
 
   componentDidMount() {
     const user = this.state.user
     updateStatus(user._id, "On Home Page")
     setOnline(user._id)
-    console.log("About to update")
 
     this.updateUser.bind(this)().then(this.initFullRivals.bind(this)().then(this.updateTempRivals.bind(this)()))
     document.title = 'Home - Big Fun';
@@ -43,16 +46,12 @@ class Home extends Component {
   searchRivals(e) {
     const user = this.state.user;
     if (e.target.value === "") {
-      console.log("Resetting to users full rival Ids");
       this.updateTempRivals.bind(this)()
     } else {
-      console.log("Let's evaluate which rivals fit");
       let new_rivals = this.state.fullRivals;
       new_rivals = new_rivals.filter((rival) => {
-          console.log(e.target.value.toLowerCase(), "in", rival.username.toLowerCase(), "?")
           return rival.username.toLowerCase().includes(e.target.value.toLowerCase());
       });
-      console.log("new rivals", new_rivals);
       this.setState({rivals: new_rivals});
     }
   }
@@ -68,7 +67,6 @@ class Home extends Component {
     let rivalName = document.getElementById("RivalName").value
 
     const user = this.state.user
-    console.log("direct Rivals", user.rivals)
     let rivals = this.state.rivals
 
     try {
@@ -78,9 +76,7 @@ class Home extends Component {
       } else if (user.username === rivalName) {
         alert("You can't do that")
       } else {
-        console.log("About to try adding ", rivalName)
         
-        console.log(rival)
         addRival(user._id, rival._id).then(
           addRival(rival._id, user._id).then(
             this.updateUser.bind(this)().then(
@@ -105,12 +101,8 @@ class Home extends Component {
 
   async updateUser() {
     const user = this.state.user
-    console.log("User Before")
-    console.log(user)
     let updatedUser = await getUserById(user._id)
     this.setState({user: updatedUser})
-    console.log("User Now")
-    console.log(updatedUser)
     this.initFullRivals.bind(this)()
   }
 
@@ -122,9 +114,6 @@ class Home extends Component {
 
   async initFullRivals() {
     const rival_ids = this.state.user.rivals
-    console.log("using these rival_ids:", rival_ids)
-    console.log("Rivals Before")
-    console.log(this.state.fullRivals)
     
     let rivals = []
 
@@ -135,29 +124,20 @@ class Home extends Component {
     }
 
     this.setState({fullRivals: rivals, rivals: rivals})
-    console.log("Rivals Now")
-    console.log(rivals)
   }
 
   updateTempRivals() {
-    console.log("Now Updating Temp Rivals")
-    console.log("Temp Rivals Before", this.state.rivals)
     this.setState({rivals: this.state.fullRivals})
-    console.log("Temp Rivals Now", this.state.rivals)
     this.forceUpdate()
   }
 
   createRivalTable() {
     let rivals = this.state.rivals
-    console.log("These are the rivals to create rows with", rivals)
     let rivalRows = []
     for (let i = 0; i < rivals.length; i++) {
-      console.log("Key and rival", i, rivals[i])
       let row = <RivalRow key={i} user={rivals[i]}/>
-      console.log("Row", rivals)
       rivalRows.push(row)
     }
-    console.log("These are the created rival rows", rivalRows)
     return (<TableBody>{rivalRows}</TableBody>)
   }
 
@@ -173,7 +153,8 @@ class Home extends Component {
 
     return (
       <div>
-        { this.props.successAlert &&
+        {/* { this.props.successAlert && */}
+        { this.state.successAlert &&
         <div>
           <Alert severity="success">Login successful</Alert>
           <p></p>

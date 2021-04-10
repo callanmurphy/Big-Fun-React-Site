@@ -4,11 +4,10 @@ class TypeType extends Component {
   constructor(props) {
     super(props);
     this.containerRef = React.createRef();
-    this.ballRef = React.createRef();
 
     this.state = {
       score: 0,
-      time: new Date(),
+      time: 60,
     }
 
     this.doAnimation = true;
@@ -20,9 +19,9 @@ class TypeType extends Component {
   }
 
   updateTime(diff) {
-    if (this.state.life - diff < 0) {
+    if (this.state.time - diff < 0) {
       this.setState({
-        score: this.state.score + diff,
+        score: this.state.score,
         time: 0,
       });
       this.gameOver();
@@ -38,8 +37,13 @@ class TypeType extends Component {
     if (!this.doAnimation) {
       return;
     }
-    const diff = curr - this.stats.lastTime;
     const curr = new Date();
+    const diff = curr - this.stats.lastTime;
+
+    this.updateTime(diff / 1000);
+    if (this.doAnimation) {
+      window.requestAnimationFrame(() => this.animate())
+    }
 
     this.stats = {
       lastTime: curr,
@@ -48,13 +52,40 @@ class TypeType extends Component {
 
   gameOver() {
     this.doAnimation = false;
+    console.log("GAME OVER");
+  }
+
+  componentDidMount() {
+    this.doAnimation = true;
+    this.updateSize = () => this.forceUpdate();
+    window.addEventListener('resize', this.updateSize);
+
+    this.updateSize();
+
+    window.requestAnimationFrame(() => this.animate())
+  }
+
+  handleKeyPress(e)  {
+    if(e.key === 'Enter'){
+      console.log('enter press here!')
+    }
+  }
+
+  componentDidUpdate() {
+    
+  }
+
+  componentWillUnmount() {
+    this.doAnimation = false;
+    window.removeEventListener('resize', this.updateSize);
   }
 
   render() {
     return (
-    <div>
-      <div>
+    <div className='gamePlayContainer'>
+      <div className='scoreBox'>
         <h1>Type the keys</h1>
+        <p>{ Math.round(this.state.time * 100) / 100 }</p>
       </div>
       <div 
         className='gamePlayContainer'
