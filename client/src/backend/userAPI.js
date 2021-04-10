@@ -186,3 +186,18 @@ export async function updatePic(id, pic) {
   }).catch(err => console.log(err));
   console.log(result)
 }
+
+export async function setCustomPic(id, url) {
+  const result = await fetch('/api/users/user', {
+    method: 'put',
+    body: JSON.stringify({id: id, update: {$set: {profilePic: -1}}}),
+    headers: { 'Content-type': 'application/json' }
+  }).catch(err => console.log(err));
+  console.log(result)
+  const result2 = await fetch('/api/users/user', {
+    method: 'put',
+    body: JSON.stringify({id: id, update: {$set: {customProfilePic: url}}}),
+    headers: { 'Content-type': 'application/json' }
+  }).catch(err => console.log(err));
+  console.log(result2)
+}

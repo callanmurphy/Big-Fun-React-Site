@@ -5,7 +5,8 @@ import { profilePictures } from './';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Button from '@material-ui/core/Button';
-import {updatePic} from '../../backend/userAPI'
+import {updatePic, setCustomPic} from '../../backend/userAPI'
+import Input from '@material-ui/core/Input';
 
 class ProfilePicture extends Component {
   constructor(props) {
@@ -13,12 +14,21 @@ class ProfilePicture extends Component {
 
     
     const {user} = this.props
+    let pp = null
+
+    if (user.profilePic === -1) {
+      pp = {currentProfilePicture: {src: user.customProfilePic, name: "Custom"}}
+    } else {
+      pp = profilePictures[user.profilePic]
+    }
+
     this.state = {
       showProfilePics: false,
       profilePictures: profilePictures,
-      currentProfilePicture: profilePictures[user.profilePic],
+      currentProfilePicture: pp,
       buttonText: "Change Picture"
     }
+    console.log(this.state)
   }
 
   UpdatePicStuff() {
@@ -29,6 +39,15 @@ class ProfilePicture extends Component {
     !this.state.showProfilePics ? this.setState({buttonText: "Confirm"}) : this.setState({buttonText: "Change Picture"})
   }
   
+  disableEnterKey(e) {
+    const {user} = this.props
+    if (e.which === 13) {
+      e.preventDefault();
+      let url = document.getElementById("Custom").value
+      this.setState({currentProfilePicture: {src: url, name: "Custom"}})
+      setCustomPic(user._id, url)
+    }
+  }
 
   render() {
     const {user} = this.props
@@ -41,6 +60,8 @@ class ProfilePicture extends Component {
             <Button id="ChangeButton" onClick={this.UpdatePicStuff.bind(this)}>{this.state.buttonText}</Button>
           {
             this.state.showProfilePics ?
+            <div>
+                  <Input id="Custom" onKeyPress={this.disableEnterKey.bind(this)}/>
                   <GridList className="PictureChoices" cols={3}>
                     {(this.state.profilePictures.map((pic, i) => (
                      
@@ -50,6 +71,7 @@ class ProfilePicture extends Component {
                     )))}
 
                   </GridList>
+              </div>    
             : null
           }
       </div>

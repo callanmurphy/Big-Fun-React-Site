@@ -25,7 +25,8 @@ class Home extends Component {
   constructor(props) {
     super(props)
     const {user} = this.props
-    this.state = {rivals: [], user: user, fullRivals: []}
+    this.state = {rivals: [], user: user, fullRivals: [], rivalRows: []}
+    // this.searchRivals = this.searchRivals.bind(this)
     console.log(this.props)
   }
 
@@ -40,7 +41,7 @@ class Home extends Component {
   }
 
   // Modified from an Emma Goto tutorial - https://www.emgoto.com/react-search-bar/
-  searchRivals(e) {
+  searchRivals = (e) => {
     const user = this.state.user;
     if (e.target.value === "") {
       console.log("Resetting to users full rival Ids");
@@ -54,6 +55,7 @@ class Home extends Component {
       });
       console.log("new rivals", new_rivals);
       this.setState({rivals: new_rivals});
+      this.createRivalTable.bind(this)(new_rivals)
     }
   }
 
@@ -99,9 +101,6 @@ class Home extends Component {
     clearRivals(user._id).then(this.updateUser.bind(this)())
   }
 
-  // async updateState() {
-  //   this.updateUser.bind(this)().then(console.log("After updating", this.state))
-  // }
 
   async updateUser() {
     const user = this.state.user
@@ -144,21 +143,27 @@ class Home extends Component {
     console.log("Temp Rivals Before", this.state.rivals)
     this.setState({rivals: this.state.fullRivals})
     console.log("Temp Rivals Now", this.state.rivals)
-    this.forceUpdate()
+    // this.forceUpdate()
+    this.createRivalTable.bind(this)(this.state.fullRivals)
   }
 
-  createRivalTable() {
-    let rivals = this.state.rivals
+  createRivalTable = (rivals) => {
+    // let rivals = this.state.rivals
     console.log("These are the rivals to create rows with", rivals)
     let rivalRows = []
     for (let i = 0; i < rivals.length; i++) {
       console.log("Key and rival", i, rivals[i])
-      let row = <RivalRow key={i} user={rivals[i]}/>
+      let row = this.createRivalRow(i, rivals[i])
       console.log("Row", rivals)
       rivalRows.push(row)
     }
     console.log("These are the created rival rows", rivalRows)
-    return (<TableBody>{rivalRows}</TableBody>)
+    this.setState({rivalRows: (<TableBody>{rivalRows}</TableBody>)})
+  }
+
+  createRivalRow = (key, user) => {
+    console.log("the new row will have", key, "and", user)
+    return(<RivalRow key={key} user={user}/>)
   }
 
   render() {
@@ -189,7 +194,7 @@ class Home extends Component {
                     type="text" 
                     placeholder="Search Rivals..." 
                     title="Type in a Rival's Name" 
-                    onChange={this.searchRivals.bind(this)}
+                    onChange={e => this.searchRivals(e)}
                     onKeyPress={this.disableEnterKey.bind(this)}
                   />
               </form>
@@ -206,7 +211,7 @@ class Home extends Component {
           </Paper>
           <Paper>
             <Table aria-label="simple table">
-              {this.createRivalTable.bind(this)()}
+              {this.state.rivalRows}
             </Table>
           </Paper>
         </div>  

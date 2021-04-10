@@ -36,6 +36,7 @@ const UserSchema = new mongoose.Schema({
     password: String,
     online: {type: Boolean, default: false},
     profilePic: {type: Number, default: 0},
+    customProfilePic: String,
     rivals: [mongoose.Types.ObjectId],
     status: {type: String, default: 'bumblefucking'},
     challenges: [ChallengeSchema],
