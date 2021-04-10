@@ -30,10 +30,12 @@ The second part of the admin page is the number of weekly players graph. This sh
 
 The third section is a list of 4 statistics relevant to the website. These cards are intended to show the more information about an overview of the website. Specifically, the total number of games palayed, total number of games this week, most frequent user, and most played game are shjown here.
 
-The last component of the admin page is a table that is meant to allow the admin to manage the users that participate in the website. 
+The last component of the admin page is a table that is meant to allow the admin to manage the users that participate in the website. The admin can search users by their username, view their passwords, delete users, and give users admin privelages. The  users' favorite game, number of games played, and favorite rival are also shown in the table. The admin is alowed to remove admin privelages from other users, but cannot remove admin privelages from or delete themself.
 
 ### Progress
 progress page
+
+
 ### Leaderboard
 A page that displays all the users in the database and their scores.
 
