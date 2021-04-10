@@ -45,6 +45,7 @@ class Login extends Component {
         this.setState({loginError : null});
       } else {
         this.setState({loginError : "check username and password"});
+        // alert('Failed to login. Try using the correct credentials.');
       }
   }
   
