@@ -6,6 +6,7 @@ import RivalForm  from "./rivalForm";
 import { getChallenges } from "../../backend";
 
 import "./Challenges.css";
+import { makeChallenge } from "../../backend/userAPI";
 
 class Challenges extends Component {
 
@@ -21,11 +22,11 @@ class Challenges extends Component {
     const min = date.getMinutes()
     const dateString = `${y}-${m < 10 ? 0 : ""}${m}-${d < 10 ? 0 : ""}${d}T${h < 10 ? 0 : ""}${date.getHours()}:${min < 10 ? 0 : ""}${date.getMinutes()}`
     
-    /*********** Needs to make backend request ***********/
     this.state = {
       currUser: user,
       rivalNames: [],
       scheduled: [],
+      scheduleDate: dateString,
       /* rivalName: getUser(user.rivals[0]).name,
       scheduleDate: dateString,
       scheduled: user.rivalGames.map((item) => {
@@ -87,8 +88,8 @@ class Challenges extends Component {
       
 
     }
-    /*********** Needs to make backend request ***********/
     this.setState({scheduled: scheduled});
+    makeChallenge(this)
   }
 
   cancelGame(i) {

@@ -178,12 +178,12 @@ class Home extends Component {
 
     return (
       <div>
-        {/* { this.props.successAlert &&
+        { this.props.successAlert &&
         <div>
           <Alert severity="success">Login successful</Alert>
           <p></p>
         </div>
-        } */}
+        }
         <ProfilePicture user={user}/>
         <div id="RivalTable">
           <Paper id="RivalTableHeader">
