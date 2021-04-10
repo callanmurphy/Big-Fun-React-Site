@@ -14,6 +14,7 @@ import { FilterList, ArrowBackIos as BackArrow, ArrowForwardIos as ForwardArrow,
          DeleteForever, Visibility, VisibilityOff, Search, CompassCalibrationOutlined
         } from '@material-ui/icons';
 import { gameHistory, gameInfo, getUsers, getFavoriteGame, delUser, toggleAdmin } from "../../backend";
+import {updateStatus} from '../../backend/userAPI'
 import * as d3 from 'd3';
 
 
@@ -66,6 +67,8 @@ class Admin extends Component {
 
   componentDidMount() {
     document.title = 'Admin - Big Fun';
+    const {user} = this.props
+    updateStatus(user._id, "Doing Admin Stuff")
   }
 
   updateUserFilter(v) {
