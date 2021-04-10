@@ -17,9 +17,6 @@ class Leaderboard extends Component {
   componentDidMount() {
     document.title = 'Leaderboard - Big Fun';
     getAllUsers(this);
-    const users = this.state.users;
-    users.sort((a, b) => (a.points < b.points) ? 1 : -1)
-    this.setState(users)
   }
 
   getAvatar(user) {

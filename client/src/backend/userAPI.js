@@ -71,7 +71,9 @@ export const getAllUsers = (component) => {
   })
   .then(json => {
       // the resolved promise with the JSON body
-      component.setState({ users: json.users });
+      const users = json.users
+      users.sort(function(a, b) {return b.points - a.points})
+      component.setState({ users: users });
   })
   .catch(error => {
       console.log(error);
