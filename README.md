@@ -22,6 +22,20 @@ Using an alphanumeric username and a password that matches the confirm password 
 for an account - which will redirect you back to login. Instead, you can also click the "Have an account?" 
 hyperlink at the bottom of the page to return to login at any time.
 
+### Admin
+The admin page is meant to be a landing page for admin users. When an admin signs into the website, they are automatically redirected to the admin page. The admin page has 4 main sections.
+
+The first is a table of all of the games that are in the database. The informatino for each game is displayed, and each column can be sorted in ascending or descending order. The admin also has the ability to filter the table by the specific game, so they can inspect instances of each game more closely. The table is paginated so that the page can remain clean and uncluttered by massive collections of table rows.
+
+The second part of the admin page is the number of weekly players graph. This shows how many games of each game type have been played in each week up to the current date. The admin has the ability to flip between graphs for each of the different ganes and this section of the admin page in intended to give an overview of the website traffic on a week-by-week basis.
+
+The third section is a list of 4 statistics relevant to the website. These cards are intended to show the more information about an overview of the website. Specifically, the total number of games palayed, total number of games this week, most frequent user, and most played game are shjown here.
+
+The last component of the admin page is a table that is meant to allow the admin to manage the users that participate in the website. 
+
+### Progress
+progress page
+
 
 ## Dependencies
 ### Frontend Dependencies
