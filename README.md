@@ -27,6 +27,7 @@ A page that displays all the users in the database and their scores.
 
 ### Challenges 
 Able to challenge your rivals in the Challenges page.
+You need to choose the user and edit the date.
 Can forfeit challenges already present or add new ones.
 After adding challenges you must refresh the page in order to forfeit them.
 Functionality to accept challenges is incomplete.
