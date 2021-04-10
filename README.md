@@ -22,6 +22,14 @@ Using an alphanumeric username and a password that matches the confirm password 
 for an account - which will redirect you back to login. Instead, you can also click the "Have an account?" 
 hyperlink at the bottom of the page to return to login at any time.
 
+### Leaderboard
+A page that displays all the users in the database and their scores.
+
+### Challenges 
+Able to challenge your rivals in the Challenges page.
+Can forfeit challenges already present or add new ones.
+After adding challenges you must refresh the page in order to forfeit them.
+Functionality to accept challenges is incomplete.
 
 ### Home Page
 In terms of the Home Page, which you access immediately upon logging in (unless you're an admin) or by clicking on the octopus icon, there are a few things you have access to. First, you can change the profile picture. You have 3 given options listed, but you also have the option to input a url of an image. This is also including gifs, apparently. You enter the url and press enter. For the rivals, intially they will be blank, but once you enter any keys, they populate. This seems to be a strange react async problem. Then the users filter based on what you write. That said, sometimes there's an issue regarding filtering users below the top one, but any issues can be resolved by entering characters that don't fit any user and deleting them. You can also add a rival by entering their name in the box and click the add Rival button. You can also clear all your users, after which you need to click the refresh button to update. Again, if there's any issues, they can be solved using the same technique as before, or simply coming back.
