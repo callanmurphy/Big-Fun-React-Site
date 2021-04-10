@@ -35,12 +35,12 @@ class Games extends Component {
                     title={g.title}
                     className='gameCardImage'
                   />
-                  {g.title == 'Type the keys' &&
+                  {g.title === 'Type the keys' &&
                   <div className='comingSoonOverlay'>
                     <div className='comingSoonText'>Coming Soon!</div>
                   </div>
                   }
-                  {g.title == 'Pong' &&
+                  {g.title === 'Pong' &&
                   <div className='comingSoonOverlay'>
                     <div className='comingSoonText'>Coming Soon!</div>
                   </div>
