@@ -22,6 +22,14 @@ Using an alphanumeric username and a password that matches the confirm password 
 for an account - which will redirect you back to login. Instead, you can also click the "Have an account?" 
 hyperlink at the bottom of the page to return to login at any time.
 
+### Games
+Here's where you can play the biggest funnest games! In the current version of the site, you will see 3 options:
+Follow the dot, Type the keys, and Pong. Since Type the keys and Pong are still in development, they have a "Coming Soon!"
+overlay on the game icon. Selecting one of these two will refresh the current Games page (at least for now!). Follow the dot
+is the only fully operational game in this early version of the site. Unlike the other two games, you will be able to click Follow the dot to play the game.
+
+### Follow the Dot
+Try for the top score in Follow the Dot! Hover your mouse over the moving circle to accumulate score. While hovered over the circle, the countdown will stop and the circle will disappear (but it won't stop moving!). Get the highest score you can before time runs out.
 
 ## Dependencies
 ### Frontend Dependencies
