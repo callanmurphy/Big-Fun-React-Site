@@ -25,12 +25,20 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 
 ## Dependencies
-### dependencies
+### Frontend Dependencies
 - [`react`](https://reactjs.org/docs/getting-started.html): This is the framework that we are using for the webapp.
 - [`react-router-dom`](https://reactrouter.com/web/guides/quick-start): This is used for routing between different views/components.
 - [`d3`](https://d3js.org/): This library is used for creating plots.
 - [`react-uid`](https://www.npmjs.com/package/react-uid): Used for generating unique keys (mostly in lists).
 - [`material-ui`](https://material-ui.com/) Used for fancy ui components.
+
+### Backend Dependencies
+- [`express`](https://expressjs.com/): this is for creating the server.
+- [`express-session`](https://www.npmjs.com/package/express-session): allows the creationof sessions to store information in the browser.
+- [`mongoose`](https://www.npmjs.com/package/mongoose): allows connections to the database, so that we can persist data, as well as share it across instances of the website.
+
+
+
 
 ### dev-dependencies
 - [`create-react-component-folder`](https://www.npmjs.com/package/create-react-component-folder): makes it easier to create react component folders.
