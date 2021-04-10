@@ -66,6 +66,8 @@ class Admin extends Component {
 
   componentDidMount() {
     document.title = 'Admin - Big Fun';
+    const {user} = this.props
+    updateStatus(user._id, "Doing Admin Stuff")
   }
 
   updateUserFilter(v) {
