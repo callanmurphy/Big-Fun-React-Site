@@ -1,5 +1,16 @@
-# Team 05
+# Team 05: Big Fun
 
+## Overview
+
+Welcome to Big Fun - the greatest gaming platform on the web!
+Challenge your rivals to compete for the top score in an assortment of games.
+
+Site: [https://biggest-fun.herokuapp.com](https://biggest-fun.herokuapp.com)
+
+## Details
+
+The site features two types of accounts: users and admins.
+Visiting the site will take you to the login page, where you can sign in with user or admin credentials.
 
 ## Available Scripts
 
