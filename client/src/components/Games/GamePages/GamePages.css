@@ -26,10 +26,9 @@
 .ballTrackerScore {
     position: absolute;
     margin: auto;
-    margin-left: 5px;
-    margin-top: 5px;
     min-width: 25%;
     padding: 2rem;
+    text-align: center;
 }
 .ballTrackerGood {
     color: var(--primary);
