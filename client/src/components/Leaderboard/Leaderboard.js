@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableRow, Avatar, Paper } from '@material-
 import { profilePictures } from "../Home"
 import { getAllUsers } from "../../backend"
 import "./Leaderboard.css"
+import UserAvatar from '../UserAvatar';
 
 class Leaderboard extends Component {
   
@@ -21,8 +22,28 @@ class Leaderboard extends Component {
     this.setState(users)
   }
 
+  getAvatar(user) {
+    let pp = null
+    let avatar = null
+
+    if (user.profilePic === -1) {
+      pp = {src: user.customProfilePic, name: "Custom"}
+    } else {
+      pp = profilePictures[user.profilePic]
+    }
+
+    if (user.online) {
+      avatar = (<UserAvatar uid={user._id} onlineIndicator pic={pp} size='medium' />)
+    } else {
+      avatar = (<UserAvatar uid={user._id} offlineIndicator pic={pp} size='medium' />)
+    }
+
+    return avatar
+  }
+
 
   render() {
+
     return (
       <div>
       <Paper>
@@ -46,7 +67,7 @@ class Leaderboard extends Component {
                   {i+1}
                 </TableCell>
                 <TableCell>
-                  <Avatar alt="" src={profilePictures[user.profilePic].src}/>
+                  {this.getAvatar(user)}
                   {user.username}
                 </TableCell>
                 <TableCell>

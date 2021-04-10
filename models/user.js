@@ -23,19 +23,28 @@
 const mongoose = require('mongoose');
 
 const ChallengeSchema = new mongoose.Schema({
-    /* gid: mongoose.Types.ObjectId, */
+    // gid: mongoose.Types.ObjectId, 
     rid: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     inviter: {type: Boolean, default: true},
     date: {type: Date, default: Date.now},
     confirmed: {type: Boolean, default: false},
-    /* points: Number, */
+    // points: Number,
 });
+
+/* const ChallengeSchema = new mongoose.Schema({
+    inviter: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    invitee: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    date: {type: Date, default: Date.now},
+    confirmed: {type: Boolean, default: false},
+    // points: Number,
+}); */
 
 const UserSchema = new mongoose.Schema({
     username: {type: String, unique: true},
     password: String,
     online: {type: Boolean, default: false},
     profilePic: {type: Number, default: 0},
+    customProfilePic: String,
     rivals: [mongoose.Types.ObjectId],
     status: {type: String, default: 'bumblefucking'},
     challenges: [ChallengeSchema],

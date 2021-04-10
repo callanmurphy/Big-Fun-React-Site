@@ -16,7 +16,7 @@ import { ExitToApp } from '@material-ui/icons';
 import 'fontsource-roboto';
 
 
-import { login, getUser, getUserByName } from '../../backend/userAPI'
+import { login, getUser, getUserByName, setOffline } from '../../backend/userAPI'
 
 class App extends Component {
   constructor(props) {
@@ -102,7 +102,9 @@ class App extends Component {
   }
 
   logout() {
+    setOffline(this.state.curUser._id)
     this.setState({
+      curUser: null,
       loggedIn: false,
       navlinks: this.navlinks
     })

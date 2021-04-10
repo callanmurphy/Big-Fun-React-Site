@@ -318,6 +318,7 @@ router.post('/challenge/:id', async (req, res) => {
                 confirmed: req.body.confirmed
 			});
 			user.challenges.push(challenge)
+            user.challenges.sort(function(a, b) {return new Date(a.date) - new Date(b.date)})
 	
 			const result = await user.save()
 			res.send(result)
@@ -331,6 +332,84 @@ router.post('/challenge/:id', async (req, res) => {
         }
     }
 });
+
+// A route to forfeit a challenge
+router.delete('/challenge/:id/:cid', async (req, res) => {
+    	// Add code here
+	const id = req.params.id
+	const cid = req.params.cid
+
+	// Good practise: Validate id immediately.
+	if (!ObjectID.isValid(id) || !ObjectID.isValid(cid)) {
+		res.status(404).send()  // if invalid id, definitely can't find resource, 404.
+		return;  // so that we don't run the rest of the handler.
+	}
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}
+
+	// If id and resv_id are valid, findById
+	try {
+		const user = await User.findById(id)
+		if (!user) {
+			res.status(404).send('Resource not found')  // could not find this student
+		} else {
+			const challenge = user.challenges.id(cid).remove()
+            user.challenges.sort(function(a, b) {return new Date(a.date) - new Date(b.date)})
+			const result = await user.save()
+			res.send({"challenge" : challenge, "user": result})
+		}
+	} catch(error) {
+		log(error)
+		res.status(500).send('Internal Server Error')  // server error
+	}
+});
+
+router.patch('/challenge/:id/:cid', async (req, res) => {
+	// Add code here
+
+	const id = req.params.id
+	const resv_id = req.params.resv_id
+
+	// Good practise: Validate id immediately.
+	if (!ObjectID.isValid(id) || !ObjectID.isValid(resv_id)) {
+		res.status(404).send()  // if invalid id, definitely can't find resource, 404.
+		return;  // so that we don't run the rest of the handler.
+	}
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}
+
+	// If id and cid are valid, findById
+	try {
+		const user = await User.findById(id)
+		if (!user) {
+			res.status(404).send('Resource not found')  // could not find this student
+		} else {
+			const challenge = user.challenges.id(cid)
+			/* challenge.time = req.body.time
+			reservation.people = req.body.people */
+			const result = await user.save()
+			res.send({"challenge" : challenge, "user": user})
+		}
+	} catch(error) {
+		log(error)
+		if (typeof error === 'object' && error !== null && error.name === "MongoNetworkError") { // check for if mongo server suddenly dissconnected before this request.
+			res.status(500).send('Internal server error')
+		} else {
+			res.status(400).send('Bad Request') // 400 for bad request gets sent to client.
+		}
+	}
+
+})
 
 // A route to delete a user
 router.delete('/user', async (req, res) => {

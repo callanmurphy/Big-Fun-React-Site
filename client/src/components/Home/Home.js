@@ -25,12 +25,17 @@ class Home extends Component {
   constructor(props) {
     super(props)
     const {user} = this.props
+    // this.searchRivals = this.searchRivals.bind(this)
     this.state = {
       rivals: [], 
       user: user, 
       fullRivals: [],
+      rivalRows: [],
       successAlert: true,
     }
+    setTimeout(() => {this.setState({ successAlert: false });}, 3000);
+    this.searchRivals(null)
+    console.log(this.props)
   }
 
   componentDidMount() {
@@ -43,9 +48,11 @@ class Home extends Component {
   }
 
   // Modified from an Emma Goto tutorial - https://www.emgoto.com/react-search-bar/
-  searchRivals(e) {
+  searchRivals = (e) => {
     const user = this.state.user;
-    if (e.target.value === "") {
+
+    if (e === null || e.target.value === "") {
+      console.log("Resetting to users full rival Ids");
       this.updateTempRivals.bind(this)()
     } else {
       let new_rivals = this.state.fullRivals;
@@ -53,6 +60,7 @@ class Home extends Component {
           return rival.username.toLowerCase().includes(e.target.value.toLowerCase());
       });
       this.setState({rivals: new_rivals});
+      this.createRivalTable.bind(this)(new_rivals)
     }
   }
 
@@ -72,9 +80,9 @@ class Home extends Component {
     try {
       let rival = await getUserByName(rivalName)
       if (rival.rivals.includes(user._id)) {
-        alert("You're already Rivals with " + rivalName)
+        alert("You're already Rivals with " + rivalName) //<Alert severity="error">{ "You're already Rivals with " + rivalName }</Alert>
       } else if (user.username === rivalName) {
-        alert("You can't do that")
+        alert("You can't do that") //<Alert severity="error">{ "You can't do that, silly..." }</Alert>
       } else {
         
         addRival(user._id, rival._id).then(
@@ -86,7 +94,7 @@ class Home extends Component {
 
       document.getElementById("RivalName").value = ""
     } catch {
-      alert("Can't find that user")
+      alert("Can't find that user") //<Alert severity="error">{ "You can't do that, silly..." }</Alert>
     }
   }
 
@@ -95,9 +103,6 @@ class Home extends Component {
     clearRivals(user._id).then(this.updateUser.bind(this)())
   }
 
-  // async updateState() {
-  //   this.updateUser.bind(this)().then(console.log("After updating", this.state))
-  // }
 
   async updateUser() {
     const user = this.state.user
@@ -128,17 +133,28 @@ class Home extends Component {
 
   updateTempRivals() {
     this.setState({rivals: this.state.fullRivals})
-    this.forceUpdate()
+    console.log("Temp Rivals Now", this.state.rivals)
+    // this.forceUpdate()
+    this.createRivalTable.bind(this)(this.state.fullRivals)
   }
 
-  createRivalTable() {
-    let rivals = this.state.rivals
+  createRivalTable = (rivals) => {
+    // let rivals = this.state.rivals
+    console.log("These are the rivals to create rows with", rivals)
     let rivalRows = []
     for (let i = 0; i < rivals.length; i++) {
-      let row = <RivalRow key={i} user={rivals[i]}/>
+      console.log("Key and rival", i, rivals[i])
+      let row = this.createRivalRow(i, rivals[i])
+      console.log("Row", rivals)
       rivalRows.push(row)
     }
-    return (<TableBody>{rivalRows}</TableBody>)
+    console.log("These are the created rival rows", rivalRows)
+    this.setState({rivalRows: (<TableBody>{rivalRows}</TableBody>)})
+  }
+
+  createRivalRow = (key, user) => {
+    console.log("the new row will have", key, "and", user)
+    return(<RivalRow key={key} user={user}/>)
   }
 
   render() {
@@ -170,7 +186,7 @@ class Home extends Component {
                     type="text" 
                     placeholder="Search Rivals..." 
                     title="Type in a Rival's Name" 
-                    onChange={this.searchRivals.bind(this)}
+                    onChange={e => this.searchRivals(e)}
                     onKeyPress={this.disableEnterKey.bind(this)}
                   />
               </form>
@@ -187,7 +203,7 @@ class Home extends Component {
           </Paper>
           <Paper>
             <Table aria-label="simple table">
-              {this.createRivalTable.bind(this)()}
+              {this.state.rivalRows}
             </Table>
           </Paper>
         </div>  
