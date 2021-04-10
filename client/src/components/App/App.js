@@ -67,7 +67,6 @@ class App extends Component {
       }
     ]
 
-    this.renderedNavLinks = [];
     this.homeComp = null;
 
   }
@@ -82,17 +81,6 @@ class App extends Component {
             path: '/admin',
             element: () => (<Admin user={this.state.curUser} />)
           });
-
-          this.homeComp = (<Home user={user} successAlert = {this.successAlert} />);
-
-          this.renderedNavLinks = this.gamelinks.map(({ title, path, element }) => {
-            const el = element(this.state.curUser);
-            return (<Route key={path} exact path={path}
-              render={this.state.loggedIn
-                ? () => el
-                : () => <Redirect to='/login' />}
-            />);
-        });
         } else {
           this.successAlert = true; // login success alert
           // newlinks.push({
@@ -161,13 +149,11 @@ class App extends Component {
 
         <Switch>
           {/* home route */}
-          <Route exact path='/home'>
-            {
-              this.state.loggedIn
-                ? this.homeComp
-                : <Redirect to='/login' />
-            }
-          </Route>
+          <Route exact path='/home'
+            render={this.state.loggedIn
+              ? () => <Home user={this.state.curUser} successAlert = {this.successAlert} />
+              : () => <Redirect to='/login' />}
+          />
           {  // page routes
             this.state.navlinks.map(({ title, path, element }) => (
               <Route key={path} exact path={path}
@@ -178,7 +164,13 @@ class App extends Component {
             ))
           }
           {  // game routes
-            this.renderedNavLinks
+            this.gamelinks.map(({ title, path, element }) => (
+              <Route key={path} exact path={path}
+                render={this.state.loggedIn
+                  ? () => element(this.state.curUser)
+                  : () => <Redirect to='/login' />}
+              />
+            ))
           }
           {  // game routes
             this.nonNavlinks.map(({ path, element }) => (
