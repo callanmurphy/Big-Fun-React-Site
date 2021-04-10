@@ -13,6 +13,10 @@ The site features two types of accounts: users and admins.
 Visiting the site will take you to the login page, where you can sign in with user or admin credentials.
 
 
+### Home Page
+In terms of the Home Page, which you access immediately upon logging in (unless you're an admin) or by clicking on the octopus icon, there are a few things you have access to. First, you can change the profile picture. You have 3 given options listed, but you also have the option to input a url of an image. This is also including gifs, apparently. You enter the url and press enter. For the rivals, intially they will be blank, but once you enter any keys, they populate. This seems to be a strange react async problem. Then the users filter based on what you write. That said, sometimes there's an issue regarding filtering users below the top one, but any issues can be resolved by entering characters that don't fit any user and deleting them. 
+
+
 ## Dependencies
 ### Frontend Dependencies
 - [`react`](https://reactjs.org/docs/getting-started.html): This is the framework that we are using for the webapp.
