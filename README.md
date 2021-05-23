@@ -1,6 +1,4 @@
 # Team 05: Big Fun
-
-## Callan Murphy
 (February - April 2021)
 
 Developed and deployed a React JS website for a class project with 3 other students. Used tools such as Node JS, npm, Express, MongoDB/Mongoose, Material-UI, and Heroku.
@@ -13,8 +11,6 @@ Developed and deployed a React JS website for a class project with 3 other stude
 - Set up database backend with MongoDB and connected it to React Components
 - Worked collaboratively online to create a functional website from scratch
 
-
-Developed and deployed a React JS website for a class project with 3 other students. Used tools such as Node JS, npm, Express, MongoDB/Mongoose, Material-UI, and Heroku.
 
 ## Overview
 
