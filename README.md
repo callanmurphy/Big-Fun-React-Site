@@ -1,3 +1,5 @@
+![logo](./client/public/img/logo-3.png)
+
 # Big Fun
 (February - April 2021)
 
